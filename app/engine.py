@@ -782,6 +782,12 @@ class Engine:
         if guven < 0.55:
             notlar.append("Bu cevap, sorunuza en yakın kaydın özetidir; sorunuzu biraz daha "
                           "netleştirirsen daha isabetli cevap verebilirim.")
+        # Şeffaflık: soru, kaydın anahtar kelimelerinin çoğunu kapsamıyorsa kullanıcıyı bilgilendir;
+        # yanlış yönlendirme hissini önler ve soruyu netleştirmeye davet eder.
+        if guven < 0.85 and (len(eksik) >= 2 or (q_set and 1 - len(eksik) / len(q_set) < 0.55)):
+            notlar.append("Not: Sorunuzun bazı kısımları bilgi bankamda **doğrudan** yer almıyor "
+                          "olabilir; aşağıdaki cevap en yakın konudandır. Konuyu biraz daha "
+                          "netleştirirsen (örneğin: niyet, durum, mezhep) daha isabetli cevap verebilirim.")
         if self._needs_fatwa(best, question):
             notlar.append("Bu konu **içtihat/ihtilaf** içerir. Kişisel durumunuz için İl/İlçe "
                           "Müftülüğü'ne danışmanız en doğrusudur.")

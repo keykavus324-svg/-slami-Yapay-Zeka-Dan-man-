@@ -140,6 +140,10 @@ BEKLENEN = {
     "kızımın okula gitmesi caiz mi": "egitim-okul-karma",
     "küfür etmek ve beddua": "kufur-beddua-hakaret",
     "israf ve lüks tüketim": "israf-luks-borc",
+    "güneş tutulmasında namaz kılınır mı": "kusuf-husuf-namazi",
+    "kedi beslemek caiz mi": "evcil-hayvan-beslemek",
+    "kandilde ne yapılır": "kandil-mubarek-geceler",
+    "tecvid öğrenmek farz mı": "tecvid-lahn",
 }
 
 

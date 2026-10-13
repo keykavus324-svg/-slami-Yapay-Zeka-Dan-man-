@@ -46,9 +46,9 @@ Port değiştirmek için: `PORT=9000 python -m app.main`
 
 ## 🧩 Neler Yapabilir?
 
-- **148 soru-cevap kaydı**, 13 konu başlığı: İnanç, Taharet, Namaz, Oruç, Zekât, Hac, Aile,
+- **152 soru-cevap kaydı**, 13 konu başlığı: İnanç, Taharet, Namaz, Oruç, Zekât, Hac, Aile,
   Helâl-Haram, Ahlâk, Dua, Kur'an, Günlük Hayat, Genel
-- **~1.800 pasaj indeksi:** Tam karşılığı olmayan sorularda bile, tüm cevap metinleri
+- **~1.900 pasaj indeksi:** Tam karşılığı olmayan sorularda bile, tüm cevap metinleri
   **paragraf paragraf** taranır ve en ilgili bölümler kaynağıyla sunulur
 - **Doğal dil ile arama:** *"adetliyken namaz kılınır mı"*, *"faizli kredi caiz mi"*,
   *"namaz kılmıyorum nasıl başlarım"* gibi sorular anlaşılır
@@ -126,7 +126,8 @@ curl -X POST http://localhost:8000/api/sor \
 │   │   ├── qa_evlilik_genis.json  # Evlilik engelleri, mehir, çok eşlilik, kadın hakları, Nisâ 4/34, velayet
 │   │   ├── qa_ibadet_ek.json      # Tilâvet/şükür secdesi, adak, yemin, tesbih namazı, nafile oruç, zikir, hatim
 │   │   ├── qa_akaid_lim.json      # Bidat, tasavvuf, keramet, rüya, kıyamet alâmetleri, siyer, tekfir, hadis ilmi
-│   │   └── qa_ek2.json            # Üreme sağlığı, fıtrat bakımı, spor, döviz, parfüm, kayınvalide, nişan, askerlik…
+│   │   ├── qa_ek2.json            # Üreme sağlığı, fıtrat bakımı, spor, döviz, parfüm, kayınvalide, nişan, askerlik…
+│   │   └── qa_ek3.json            # Tutulma (kusûf) namazı, evcil hayvan, kandiller, tecvid
 │   └── static/              # Arayüz (index.html, style.css, app.js, favicon.svg)
 ├── tests/test_smoke.py      # Duman testleri
 └── requirements.txt
