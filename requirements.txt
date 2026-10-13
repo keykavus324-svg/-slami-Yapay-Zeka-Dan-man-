@@ -1,0 +1,5 @@
+# ŞEYH TUĞRUL — İslami Yapay Zeka Danışmanı
+# Harici yapay zeka servisi veya API anahtarı GEREKMEZ.
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.5

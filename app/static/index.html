@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ŞEYH TUĞRUL — İslami Yapay Zeka Danışmanı</title>
+<meta name="description" content="Ücretsiz ve sınırsız İslami soru-cevap danışmanı. Namaz, abdest, oruç, zekât, hac, aile, helâl-haram ve daha fazlası. Kayıt yok, ücret yok." />
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/static/style.css" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="preconnect" href="https://huggingface.co" crossorigin />
+</head>
+<body>
+
+<div class="bg-pattern" aria-hidden="true"></div>
+
+<div class="app">
+
+  <!-- ============ YAN PANEL ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">﷽</div>
+      <div class="brand-text">
+        <strong>ŞEYH TUĞRUL</strong>
+        <span>İslami Yapay Zeka Danışmanı</span>
+      </div>
+      <button class="icon-btn close-side" id="closeSide" title="Kapat" aria-label="Kapat">✕</button>
+    </div>
+
+    <div class="free-banner">
+      <span class="dot"></span>
+      <div>
+        <b>Ücretsiz &amp; Sınırsız</b>
+        <small>Kayıt yok • Ücret yok • Soru limiti yok • İnternetsiz de çalışır</small>
+      </div>
+    </div>
+
+    <div class="motor-box">
+      <div class="motor-head">
+        <b>🧠 Yapay Zekâ Motoru</b>
+        <span class="motor-durum" id="motorDurum">Yerel</span>
+      </div>
+      <p class="mini" id="motorOzet">Şu an <b>yerel bilgi bankası</b> cevaplıyor. İstersen ücretsiz bir yüksek parametreli model (Gemini / Llama 70B / GPT-OSS 120B) bağla.</p>
+      <button class="ghost-btn" id="motorBtn2">Model bağla →</button>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <nav class="cats" aria-label="Konular">
+      <h4>Konular</h4>
+      <div id="catList" class="cat-list"></div>
+    </nav>
+
+    <div class="qlist-wrap">
+      <h4 id="qlistTitle">Sorular</h4>
+      <div id="qList" class="q-list"></div>
+    </div>
+
+    <div class="sidebar-foot">
+      <button class="ghost-btn" id="randomBtn">🎲 Rastgele soru</button>
+      <p class="mini">Bilgiler genel bilgilendirme içindir. Kişisel ve hassas konularda <b>İl/İlçe Müftülüğü'ne</b> danışınız.</p>
+    </div>
+  </aside>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ============ ANA ALAN ============ -->
+  <main class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="openSide" aria-label="Konuları aç">☰</button>
+      <div class="title-block">
+        <h1>ŞEYH TUĞRUL</h1>
+        <p><span class="star">✦</span> İslami Yapay Zeka Danışmanı <span class="hijri" id="hijri"></span></p>
+      </div>
+      <div class="top-actions">
+        <button class="motor-chip" id="motorBtn" title="Yapay zekâ motorunu seç">📚 Yerel bilgi bankası</button>
+        <div class="seg" role="group" aria-label="Cevap uzunluğu">
+          <button data-detay="normal" class="active">Ayrıntılı</button>
+          <button data-detay="kisa">Kısa</button>
+        </div>
+        <button class="icon-btn" id="clearBtn" title="Sohbeti temizle" aria-label="Sohbeti temizle">🧹</button>
+      </div>
+    </header>
+
+    <section class="chat" id="chat" aria-live="polite"></section>
+
+    <div class="chips" id="chips"></div>
+
+    <footer class="composer">
+      <form id="form" autocomplete="off">
+        <textarea id="input" rows="1" placeholder="İslami sorunuzu yazın… (örn: Faizli kredi caiz mi?)" maxlength="1000" aria-label="Sorunuz"></textarea>
+        <button type="submit" id="sendBtn" class="send" aria-label="Gönder">
+          <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><path fill="currentColor" d="M3.4 20.4 21 12 3.4 3.6l.01 6.53L15 12 3.41 13.87z"/></svg>
+        </button>
+      </form>
+      <p class="disclaimer">
+        <b>Ücretsiz &amp; sınırsız.</b> Bu araç fetva mercii değildir. Cevaplar; 152 kayıtlık yerel bilgi bankasından
+        (Kur'an, sahih hadis ve fıkıh kaynaklarına dayalı) ve <b>bağlarsan</b> seçtiğin yüksek parametreli dil
+        modelinden üretilir. Kişisel durumlar için müftülüğe danışın.
+      </p>
+    </footer>
+  </main>
+</div>
+
+<!-- ============ DİL MODELİ (LLM) AYAR PENCERESİ ============ -->
+<div class="modal" id="llmModal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="llmBaslik">
+    <h3 id="llmBaslik">🧠 Dil Modeli Ayarları</h3>
+    <div class="yerel-kart tarayici-kart">
+      <div class="yerel-head">
+        <b>⚡ Tarayıcıda çalışan model <span class="etiket">en hızlı</span></b>
+        <span class="motor-durum" id="tarayiciDurum">kapalı</span>
+      </div>
+      <p class="mini" id="tarayiciOzet">
+        Model <b>sizin tarayıcınızda</b> koşar: cevaplar saniyeler içinde akar, yazdığınız metin hiçbir
+        sunucuya gönderilmez. İlk açılışta <b>bir kez</b> indirilir ve tarayıcı önbelleğinde kalır.
+      </p>
+      <label class="alan">Model
+        <select id="tarayiciModel"></select>
+      </label>
+      <div class="ilerleme" id="tarayiciIlerleme" hidden>
+        <div class="cubuk" id="tarayiciCubuk"></div>
+        <span id="tarayiciYuzde">%0</span>
+      </div>
+      <p class="mini" id="tarayiciNot"></p>
+      <div class="modal-actions">
+        <button class="primary" id="tarayiciBaslat">Modeli başlat</button>
+        <button id="tarayiciBosalt">Boşalt</button>
+      </div>
+    </div>
+
+    <div class="yerel-kart">
+      <div class="yerel-head">
+        <b>🖥️ Sistem içi model <span class="etiket">önerilen</span></b>
+        <span class="motor-durum" id="yerelDurum">aranıyor…</span>
+      </div>
+      <p class="mini" id="yerelOzet">Sunucunun kendi makinesinde koşan bir dil modeli aranıyor…</p>
+      <label class="anahtar-satir">
+        <input type="checkbox" id="yerelKullan" />
+        <span>Cevapları sistem içi model üretsin (anahtar gerekmez, dış servis yok)</span>
+      </label>
+      <div class="modal-actions">
+        <button id="yerelYenile">Durumu yenile</button>
+        <button id="yerelKurulum">Kurulum komutları</button>
+      </div>
+      <pre class="yerel-komut" id="yerelKomut" hidden># 1) En kolay yol — Ollama (Windows/macOS/Linux)
+ollama pull qwen2.5:7b
+ollama serve
+
+# 2) veya GGUF indirme betiği (sunucuda):
+python -m app.model_indir qwen2.5:7b
+
+# 3) veya elinizde GGUF varsa models/ klasörüne koyun:
+#    models/qwen2.5-7b-instruct-q4_k_m.gguf
+# Uygulamayı yeniden başlatın — model otomatik bulunur.</pre>
+    </div>
+
+    <p class="mini">
+      Alternatif: tarayıcıdan bulut modeli bağlamak isterseniz (ücretsiz anahtarla, örn. Gemini),
+      aşağıdan seçebilirsiniz. <b>Anahtar yalnızca bu tarayıcıda saklanır</b> — sunucuya gönderilmez.
+      Sistem içi model varsa o tercih edilir.
+    </p>
+
+    <label class="alan">Sağlayıcı
+      <select id="llmSaglayici"></select>
+    </label>
+    <p class="mini" id="llmSagNot"></p>
+
+    <label class="alan">API anahtarı
+      <input id="llmAnahtar" type="password" autocomplete="off" spellcheck="false" placeholder="..." />
+    </label>
+
+    <label class="alan">Model
+      <input id="llmModel" list="llmModelListe" autocomplete="off" spellcheck="false" placeholder="model adı" />
+      <datalist id="llmModelListe"></datalist>
+    </label>
+
+    <label class="alan" id="llmUrlSar" hidden>Sunucu adresi
+      <input id="llmUrl" autocomplete="off" spellcheck="false" placeholder="https://ornek.com/v1/chat/completions" />
+    </label>
+
+    <div class="modal-actions">
+      <button class="primary" id="llmKaydet">Kaydet ve kullan</button>
+      <button id="llmTest">Bağlantıyı test et</button>
+      <button id="llmYerel">Yerel motora dön</button>
+      <button id="llmKapat">Kapat</button>
+    </div>
+    <div class="mini" id="llmDurum"></div>
+    <p class="mini" id="llmLink"></p>
+  </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# ŞEYH TUĞRUL — tek komutla çalıştır:  docker compose up
+# Model, ./models klasörüne konur (indirme: docker compose run --rm tugrul python -m app.model_indir qwen2.5:7b)
+services:
+  tugrul:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models
+      - ./app/data:/app/app/data
+    environment:
+      - TUGRUL_MODEL_DIZIN=/app/models
+      - TUGRUL_YEREL_MAKS_TOKEN=700
+      - TUGRUL_YEREL_SICAKLIK=0.6
+    restart: unless-stopped
