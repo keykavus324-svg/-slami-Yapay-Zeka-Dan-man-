@@ -5,21 +5,22 @@
 > Namaz, abdest, gusül, oruç, zekât, hac, dua, iman esasları, aile, helâl-haram, ahlâk,
 > günlük hayat… Aklınıza gelen her İslami soruyu doğal bir dille yazın; cevabı kaynaklarıyla alın.
 
-**Üç katmanlı yapay zekâ:**
+**Dört katmanlı yapay zekâ (hepsi ücretsiz, hepsi sınırsız):**
 
-1. **Yerel bilgi bankası (RAG kaynağı)** — 152 doğrulanmış kayıt + ~1.900 pasaj. Anahtarsız,
-   kotasız, çevrimdışı. Her zaman açıktır.
-2. **Sistem içi dil modeli (önerilen)** — Model, uygulamanın **kendi makinesinde** koşar
-   (Ollama / llama.cpp / llama-cpp-python). **API anahtarı yok, dış servis yok, kota yok.**
-   `qwen2.5:7b` gibi bir model bir kez indirilir; cevapları bu model üretir ve bilgi
-   bankasındaki kaynaklarla beslenir. Kurulum: `scripts/kur.sh` ya da
+1. **⚡ Tarayıcıda çalışan model (en hızlı)** — Model **sizin tarayıcınızda** koşar:
+   WebGPU varsa ekran kartıyla, yoksa WebAssembly ile. Cevap kelime kelime saniyeler içinde
+   akar; yazdığınız metin hiçbir sunucuya gitmez. İlk açılışta model bir kez indirilir
+   (varsayılan **Qwen2.5 0.5B ≈ 450 MB**) ve tarayıcı önbelleğinde kalır.
+2. **Yerel bilgi bankası (RAG kaynağı)** — 152 doğrulanmış kayıt + ~1.900 pasaj.
+   Anahtarsız, kotasız, çevrimdışı; her cevaba kaynak sağlar. Her zaman açıktır.
+3. **Sistem içi dil modeli** — Sunucunun makinesinde koşan model (Ollama / llama.cpp /
+   llama-cpp-python). GPU'suz sunucular için. `scripts/kur.sh` ya da
    `python -m app.model_indir qwen2.5:7b`.
-3. **Bulut modeli (isteğe bağlı)** — Sistem içi model yoksa, ücretsiz anahtarla
-   Gemini 2.5 Flash / Llama 70B / Qwen3 235B bağlanabilir; çağrı **tarayıcıdan** yapılır,
-   anahtar sunucuya gitmez.
+4. **Bulut modeli (isteğe bağlı)** — Ücretsiz anahtarla Gemini 2.5 Flash / Llama 70B bağlanır;
+   çağrı tarayıcıdan yapılır, anahtar sunucuya gitmez.
 
-> Kesintisizlik: Sistem içi model yoksa bile cevaplar yerel bilgi bankasından gelir ve
-> kriz/güvenlik soruları hiçbir zaman modele gönderilmez.
+> Kesintisizlik: hiçbiri yoksa cevaplar yerel bilgi bankasından gelir ve kriz/güvenlik
+> soruları hiçbir zaman modele gönderilmez (112/183 yönlendirmesi korunur).
 
 ---
 
@@ -61,7 +62,35 @@ Port değiştirmek için: `PORT=9000 python -m app.main`
 
 ---
 
-## 🖥️ Modeli Sistemin İçine Kur (anahtar yok, dış servis yok)
+## ⚡ Tarayıcıda Çalışan Model (en hızlısı, kurulum yok)
+
+Arayüzde **Dil Modeli Ayarları → ⚡ Tarayıcıda çalışan model → "Modeli başlat"** düğmesine basın.
+Hepsi bu; sunucu tarafında hiçbir kurulum gerekmez.
+
+| | |
+|---|---|
+| **Nerede çalışır?** | Sizin tarayıcınızda (WebGPU varsa GPU ile, yoksa WebAssembly) |
+| **İlk indirme** | Varsayılan `Qwen2.5 0.5B` ≈ **450 MB** (tek seferlik, önbellekte kalır) |
+| **Tipik hız** | WebGPU: **~40–90 kelime/sn** · WebAssembly: ~5–15 kelime/sn |
+| **Gizlilik** | Metin cihazınızdan çıkmaz; sunucuya yalnızca "hangi kayıtlar ilgili" sorusu gider |
+| **Ücret/kota** | Yok — model sizin cihazınızda çalışır |
+| **Hangi modeller?** | `Qwen2.5 0.5B` (çok hızlı) · `1.5B` (dengeli) · `3B` (kaliteli) — hepsi insan onayıyla, değiştirilebilir |
+
+Küçük modeller bilgi bankası bağlamıyla beslenir (RAG): soruyla ilgili 2 kayıt + 3 bölüm
+modele kaynak olarak verilir, böylece 0.5B'lik bir model bile fıkha uygun, kaynaklı cevap üretir.
+
+### Kütüphane yerelden servis edilsin (isteğe bağlı, önerilir)
+Tarayıcı modeli, `transformers.js` kütüphanesini önce **kendi sunucumuzdan** yükler; kurulu
+değilse otomatik olarak CDN'e düşer. Yerele almak için:
+```bash
+python -m scripts.vendor_indir          # ~43 MB indirir (transformers.js + onnxruntime WASM)
+python -m scripts.vendor_indir --kontrol
+```
+Bu klasör (`app/static/vendor/`) sürüm takibine girmez; dağıtımda betikle kurulur.
+
+---
+
+## 🖥️ Alternatif: Modeli Sistemin İçine Kur (Ollama / llama.cpp)
 
 Modeli **uygulamanın çalıştığı makineye** kurun; uygulama açılışta otomatik bulur ve kullanır.
 
@@ -188,6 +217,7 @@ güvenlik yanıtıyla karşılanır.
 | `GET`  | `/api/sorular?kategori=Namaz` | Soru listesi (isteğe bağlı konu filtresi) |
 | `GET`  | `/api/soru/{id}` | Belirli bir kaydın tam cevabı |
 | `GET`  | `/api/rastgele` | Rastgele soru-cevap |
+| `POST` | `/api/baglam?kisa=true` | Tarayıcı modeli için **sıkıştırılmış** bağlam (2 kayıt + 3 bölüm) |
 | `POST` | `/api/sor-yerel` | **Sistem içi model** cevabı — SSE ile kelime kelime akar (anahtarsız) |
 | `GET`  | `/api/yerel-model` | Yerel model durumu + önerilen model listesi (boyut/RAM) |
 | `POST` | `/api/baglam` | LLM için **kaynaklı bağlam paketi** (4 kayıt + 6 pasaj + hazır mesaj) |
@@ -265,14 +295,15 @@ yanıtları, LLM bağlam uç noktası (`/api/baglam`), **sistem içi model akı�
 sistem yönergesinin kritik kuralları ve
 "ücretsiz/sınırsız" sözleşmesi.
 
-**Arayüz testi (28 kontrol, tarayıcı taklidi):**
+**Arayüz testi (43 kontrol, tarayıcı taklidi):**
 ```bash
 npm i jsdom          # bir kez
 python -m app.main & # sunucu açıkken gerçek veriyle çalışır
 node tests/ui_test.js
 ```
-Bu test; sistem içi model akışını (SSE), bilgi bankası yolunu, güvenlik sorusunda modelin devre dışı
-kalmasını, kaynak bloğunu, rozetin güncellenmesini ve ayar penceresini doğrular.
+Bu test; **tarayıcıda çalışan model akışını** (yükleme → akış → hız rozeti → kaynak bloğu),
+sistem içi model akışını (SSE), bilgi bankası yolunu, güvenlik sorusunda modelin devre dışı
+kalmasını, model yüklenemediğinde yedeğe düşmeyi ve ayar penceresini doğrular.
 
 ---
 

@@ -19,6 +19,13 @@
   let MODEL_BILGISI = { sistem_promptu: "", saglayicilar: [] };
   /* Sistem içi (yerel) model durumu — anahtar yok, dış servis yok */
   let YEREL = { hazir: false, model: "", arka_uc: "", kucuk_model: false };
+  /* Tarayıcıda çalışan model: model dosyaları kullanıcının tarayıcısına iner,
+     çıkarım da tarayıcıda yapılır (WebGPU varsa ekran kartıyla). */
+  const TARAYICI_ANAHTAR = "seyh-tugrul-tarayici";
+  let TARAYICI = { yuklu: false, modelId: "", cihaz: "", dtype: "", hiz: null, cihazEtiketi: "" };
+  let TARAYICI_AYAR = { modelId: "", otomatik: false };
+  let TARAYICI_MODUL = null;
+
   /* Üç durumlu tercih: null = otomatik (küçük model ise kapalı), "1" = açık, "0" = kapalı */
   function yerelEtkin() {
     if (!YEREL.hazir) return false;
@@ -367,6 +374,221 @@
   }
 
   /* ============================================================
+     TARAYICIDA ÇALIŞAN MODEL (WebGPU / WASM)
+     ============================================================ */
+  function akisBaloncuk(soru, rozetler, uyari) {
+    const wrap = el("div", "msg bot");
+    wrap.appendChild(botAvatar());
+    const bubble = el("div", "bubble");
+    const meta = el("div", "meta");
+    (rozetler || []).forEach((r) => meta.appendChild(el("span", "chip " + (r[0] || ""), r[1])));
+    bubble.appendChild(meta);
+    bubble.appendChild(el("p", "q-title", "Soru: <b>" + esc(soru) + "</b>"));
+    if (uyari) bubble.appendChild(el("div", "notlar", uyari));
+    const ans = el("div", "answer", '<p class="mini">🖥️ Cevap tarayıcınızda yazılıyor…</p>');
+    bubble.appendChild(ans);
+    wrap.appendChild(bubble);
+    chat.appendChild(wrap);
+    scrollDown();
+
+    let birikim = "";
+    let sonCizim = 0;
+    const ciz = (zorla) => {
+      const n = performance.now();
+      if (!zorla && n - sonCizim < 80) return;
+      sonCizim = n;
+      ans.innerHTML = markdown(birikim) + (zorla ? "" : '<span class="imlec"></span>');
+      scrollDown();
+    };
+    return {
+      bubble,
+      ans,
+      meta,
+      yaz: (t) => { birikim += t || ""; ciz(false); },
+      bosCiz: (html) => { ans.innerHTML = html; },
+      metin: () => birikim,
+      bitir: () => ciz(true),
+    };
+  }
+
+  function tarayiciDurumYaz() {
+    const d = $("#tarayiciDurum");
+    if (d) {
+      d.textContent = TARAYICI.yuklu
+        ? (TARAYICI.cihaz === "webgpu" ? "WebGPU · hazır" : "WASM · hazır")
+        : "kapalı";
+      d.classList.toggle("on", !!TARAYICI.yuklu);
+    }
+    const not = $("#tarayiciNot");
+    if (not) {
+      not.textContent = TARAYICI.yuklu
+        ? "✔ Yüklü: " + (TARAYICI.modelId || "") + (TARAYICI.hiz ? " · son hız ~" + TARAYICI.hiz + " kelime/sn" : "")
+        : "";
+    }
+    motorRozeti();
+  }
+
+  function tarayiciAyariYukle() {
+    try {
+      const k = JSON.parse(localStorage.getItem(TARAYICI_ANAHTAR) || "null");
+      if (k && k.modelId) TARAYICI_AYAR = { modelId: k.modelId, otomatik: !!k.otomatik };
+    } catch {}
+  }
+  function tarayiciAyariYaz() {
+    try { localStorage.setItem(TARAYICI_ANAHTAR, JSON.stringify(TARAYICI_AYAR)); } catch {}
+  }
+
+  function tarayiciModelListesiDoldur() {
+    const sec = $("#tarayiciModel");
+    if (!sec) return;
+    const modeller = (MODEL_BILGISI.tarayici_modelleri || []);
+    sec.innerHTML = "";
+    modeller.forEach((m) => {
+      const o = document.createElement("option");
+      o.value = m.id;
+      o.textContent = m.ad + "  (" + m.boyut + ")";
+      o.title = m.not || "";
+      sec.appendChild(o);
+    });
+    sec.value = TARAYICI_AYAR.modelId || (modeller[0] && modeller[0].id) || "";
+    sec.onchange = () => {
+      TARAYICI_AYAR.modelId = sec.value;
+      tarayiciAyariYaz();
+      const n = $("#tarayiciNot");
+      const m = modeller.find((x) => x.id === sec.value);
+      if (n && m) n.textContent = m.not || "";
+    };
+  }
+
+  async function tarayiciModul() {
+    if (TARAYICI_MODUL) return TARAYICI_MODUL;
+    if (window.__TUGRUL_TEST_TARAYICI__) {           // test kancası
+      TARAYICI_MODUL = window.__TUGRUL_TEST_TARAYICI__;
+      return TARAYICI_MODUL;
+    }
+    TARAYICI_MODUL = await import("/static/tarayici-model.js");
+    return TARAYICI_MODUL;
+  }
+
+  async function tarayiciBaslat(sessiz) {
+    const ilerleme = $("#tarayiciIlerleme");
+    const cubuk = $("#tarayiciCubuk");
+    const yuzde = $("#tarayiciYuzde");
+    const not = $("#tarayiciNot");
+    const sec = $("#tarayiciModel");
+    const modelId = TARAYICI_AYAR.modelId || (sec && sec.value) || "";
+    if (!modelId) { if (not) not.textContent = "⚠️ Önce bir model seçin."; return; }
+
+    TARAYICI_AYAR.modelId = modelId;
+    tarayiciAyariYaz();
+    if (ilerleme) ilerleme.hidden = false;
+    if (not) not.textContent = "⏳ Model hazırlanıyor… (ilk seferde indirme uzun sürebilir)";
+
+    try {
+      const mod = await tarayiciModul();
+      const sonuc = await mod.yukle({
+        modelId,
+        ilerleme: (p) => {
+          if (!not) return;
+          if (p.asama === "indirme" && typeof p.yuzde === "number") {
+            if (cubuk) cubuk.style.width = p.yuzde + "%";
+            if (yuzde) yuzde.textContent = "%" + p.yuzde;
+            not.textContent = "⬇️ " + (p.mesaj || "indiriliyor") + " — %" + p.yuzde;
+          } else if (p.mesaj) {
+            not.textContent = "⏳ " + p.mesaj;
+          }
+        },
+      });
+      TARAYICI = { ...TARAYICI, ...sonuc };
+      TARAYICI_AYAR.otomatik = true;
+      tarayiciAyariYaz();
+      if (ilerleme) ilerleme.hidden = true;
+      tarayiciDurumYaz();
+      if (not) not.textContent = "✔ Hazır: " + (sonuc.modelId || modelId) + " — " + (sonuc.cihazEtiketi || "") +
+        " · artık cevaplar tarayıcınızda üretilecek.";
+    } catch (e) {
+      if (ilerleme) ilerleme.hidden = true;
+      TARAYICI.yuklu = false;
+      tarayiciDurumYaz();
+      if (not) not.textContent = "✘ " + ((e && e.message) || "Model yüklenemedi.");
+      if (!sessiz) console.warn("tarayıcı modeli yüklenemedi", e);
+    }
+  }
+
+  function tarayiciBosalt() {
+    try { if (TARAYICI_MODUL && TARAYICI_MODUL.bosalt) TARAYICI_MODUL.bosalt(); } catch {}
+    TARAYICI = { yuklu: false, modelId: "", cihaz: "", dtype: "", hiz: null, cihazEtiketi: "" };
+    TARAYICI_AYAR.otomatik = false;
+    tarayiciAyariYaz();
+    tarayiciDurumYaz();
+    const not = $("#tarayiciNot");
+    if (not) not.textContent = "Model bellekten boşaltıldı (dosyalar önbellekte kalır; tekrar başlatmak hızlıdır).";
+  }
+
+  async function tarayiciAkisi(soru, veri) {
+    const a = akisBaloncuk(soru, [
+      ["llm", "🧠 " + esc(TARAYICI.modelId || "tarayıcı modeli")],
+      ["cat", "Tarayıcıda · " + esc(TARAYICI.cihazEtiketi || "yerel çıkarım")],
+    ]);
+
+    // Bilgi bankasından SIKIŞTIRILMIŞ bağlam (hızlı istem için)
+    let kaynakVeri = veri;
+    try {
+      const y = await fetch("/api/baglam?kisa=true", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ soru }),
+      });
+      if (y.ok) kaynakVeri = await y.json();
+    } catch { /* tam bağlam elimizde zaten */ }
+
+    const sistem = (MODEL_BILGISI.sistem_promptu || "Sen İslami konularda yardımcı bir asistansın.");
+    const kullanici = kaynakVeri.kullanici_mesaji || veri.kullanici_mesaji;
+    const iptal = { iptal: false };
+
+    try {
+      const mod = await tarayiciModul();
+      const sonuc = await mod.uret(
+        [{ role: "system", content: sistem }, { role: "user", content: kullanici }],
+        { onParca: (t) => a.yaz(t), maksToken: 420, sicaklik: 0.6, iptal }
+      );
+      a.bitir();
+      if (!a.metin().trim()) throw new Error("model boş yanıt döndürdü");
+
+      if (sonuc && sonuc.hiz) {
+        TARAYICI.hiz = sonuc.hiz;
+        a.meta.appendChild(el("span", "chip conf", "⚡ ~" + sonuc.hiz + " kelime/sn"));
+      }
+      a.bubble.appendChild(kaynakBloku(kaynakVeri));
+
+      const tools = el("div", "tools");
+      const kopya = el("button", "tool", "📋 Kopyala");
+      kopya.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(a.metin()); kopya.textContent = "✔ Kopyalandı"; }
+        catch { kopya.textContent = "Kopyalanamadı"; }
+        setTimeout(() => (kopya.textContent = "📋 Kopyala"), 1800);
+      });
+      tools.appendChild(kopya);
+      const ayar = el("button", "tool", "⚡ Model ayarları");
+      ayar.addEventListener("click", llmAc);
+      tools.appendChild(ayar);
+      a.bubble.appendChild(tools);
+      tarayiciDurumYaz();
+
+      gecmis.push({ rol: "bot", veri: { bulundu: true, tip: "tarayici", guven: 1, kategori: "Tarayıcıda çalışan model", soru: soru, cevap: a.metin(), kaynaklar: [], ilgili: [], notlar: [] } });
+      kaydet();
+    } catch (e) {
+      iptal.iptal = true;
+      a.bosCiz("");
+      a.bubble.appendChild(el("div", "notlar",
+        "⚠️ Tarayıcı modeli cevap veremedi: " + esc((e && e.message) || "bilinmeyen hata") +
+        " — bilgi bankası cevabı gösteriliyor."));
+      if (veri && veri.yerel) addBot(veri.yerel);
+    }
+    scrollDown();
+  }
+
+  /* ============================================================
      YÜKSEK PARAMETRELİ DİL MODELİ (LLM) KATMANI
      • Model çağrısı doğrudan TARAYICIDAN yapılır — API anahtarı sunucuya gitmez.
      • Sunucu yalnızca yerel bilgi bankasından KAYNAKLI BAĞLAM üretir (RAG).
@@ -390,7 +612,9 @@
 
   function motorRozeti() {
     const sag = LLM ? saglayiciBul(LLM.saglayici) : null;
-    const yazi = yerelEtkin()
+    const yazi = TARAYICI.yuklu
+      ? "⚡ " + (TARAYICI.modelId || "tarayıcı modeli").split("/").pop()
+      : yerelEtkin()
       ? "🧠 " + (YEREL.model || "yerel model")
       : (YEREL.hazir && !yerelEtkin())
         ? "🧠 " + (YEREL.model || "model") + " (kapalı)"
@@ -418,7 +642,15 @@
       MODEL_BILGISI = await r.json();
     } catch { /* yerel motor yine çalışır */ }
     llmPaneliDoldur();
+    tarayiciModelListesiDoldur();
     motorRozeti();
+
+    // Daha önce açılmışsa sessizce yeniden yükle (dosyalar önbellekte, hızlıdır)
+    if (TARAYICI_AYAR.otomatik && TARAYICI_AYAR.modelId && !TARAYICI.yuklu) {
+      const not = $("#tarayiciNot");
+      if (not) not.textContent = "⏳ Önbellekten yükleniyor…";
+      tarayiciBaslat(true);
+    }
   }
 
   function llmPaneliDoldur() {
@@ -663,20 +895,26 @@
 
       const ozelTip = ["guvenlik", "sohbet", "bos"].includes(veri.tip);
 
-      // 1) Sistem içi model (varsa ve açıksa) — anahtarsız, dış servis yok
+      // 1) Tarayıcıda çalışan model (varsa) — en hızlısı, veri cihazdan çıkmaz
+      if (!ozelTip && TARAYICI.yuklu) {
+        t.remove();
+        await tarayiciAkisi(metin, veri);
+        return;
+      }
+      // 2) Sistem içi model (varsa ve açıksa) — anahtarsız, dış servis yok
       if (!ozelTip && yerelEtkin()) {
         t.remove();
         await yerelAkisi(metin, t);
         return;
       }
-      // 2) Tarayıcıdan bağlanan bulut modeli (isteğe bağlı)
+      // 3) Tarayıcıdan bağlanan bulut modeli (isteğe bağlı)
       if (ozelTip || !llmAktif()) {
         t.remove();
         await sleep(160);
         addBot(yerel);
         return;
       }
-      // 3) Bulut modeli: bağlamla beslenmiş cevap (akışlı)
+      // 4) Bulut modeli: bağlamla beslenmiş cevap (akışlı)
       t.remove();
       await llmAkisi(metin, veri);
     } catch (e) {
@@ -853,6 +1091,11 @@
   const mmodal = $("#llmModal");
   if (mmodal) mmodal.addEventListener("click", (e) => { if (e.target === mmodal) llmKapat(); });
 
+  const tarayiciBtn = $("#tarayiciBaslat");
+  if (tarayiciBtn) tarayiciBtn.addEventListener("click", () => tarayiciBaslat(false));
+  const tarayiciBosaltBtn = $("#tarayiciBosalt");
+  if (tarayiciBosaltBtn) tarayiciBosaltBtn.addEventListener("click", tarayiciBosalt);
+
   const yerelKullan = $("#yerelKullan");
   if (yerelKullan) yerelKullan.addEventListener("change", () => {
     try { localStorage.setItem("seyh-tugrul-yerel-kullan", yerelKullan.checked ? "1" : "0"); } catch {}
@@ -943,8 +1186,10 @@
 
   /* ------------------------- Başlat ------------------------- */
   llmOku();
+  tarayiciAyariYukle();
   modelBilgisiYukle();
   yerelDurumYukle();
+  tarayiciDurumYaz();
   motorRozeti();
   hicriTarih();
   chipsYukle();

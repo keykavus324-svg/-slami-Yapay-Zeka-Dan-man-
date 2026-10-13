@@ -50,7 +50,43 @@ const sablon = fs.readFileSync(path.join(REPO, "app/static/index.html"), "utf8")
   .replace('<script src="/static/app.js"></script>', "");
 const appJs = fs.readFileSync(path.join(REPO, "app/static/app.js"), "utf8");
 
-const durum = { llmCagri: 0, sonGovde: null, yerelCagri: 0, yerelDurum: null };
+const durum = { llmCagri: 0, sonGovde: null, yerelCagri: 0, yerelDurum: null, kisaCagri: 0, tarayici: null };
+
+/* Sahte tarayıcı modeli: gerçek indirme yapmadan akış hattını sınar */
+function sahteTarayiciModul(opts = {}) {
+  const cagri = { yukleme: 0, uretim: 0, sonMesajlar: null, bosaltildi: false };
+  return {
+    cagri,
+    modul: {
+      MODELLER: [
+        { id: "onnx-community/Qwen2.5-0.5B-Instruct", ad: "⚡ Qwen2.5 0.5B — çok hızlı", boyut: "~450 MB", not: "" },
+        { id: "onnx-community/Qwen2.5-1.5B-Instruct", ad: "⚖️ Qwen2.5 1.5B — dengeli", boyut: "~1.1 GB", not: "" },
+      ],
+      durum: () => ({ yuklu: true, modelId: "onnx-community/Qwen2.5-0.5B-Instruct", cihaz: "webgpu",
+                      dtype: "q4f16", hiz: 42, cihazEtiketi: "WebGPU (ekran kartı)" }),
+      yukle: async (ayar = {}) => {
+        cagri.yukleme++;
+        if (opts.hata) throw new Error("model indirilemedi (test)");
+        if (ayar.ilerleme) {
+          ayar.ilerleme({ asama: "indirme", dosya: "onnx/model_q4f16.onnx", yuzde: 40, mesaj: "İndiriliyor: model_q4f16.onnx" });
+          ayar.ilerleme({ asama: "indirme", yuzde: 100, mesaj: "İndiriliyor: model_q4f16.onnx" });
+        }
+        return { yuklu: true, modelId: ayar.modelId, cihaz: "webgpu", dtype: "q4f16",
+                 cihazEtiketi: "WebGPU (ekran kartı)", hiz: null };
+      },
+      bosalt: () => { cagri.bosaltildi = true; },
+      uret: async (mesajlar, secenekler = {}) => {
+        cagri.uretim++;
+        cagri.sonMesajlar = mesajlar;
+        const parcalar = ["**Kripto para** konusunda ", "âlimler ihtilaf etmiştir; ", "«Allah alışverişi helâl, faizi haram kılmıştır.» (Bakara 2/275) ",
+                          "Temkinli yaklaşmak en doğrusudur."];
+        for (const p of parcalar) { if (secenekler.onParca) secenekler.onParca(p); }
+        return { metin: parcalar.join(""), hiz: 38, sure: 2.1, dtype: "q4f16", cihaz: "webgpu" };
+      },
+    },
+  };
+}
+
 
 const YEREL_MODEL = {
   hazir: true, arka_uc: "Ollama", adres: "http://127.0.0.1:11434/v1", model: "qwen2.5-7b-instruct",
@@ -95,9 +131,10 @@ function sseAkisi() {
   };
 }
 
-function sayfaKur(llmAyar, depolama) {
+function sayfaKur(llmAyar, depolama, kanca) {
   const dom = new JSDOM(sablon, { url: "http://localhost:8000/", runScripts: "outside-only", pretendToBeVisual: true });
   const { window } = dom;
+  if (kanca) window.__TUGRUL_TEST_TARAYICI__ = kanca;
   if (llmAyar) window.localStorage.setItem("seyh-tugrul-llm", JSON.stringify(llmAyar));
   Object.entries(depolama || {}).forEach(([k, v]) => window.localStorage.setItem(k, v));
 
@@ -110,7 +147,8 @@ function sayfaKur(llmAyar, depolama) {
     if (u.endsWith("/api/sorular")) return gonder({ sorular: [] });
     if (u.includes("/api/yerel-model")) return gonder(durum.yerelDurum || { hazir: false, model: "", arka_uc: "" });
     if (u.endsWith("/api/sor-yerel")) { durum.yerelCagri++; return yerelAkisi(); }
-    if (u.endsWith("/api/baglam")) {
+    if (u.includes("/api/baglam")) {
+      if (u.includes("kisa=true")) durum.kisaCagri++;
       const soru = JSON.parse(opts.body).soru;
       return gonder(/zarar|intihar|şiddet/i.test(soru) ? paketler.guvenlik : paketler.faiz);
     }
@@ -203,7 +241,56 @@ const kontrol = (ad, kosul, ek = "") => sonuc.push({ ad, gecti: !!kosul, ek });
   kontrol("yerel: 'Sistem içi · anahtarsız' etiketi", /Sistem içi/.test(b.textContent));
   kontrol("yerel: kaynak bloğu", /bilgi bankası kayıtları/.test(b.textContent));
 
-  /* ---------- 6) Sistem içi model kapatılınca bilgi bankasına döner ---------- */
+  /* ---------- 6) Tarayıcıda çalışan model ---------- */
+  const sahte = sahteTarayiciModul();
+  durum.tarayici = sahte.cagri;
+  durum.kisaCagri = 0;
+  w = sayfaKur(null, {
+    "seyh-tugrul-tarayici": JSON.stringify({ modelId: "onnx-community/Qwen2.5-0.5B-Instruct", otomatik: true }),
+    "seyh-tugrul-yerel-kullan": "0",
+  }, sahte.modul);
+  await bekle(500);
+  kontrol("tarayıcı modeli: otomatik yüklendi", sahte.cagri.yukleme >= 1, "yükleme: " + sahte.cagri.yukleme);
+  kontrol("tarayıcı modeli: durum 'WebGPU · hazır'", /WebGPU · hazır/.test(w.document.querySelector("#tarayiciDurum").textContent),
+    w.document.querySelector("#tarayiciDurum").textContent);
+  kontrol("rozet: ⚡ ile model adı", /⚡/.test(w.document.querySelector("#motorBtn").textContent) &&
+    /Qwen2\.5-0\.5B-Instruct/.test(w.document.querySelector("#motorBtn").textContent),
+    w.document.querySelector("#motorBtn").textContent);
+
+  await soruGonder(w, "Kripto para caiz mi?");
+  b = sonBaloncuk(w);
+  kontrol("tarayıcı modeli: akış çizildi", /Kripto para/.test(b.textContent) && /Bakara 2\/275/.test(b.textContent), b.textContent.slice(0, 80));
+  kontrol("tarayıcı modeli: 'Tarayıcıda' etiketi", /Tarayıcıda/.test(b.textContent));
+  kontrol("tarayıcı modeli: hız rozeti", /kelime\/sn/.test(b.textContent), b.textContent.slice(0, 120));
+  kontrol("tarayıcı modeli: kısa bağlam istendi", durum.kisaCagri >= 1, "kısa çağrı: " + durum.kisaCagri);
+  kontrol("tarayıcı modeli: RAG kaynak bloğu", /bilgi bankası kayıtları/.test(b.textContent));
+  kontrol("tarayıcı modeli: sistem yönergesi gönderildi",
+    !!(sahte.cagri.sonMesajlar && sahte.cagri.sonMesajlar[0].role === "system" && /UYDURMA YASAK/.test(sahte.cagri.sonMesajlar[0].content)));
+  kontrol("tarayıcı modeli: bağlam kullanıcı mesajında", /YEREL BİLGİ BANKASI/.test(sahte.cagri.sonMesajlar[1].content));
+
+  // Boşalt düğmesi
+  w.document.querySelector("#motorBtn").dispatchEvent(new w.Event("click", { bubbles: true }));
+  w.document.querySelector("#tarayiciBosalt").dispatchEvent(new w.Event("click", { bubbles: true }));
+  await bekle(120);
+  kontrol("tarayıcı modeli: boşaltıldı", sahte.cagri.bosaltildi === true);
+  kontrol("tarayıcı modeli: durum kapalı", /kapalı/.test(w.document.querySelector("#tarayiciDurum").textContent));
+
+  /* ---------- 7) Tarayıcı modeli yüklenemezse: uyarı + yedek yol ---------- */
+  const bozuk = sahteTarayiciModul({ hata: true });
+  durum.kisaCagri = 0;
+  w = sayfaKur(null, {
+    "seyh-tugrul-tarayici": JSON.stringify({ modelId: "onnx-community/Qwen2.5-0.5B-Instruct", otomatik: true }),
+    "seyh-tugrul-yerel-kullan": "0",
+  }, bozuk.modul);
+  await bekle(500);
+  kontrol("yükleme hatası: kullanıcı bilgilendirildi", /✘/.test(w.document.querySelector("#tarayiciNot").textContent),
+    w.document.querySelector("#tarayiciNot").textContent);
+  await soruGonder(w, "Kredi kartı gecikme faizi caiz mi?");
+  b = sonBaloncuk(w);
+  kontrol("yükleme hatası: tarayıcı modeli kullanılmadı", bozuk.cagri.uretim === 0);
+  kontrol("yükleme hatası: bilgi bankası cevabı geldi", b.textContent.length > 150);
+
+  /* ---------- 8) Sistem içi model kapatılınca bilgi bankasına döner ---------- */
   durum.yerelCagri = 0;
   w = sayfaKur(null, { "seyh-tugrul-yerel-kullan": "0" });   // sayfa, anahtar kapalı hâliyle kurulur
   await bekle(300);

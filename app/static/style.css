@@ -294,3 +294,11 @@ body{
 .yerel-komut{margin:0; font-size:11px; line-height:1.55; color:#cfe9df; background:rgba(3,26,19,.85);
   border:1px solid var(--line-soft); border-radius:10px; padding:10px; overflow-x:auto; white-space:pre}
 .yerel-komut[hidden]{display:none}
+
+/* ---------------- TARAYICIDA ÇALIŞAN MODEL ---------------- */
+.tarayici-kart{border-color:rgba(227,197,116,.45); background:linear-gradient(140deg, rgba(227,197,116,.10), rgba(45,212,191,.06))}
+.ilerleme{position:relative; height:22px; border-radius:999px; background:rgba(3,26,19,.9);
+  border:1px solid var(--line-soft); overflow:hidden; display:flex; align-items:center}
+.ilerleme[hidden]{display:none}
+.cubuk{position:absolute; inset:0 auto 0 0; width:0%; background:linear-gradient(90deg,#0e4d39,#2dd4bf); transition:width .25s}
+.ilerleme span{position:relative; margin-left:auto; margin-right:9px; font-size:10.5px; color:var(--ink); z-index:1}

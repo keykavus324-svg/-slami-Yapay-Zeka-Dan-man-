@@ -13,3 +13,4 @@ env/
 app/runtime/
 models/
 *.gguf
+app/static/vendor/

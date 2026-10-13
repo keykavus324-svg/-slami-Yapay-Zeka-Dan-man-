@@ -7,10 +7,13 @@ cd /d "%~dp0.."
 echo [1/4] Python bagimliliklari
 python -m pip install -r requirements.txt || goto :hata
 
-echo [2/4] Yerel cikarim motoru (llama-cpp-python, istege bagli)
+echo [2/5] Tarayici modeli kutuphanesi (transformers.js + onnxruntime WASM)
+python -m scripts.vendor_indir
+
+echo [3/5] Yerel cikarim motoru (llama-cpp-python, istege bagli)
 python -m pip install llama-cpp-python
 
-echo [3/4] Model dosyasi (qwen2.5:7b ~4.7 GB)
+echo [4/5] Model dosyasi (qwen2.5:7b ~4.7 GB)
 where ollama >nul 2>nul
 if %errorlevel%==0 (
   echo Ollama bulundu: ollama pull qwen2.5:7b
@@ -19,7 +22,7 @@ if %errorlevel%==0 (
   python -m app.model_indir qwen2.5:7b
 )
 
-echo [4/4] Uygulama baslatiliyor - http://localhost:8000
+echo [5/5] Uygulama baslatiliyor - http://localhost:8000
 python -m app.main
 goto :eof
 

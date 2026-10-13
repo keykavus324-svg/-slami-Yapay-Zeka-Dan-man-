@@ -131,13 +131,40 @@ kaynakla uyumlu cevap ver; bağlamda yoksa kendi ilminle cevapla. Gerekirse bilg
 kayıtların başlıklarına atıf yapabilirsin."""
 
 
+# --------------------------------------------------------------------------------------
+# TARAYICIDA ÇALIŞAN MODEL (transformers.js + WebGPU/WASM) — indirme boyutları
+# --------------------------------------------------------------------------------------
+TARAYICI_MODELLERI: List[Dict[str, str]] = [
+    {
+        "id": "onnx-community/Qwen2.5-0.5B-Instruct",
+        "ad": "⚡ Qwen2.5 0.5B — çok hızlı",
+        "boyut": "~450 MB",
+        "not": "En hızlısı: zayıf bilgisayar ve telefonlarda bile akıcı. Bilgi bankası bağlamıyla iyi sonuç verir.",
+    },
+    {
+        "id": "onnx-community/Qwen2.5-1.5B-Instruct",
+        "ad": "⚖️ Qwen2.5 1.5B — dengeli",
+        "boyut": "~1.1 GB",
+        "not": "Kalite/hız dengesi; 8 GB RAM'li bilgisayarlar için ideal.",
+    },
+    {
+        "id": "onnx-community/Qwen2.5-3B-Instruct",
+        "ad": "🎯 Qwen2.5 3B — kaliteli",
+        "boyut": "~2.2 GB",
+        "not": "Daha isabetli cevaplar; GPU veya güçlü CPU önerilir.",
+    },
+]
+
+
 def model_bilgisi() -> Dict[str, Any]:
     """Arayüzün ihtiyaç duyduğu sistem yönergesi + sağlayıcı listesi."""
     return {
         "sistem_promptu": SISTEM_PROMPTU,
         "kullanici_sablonu": KULLANICI_SABLONU,
         "saglayicilar": SAGLAYICILAR,
-        "mod": "RAG (yerel bilgi bankası) + yüksek parametreli dil modeli (tarayıcıdan)",
+        "mod": "RAG (yerel bilgi bankası) + tarayıcıda çalışan model (WebGPU/WASM) + "
+               "isteğe bağlı bulut modeli",
+        "tarayici_modelleri": TARAYICI_MODELLERI,
         "gizlilik": "API anahtarı yalnızca sizin tarayıcınızda saklanır; sunucuya gönderilmez.",
     }
 

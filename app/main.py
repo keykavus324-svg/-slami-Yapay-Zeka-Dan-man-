@@ -53,6 +53,15 @@ app.add_middleware(
 )
 
 
+@app.middleware("http")
+async def wasm_mime_korumasi(request, call_next):
+    """Tarayıcı modeli için .wasm dosyaları doğru MIME ile sunulmalı (WebAssembly.instantiateStreaming)."""
+    yanit = await call_next(request)
+    if request.url.path.endswith(".wasm"):
+        yanit.headers["content-type"] = "application/wasm"
+    return yanit
+
+
 class SoruIstegi(BaseModel):
     soru: str = Field(..., min_length=1, max_length=1000, description="Kullanıcının sorusu")
     detay: str = Field("normal", description="'normal' veya 'kisa'")
@@ -90,16 +99,36 @@ def sor(istek: SoruIstegi) -> Dict[str, Any]:
     return sonuc
 
 
+def _kisa_baglam(veri: Dict[str, Any], kayit_sinir: int = 2, pasaj_sinir: int = 3) -> str:
+    """Küçük bağlam pencereli modeller için sıkıştırılmış bağlam metni."""
+    parcalar: List[str] = []
+    for i, k in enumerate((veri.get("kayitlar") or [])[:kayit_sinir], 1):
+        cevap = (k.get("cevap") or "")[:1100]
+        kaynak = "; ".join(k.get("kaynaklar") or [])
+        parcalar.append("[KAYIT %d] (%s) %s\n%s\nKaynaklar: %s" % (i, k.get("kategori", ""), k.get("soru", ""), cevap, kaynak))
+    for i, pz in enumerate((veri.get("pasajlar") or [])[:pasaj_sinir], 1):
+        parcalar.append("[BÖLÜM %d] (%s) %s\n%s" % (i, pz.get("kategori", ""), pz.get("soru", ""), (pz.get("metin") or "")[:700]))
+    return "\n\n".join(parcalar)
+
+
 @app.post("/api/baglam")
-def baglam(istek: SoruIstegi) -> Dict[str, Any]:
+def baglam(istek: SoruIstegi, kisa: bool = False) -> Dict[str, Any]:
     """
     Dil modeline (LLM) verilecek **kaynaklı bağlam paketi** + yerel motorun cevabı.
 
-    Tarayıcı bu uç noktadan bilgi bankası bağlamını alır, ardından seçili yüksek
-    parametreli modele (Gemini/Groq/OpenRouter/Ollama) soruyu bu bağlamla birlikte sorar.
+    Tarayıcı bu uç noktadan bilgi bankası bağlamını alır, ardından tarayıcıda çalışan
+    modele (WebGPU/WASM) ya da bulut modeline soruyu bu bağlamla birlikte sorar.
+
+    `kisa=true`: tarayıcıda çalışan küçük modeller için sıkıştırılmış bağlam
+    (2 kayıt + 3 bölüm) — hızlı istem (prompt) işleme ve düşük bellek kullanımı sağlar.
     """
     sonuc = engine.baglam(istek.soru)
-    sonuc["baglam_metni"] = baglam_metni(sonuc["kayitlar"], sonuc["pasajlar"])
+    if kisa:
+        sonuc["baglam_metni"] = _kisa_baglam(sonuc)
+        sonuc["kisa"] = True
+    else:
+        sonuc["baglam_metni"] = baglam_metni(sonuc["kayitlar"], sonuc["pasajlar"])
+        sonuc["kisa"] = False
     sonuc["kullanici_mesaji"] = KULLANICI_SABLONU.format(
         kayit_sayisi=sonuc["bilgi_bankasi"]["kayit"],
         pasaj_sayisi=sonuc["bilgi_bankasi"]["pasaj"],
@@ -120,18 +149,6 @@ def model() -> Dict[str, Any]:
 def yerel_model_durumu(zorla: bool = False) -> Dict[str, Any]:
     """Sistem içi (yerel) dil modelinin durumu. Anahtar gerekmez, dış servis kullanılmaz."""
     return yerel_model.kesfet(zorla=zorla)
-
-
-def _kisa_baglam(veri: Dict[str, Any], kayit_sinir: int = 2, pasaj_sinir: int = 3) -> str:
-    """Küçük bağlam pencereli modeller için sıkıştırılmış bağlam metni."""
-    parcalar: List[str] = []
-    for i, k in enumerate((veri.get("kayitlar") or [])[:kayit_sinir], 1):
-        cevap = (k.get("cevap") or "")[:1100]
-        kaynak = "; ".join(k.get("kaynaklar") or [])
-        parcalar.append("[KAYIT %d] (%s) %s\n%s\nKaynaklar: %s" % (i, k.get("kategori", ""), k.get("soru", ""), cevap, kaynak))
-    for i, pz in enumerate((veri.get("pasajlar") or [])[:pasaj_sinir], 1):
-        parcalar.append("[BÖLÜM %d] (%s) %s\n%s" % (i, pz.get("kategori", ""), pz.get("soru", ""), (pz.get("metin") or "")[:700]))
-    return "\n\n".join(parcalar)
 
 
 @app.post("/api/sor-yerel")

@@ -7,6 +7,8 @@
 <meta name="description" content="Ücretsiz ve sınırsız İslami soru-cevap danışmanı. Namaz, abdest, oruç, zekât, hac, aile, helâl-haram ve daha fazlası. Kayıt yok, ücret yok." />
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
 <link rel="stylesheet" href="/static/style.css" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="preconnect" href="https://huggingface.co" crossorigin />
 </head>
 <body>
 
@@ -104,6 +106,29 @@
 <div class="modal" id="llmModal" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="llmBaslik">
     <h3 id="llmBaslik">🧠 Dil Modeli Ayarları</h3>
+    <div class="yerel-kart tarayici-kart">
+      <div class="yerel-head">
+        <b>⚡ Tarayıcıda çalışan model <span class="etiket">en hızlı</span></b>
+        <span class="motor-durum" id="tarayiciDurum">kapalı</span>
+      </div>
+      <p class="mini" id="tarayiciOzet">
+        Model <b>sizin tarayıcınızda</b> koşar: cevaplar saniyeler içinde akar, yazdığınız metin hiçbir
+        sunucuya gönderilmez. İlk açılışta <b>bir kez</b> indirilir ve tarayıcı önbelleğinde kalır.
+      </p>
+      <label class="alan">Model
+        <select id="tarayiciModel"></select>
+      </label>
+      <div class="ilerleme" id="tarayiciIlerleme" hidden>
+        <div class="cubuk" id="tarayiciCubuk"></div>
+        <span id="tarayiciYuzde">%0</span>
+      </div>
+      <p class="mini" id="tarayiciNot"></p>
+      <div class="modal-actions">
+        <button class="primary" id="tarayiciBaslat">Modeli başlat</button>
+        <button id="tarayiciBosalt">Boşalt</button>
+      </div>
+    </div>
+
     <div class="yerel-kart">
       <div class="yerel-head">
         <b>🖥️ Sistem içi model <span class="etiket">önerilen</span></b>
