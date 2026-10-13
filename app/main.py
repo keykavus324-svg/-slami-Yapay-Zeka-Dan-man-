@@ -40,7 +40,7 @@ app = FastAPI(
         "(2) isteğe bağlı yüksek parametreli dil modeli (Gemini/Groq/OpenRouter/Ollama) — "
         "çağrı kullanıcının tarayıcısından yapılır, anahtar sunucuya gitmez."
     ),
-    version="3.0.0",
+    version="4.0.0",
 )
 
 # Önizleme/tarayıcı erişimi için geniş CORS (herkese açık, kimlik doğrulamasız araç)
@@ -279,10 +279,11 @@ def bosluklar() -> Dict[str, Any]:
 def istatistik() -> Dict[str, Any]:
     return {
         **engine.istatistik(),
-        "surum": "3.0.0",
+        "surum": "4.0.0",
         "yerel_model": yerel_model.durum(),
-        "aciklama": "Yerel bilgi bankası her zaman çalışır (ücretsiz, kotasız). İsteğe bağlı olarak "
-                    "yüksek parametreli bir dil modeli tarayıcıdan bağlanabilir.",
+        "aciklama": "Yerel bilgi bankası her zaman çalışır (ücretsiz, kotasız). Cevaplar isteğe bağlı "
+                    "olarak TARAYICIDA çalışan bir modelle (WebGPU/WASM), sunucudaki yerel modelle ya da "
+                    "bulut modeliyle üretilebilir.",
     }
 
 

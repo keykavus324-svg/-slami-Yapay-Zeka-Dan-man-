@@ -346,3 +346,12 @@ tavsiye edilen bir tedbirdir.
 Bu proje, ilim öğrenmeyi kolaylaştırmak niyetiyle hazırlanmıştır. Hatalar bizden, doğrular
 Allah'tandır. Gördüğünüz eksik veya yanlışı düzeltmekten çekinmeyin: bilgi bankası büyüdükçe
 uygulama güzelleşir.
+
+---
+
+## 📌 Sürüm Notu
+
+- **v4.0** — Cevaplar tarayıcıda çalışan modelle üretilebiliyor (WebGPU/WASM); kütüphane yerelden servis edilir.
+- **v3.0** — Sistem içi model katmanı (Ollama / llama.cpp / llama-cpp-python) + GGUF indirici + Docker.
+- **v2.0** — RAG katmanı (`/api/baglam`) ve bulut modeli desteği.
+- **v1.0** — 152 kayıtlık bilgi bankası, pasaj araması, usul cevapları, boşluk takibi.
