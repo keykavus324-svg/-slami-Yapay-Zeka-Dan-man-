@@ -124,6 +124,13 @@ def rastgele() -> Dict[str, Any]:
     return soru_detay(entry.id)
 
 
+@app.get("/api/bosluklar")
+def bosluklar() -> Dict[str, Any]:
+    """Cevaplanamayan soruları listeler — içerik geliştirme listesi (en çok sorulanlar önce)."""
+    kayitlar = engine.bosluklar()
+    return {"adet": len(kayitlar), "bosluklar": kayitlar[:100]}
+
+
 @app.get("/api/istatistik")
 def istatistik() -> Dict[str, Any]:
     return {

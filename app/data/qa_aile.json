@@ -3,56 +3,145 @@
     "id": "nikah-islamin-aile",
     "kategori": "Aile",
     "soru": "İslam'da nikâh ve aile hayatı nasıldır? Evlenmenin hükmü nedir?",
-    "anahtar": ["nikah", "evlilik", "aile", "evlenmek", "nikah şartları", "eş seçimi", "islamda evlilik", "kız isteme", "nişan"],
+    "anahtar": [
+      "nikah",
+      "evlilik",
+      "aile",
+      "evlenmek",
+      "nikah şartları",
+      "eş seçimi",
+      "islamda evlilik",
+      "kız isteme",
+      "nişan",
+      "gençken evlenmek",
+      "erken evlenmek",
+      "evlilik yaşı",
+      "gençlikte evlilik",
+      "evlenmek istiyorum"
+    ],
     "cevap": "**Nikâh**, İslam'da yalnızca bir sözleşme değil; **yarım dini tamamlamak** olarak tarif edilmiştir: «Allah'ın âyetlerinden biri de, size kendi cinsinizden eşler yaratmasıdır; aranıza sevgi ve merhamet koymuştur.» (Rûm 30/21)\n\n**Evlenmenin hükümleri:**\n- **Şartları taşıyanlar için sünnet**, hatta bazı durumlarda vacip (harama düşme korkusu varsa).\n- **Niyet:** Yalnızca şehvet değil; iffet, neslin devamı ve huzur.\n\n**Nikâhın şartları:**\n1. **Rıza:** Tarafların rızası (zorla evlilik caiz değildir; kadının rızası gerekir).\n2. **Şahitler:** İki erkek veya bir erkek iki kadın; açık bir meclis.\n3. **Nikâh akdi** ve **ilân** (gizli nikâh olmaz).\n4. **Velî:** Hanefî'ye göre kadının velisinin izni gerekir; kadın kendi nikâhını kıyabilir, ancak veli izni, hakları korumak için güçlü bir şarttır.\n5. **Mehir:** Kadına verilecek mal (mehr-i muaccel/peşin ve mehr-i müeccel/sonradan). Mehir, kadının şahsi malıdır.\n6. **Evlenme engeli olmaması** (nesep, süt akrabalığı, din farkı vb.).\n\n**Eş seçimi:**\n- **Dindarlık ve ahlak** önceliklidir: «Kadın dört özelliği için nikâhlanır: malı, soyu, güzelliği ve dindarlığı. Sen dindar olanı seç.» (Buhârî, Müslim)\n- **Uyum ve sevgi:** Duyguyu da bir meşru ölçü olarak gör; zorla, baskıyla kurulan evlilikler İslamî değildir.\n- **Danışma ve istişare:** Aile büyükleriyle istişare et; ancak karar, tarafların kendi rızasına dayanır.\n\n**Nişan:** Meşrudur; ancak nişan, nikâh hükmü doğurmaz. Nişanlılar birbirine **yabancıdır**; başbaşa kalmak caiz değildir. **Nikahtan sonra** birlikte olmak helâl olur.\n\n**Aile hayatı:** Karşılıklı sevgi, haklara riayet, iyi geçim (muaşeret bi'l-ma'ruf), nafaka (erkeğin ailesinin geçimini sağlaması), çocukların güzel terbiye edilmesi. Aile, cennetin evdeki şubesi gibidir.",
-    "kaynaklar": ["Kur'an: er-Rûm 30/21, en-Nisâ 4/1-4, el-Bakara 2/187", "Hadis: Buhârî, Nikâh 1-10; Müslim, Nikâh 1-20"]
+    "kaynaklar": [
+      "Kur'an: er-Rûm 30/21, en-Nisâ 4/1-4, el-Bakara 2/187",
+      "Hadis: Buhârî, Nikâh 1-10; Müslim, Nikâh 1-20"
+    ]
   },
   {
     "id": "bosanma-hukuk",
     "kategori": "Aile",
     "soru": "İslam'da boşanma (talak) hükümleri nasıldır?",
-    "anahtar": ["boşanma", "talak", "eşimden boşanmak", "boşanmak günah mı", "iddet", "hul", "boşanma sonrası"],
+    "anahtar": [
+      "boşanma",
+      "talak",
+      "eşimden boşanmak",
+      "boşanmak günah mı",
+      "iddet",
+      "hul",
+      "boşanma sonrası"
+    ],
     "cevap": "İslam, evliliğin sürdürülmesini esas alır; boşanmayı **son çare** olarak meşru kılar. Hadiste boşanmanın en sevilmeyen helâl olduğu bildirilmiştir (Ebû Dâvûd).\n\n**Boşanma öncesi adımlar (Kur'an'ın sırası, Nisâ 4/34-35, 128-130):**\n1. **Konuşma ve nasihat.**\n2. **Ayrı yatak/ara verme** (geçici).\n3. **Hakem tayini:** İki taraftan birer hakem (arabulucu). Kur'an: «Eğer aralarının düzelmesini isterlerse, Allah aralarını bulur.»\n4. Düzelme olmazsa ayrılık meşrudur.\n\n**Talak çeşitleri:**\n- **Talâk-ı ric'î:** Bir veya iki talak ile boşama; iddet süresince koca rücu (geri dönüş) hakkına sahiptir.\n- **Talâk-ı bâin:** Kesin boşanma (üç talak); yeniden evlenmek için bazı şartlar aranır.\n- **Hul'/muhâlaa:** Kadının bedel karşılığı boşanması (kocasıyla anlaşarak).\n- **Tefrik:** Mahkeme yoluyla boşanma (hastalık, nafaka vermeme, kötü muamele gibi hâllerde).\n\n**İddet:** Boşanma veya eşin ölümünden sonra beklenen süre. Boşanmada üç hayız dönemi (yaklaşık üç ay), ölümde 4 ay 10 gün; hamilelikte doğuma kadar. İddet süresinde **nikâh yapılamaz**; boşanmadan dönen çift tekrar nikâh kıyar.\n\n**Önemli hükümler:**\n- Boşanma, **sarhoş hâlde veya öfkeyle bir çırpıda üç talak** söylenerek değil, Kur'an'ın belirlediği **bekleme ve düşünme** usulüyle yapılır.\n- **Mehir ve nafaka:** Boşanan kadının mehr-i müecceli ve iddet nafakası güvence altındadır.\n- **Çocuklar:** Velayet ve nafaka, çocuğun maslahatına göredir. Çocuk bir tarafın \"silahı\" değildir.\n- **Aynı evde kalma:** Boşandıktan sonra taraflar yabancıdır; dikkat ve âdâb.\n\n**Pratik öneri:** Modern hayatta boşanma süreci hukukî bir iştir; hem **fıkhi hükümler** hem **mahkeme süreci** paralel yürür. Bu karmaşık hâllerde bir müftülüğe ve bir avukata birlikte danışmak en doğru yoldur. Din, zorla evlilikte tutmayı değil, **insanın onurunu ve huzurunu** korumayı amaçlar.",
-    "kaynaklar": ["Kur'an: et-Talâk 65/1-7, el-Bakara 2/226-237", "Hadis: Ebû Dâvûd, Talâk 3; Müslim, Talâk 1-25"]
+    "kaynaklar": [
+      "Kur'an: et-Talâk 65/1-7, el-Bakara 2/226-237",
+      "Hadis: Ebû Dâvûd, Talâk 3; Müslim, Talâk 1-25"
+    ]
   },
   {
     "id": "es-haklari-muamelat",
     "kategori": "Aile",
     "soru": "Eşlerin birbirleri üzerindeki hakları nelerdir?",
-    "anahtar": ["eş hakları", "karı koca hakları", "eşime nasıl davranmalıyım", "koca hakları", "kadın hakları", "nafaka", "aile geçimi"],
+    "anahtar": [
+      "eş hakları",
+      "karı koca hakları",
+      "eşime nasıl davranmalıyım",
+      "koca hakları",
+      "kadın hakları",
+      "nafaka",
+      "aile geçimi"
+    ],
     "cevap": "İslam'da aile, **karşılıklı hak ve sorumluluk** üzerine kuruludur: «Onlar (kadınlar) sizin üzerinizde, sizin de onlar üzerinizde haklarınız vardır.» (Bakara 2/228) ve «Erkeklerin kadınlar üzerinde hakları olduğu gibi, kadınların da erkekler üzerinde hakları vardır.»\n\n**Kocanın (erkeğin) sorumlulukları:**\n- **Nafaka:** Ailenin geçimini helâl yollarla sağlamak. Kadının kendi malı varsa bile nafaka erkeğe aittir.\n- **Hüsn-i muamele:** Şiddet, hakaret, kötü söz yasaktır. Hadis: «Sizin en hayırlınız, ailesine karşı en hayırlı olanınızdır.» (Tirmizî)\n- **Yardım:** Ev işlerine destek, çocuk bakımına katılım (Hz. Peygamber evinde hizmet ederdi).\n- **Mahremiyet ve sadakat:** Sırları korumak, güven.\n- **İbadet ve ahlakta örnek olmak.**\n\n**Kadının (eşin) sorumlulukları:**\n- **Sadakat ve iffet**, güvenin korunması; aile düzenine riayet.\n- **Kocanın helâl olmayan bir şeyi istemesi hâlinde** itaat gerekmez; günaha itaat yoktur.\n- **Karşılıklı saygı ve anlayış**, çocukların terbiyesinde ortaklık.\n\n**Müşterek haklar:**\n- **Güven, sevgi, merhamet, cinsel ilişki hakkı** (karşılıklı rıza ile).\n- **Eğitim, din ve şahsiyet hakları.**\n- **Mal ayrılığı:** Kadının malı kendisine aittir, kocası onun üzerinde tasarruf edemez. Kadının çalışması ve kazancı kendi rızasına bağlıdır; İslam kadına \n ticaret ve mülk edinme hakkı vermiştir (Hz. Hatice ticaret yapan bir iş kadınıydı).\n\n**Şiddet konusunda açık hüküm:** Fiziksel şiddet, dövme, aşağılama **kesinlikle yasaktır** ve büyük bir haksızlıktır. Kur'an'ın aile için önerdiği yol Arabulucu ve hakemdir. Bir kişi şiddet görüyorsa: güvenliğini sağlamak, destek almak (aile, hukuk, sığınma) dinî ve insanî bir haktır.\n\n**Pratik:** Haftada bir 'aile meclisi', küçük hediyeler, birlikte dua, çocuklara ayrılan kaliteli zaman — bunlar evliliği ayakta tutan sünnetlerdir.",
-    "kaynaklar": ["Kur'an: el-Bakara 2/228-237, en-Nisâ 4/19-34", "Hadis: Tirmizî, Radâ' 11; Buhârî, Nikâh 43"]
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/228-237, en-Nisâ 4/19-34",
+      "Hadis: Tirmizî, Radâ' 11; Buhârî, Nikâh 43"
+    ]
   },
   {
     "id": "helal-haram-ozet",
     "kategori": "Helâl-Haram",
     "soru": "Helâl ve haram nedir? Genel ölçüler",
-    "anahtar": ["helal haram", "helal nedir", "haram nedir", "helal haram ölçüsü", "caiz mi", "haram olduğunu bilmiyordum"],
+    "anahtar": [
+      "helal haram",
+      "helal nedir",
+      "haram nedir",
+      "helal haram ölçüsü",
+      "caiz mi",
+      "haram olduğunu bilmiyordum"
+    ],
     "cevap": "**Helâl**, izin verilen; **haram**, yasaklanan; **mekruh**, çirkin görülen; **mubah**, serbest olan demektir.\n\n**Temel ölçüler:**\n1. **Aslolan helâlliktir:** Kur'an, eşyada esasın helâllik olduğunu bildirir: «Yeryüzünde olan şeyleri size helâl kıldı.» (Bakara 2/29) Bir şeyin haram olduğunu **açık bir nass** bildirmedikçe haram sayılmaz.\n2. **Haram kılan net delildir:** Kitap, sünnet ve icmâ.\n3. **Zarûret, haramı geçici olarak meşru kılar:** «Kim açlıktan dolayı zarûrette kalırsa, saldırmamak ve haddi aşmamak şartıyla (haramdan) yiyebilir.» (Bakara 2/173)\n4. **Kimseyi kendi helal-haram ölçüsü ile sınırlamak** doğru değildir; fıkhî ihtilaflar vardır ve takva seviyeleri farklıdır.\n\n**Genel haram kategorileri:**\n- Yiyecek-içecek: Domuz eti ve ürünleri, leş, akıtılmış kan, Allah'tan başkası adına kesilen, alkollü içecekler (hamr) ve sarhoş ediciler, \n- Kazanç: faiz, kumar, rüşvet, aldatma (garar), ihtikâr (stokçuluk), çalıntı/gasp mal, \n- Söz-fill: yalan, gıybet, iftira, hile, zina ve fuhşun her türü, \n- İlişkiler: zulüm, gönül kırmak, kul hakkı.\n\n**Şüpheli şeyler (şüpheli, haramla helâl arası):** Hadis: «Helâl apaçık, haram apaçık; ikisi arasında şüpheli şeyler vardır. Şüphelilerden kaçınan, dinini ve ırzını korumuş olur.» (Buhârî, Müslim)\n\n**Örnek soru:** \"Şu ürün caiz mi?\" — İçindeki katkı maddesi/hayvansal ürünleri araştırmak, sertifikalı helâl ürün seçmek gerekir. Şüphede kalınan şeyde **ihtiyat** yolu, takva; ancak **vesvese** vesveseyi besler: Bilmediğin için yediğin bir şeyden dolayı mükellef tutulmazsın (bilmediğin için sorumlu olmazsın; öğrenmenin kapısı ise açıktır).",
-    "kaynaklar": ["Kur'an: el-Bakara 2/168-173, el-Mâide 5/3-5, el-A'râf 7/157", "Hadis: Buhârî, İman 39; Müslim, Müsâkât 107-108"]
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/168-173, el-Mâide 5/3-5, el-A'râf 7/157",
+      "Hadis: Buhârî, İman 39; Müslim, Müsâkât 107-108"
+    ]
   },
   {
     "id": "helal-gida",
     "kategori": "Helâl-Haram",
     "soru": "Helal gıda: içki, domuz ürünleri, karmin, jelatin ve katkı maddeleri",
-    "anahtar": ["helal gıda", "içki", "alkol", "domuz", "jelatin", "karmin", "e120", "helal sertifika", "katkı maddeleri", "yemek helal mi"],
+    "anahtar": [
+      "helal gıda",
+      "içki",
+      "alkol",
+      "domuz",
+      "jelatin",
+      "karmin",
+      "e120",
+      "helal sertifika",
+      "katkı maddeleri",
+      "yemek helal mi"
+    ],
     "cevap": "**Yasak gıdalar (Mâide 5/3, Bakara 2/173):** Leş, kan, **domuz eti** ve ürünleri, Allah'tan başkası adına kesilen hayvan, boğulmuş/vurulmuş/düşmüş hayvanlar.\n\n**İçki (hamr):** «Ey iman edenler! İçki, kumar, putlar ve fal okları şeytan işi birer pisliktir; bunlardan kaçının.» (Mâide 5/90) **Sarhoş edicilerin her türü** haramdır (hadiste: «Sarhoş eden her şey hamrdır, her hamr da haramdır.» Müslim). Yemeğe katılan **alkolün tamamının uçmadığı** durumlarda (şarap sosu, likörlü tatlı) ihtiyaten kaçınılır. **Alkolün uçtuğu** (kaynama/pişirme ile buharlaşan) durumlarda bir kısım âlim caiz görmüş, ancak ihtiyat terki tercih edilmiştir.\n\n**Katkı maddeleri ve ihtilaflı içerikler:**\n- **Jelatin:** Domuz kaynaklı jelatin haramdır. Helâl sertifikalı sığır jelatini veya bitkisel katılar (pectin, agar-agar) uygundur.\n- **Karmin (E120):** Böcek kaynaklıdır. Hanefî âlimlerin bir kısmı caiz görürken (bazı böceklerin yenmesi tartışmalı), ihtiyaten kaçınılması yaygındır. Diyanet: E120 hakkında ihtilaf vardır; **kaçınmak takvaya daha uygundur**.\n- **Monogliseridler, E471, emülgatörler:** Yağ asidi kaynaklı olup hayvan (domuz) kaynaklı olabilir; kaynağına bakmak gerekir.\n- **Kırmızı şeker (E163), L-cysteine, maya özü**: farklı ihtilaflar vardır.\n- **Yenilebilir böcek ürünleri (karmin dışında)**: mezhepler ihtilaf etmiştir; Hanefî'de çekirge helâl, diğer böcekler haram (genel görüş).\n\n**Uygulama önerisi:**\n1. Bilinen, güvenilir **helâl sertifikalı** (ör. Diyanet'in onayladığı, GIMDES gibi kuruluşlar) ürünleri tercih et.\n2. Emin olmadığın ürünlerde üreticiye/markaya danış, içerik listesini oku; kaynağı belirsiz hayvansal katkı kullanma.\n3. **Dışarıda yemekte et türü/helâl kesim** kontrolü önemlidir; helâl et sunan mekânları tercih et.\n4. **Aşırı vesveseye kapılma:** Bilmediğin için sorumlu tutulmazsın; imkânın ölçüsünde helâle dikkat et, gerisini Allah'a havale et.\n5. Alkol ve sigara (sigara zararlı, tütün ürünleri ihtiyaten mekruh-haram arası tutulur) günlük hayatta kişisel sağlık ve iffetin de kapısıdır.",
-    "kaynaklar": ["Kur'an: el-Bakara 2/168-173, el-Mâide 5/3-5, 90-91", "Hadis: Müslim, Eşribe 72-73; Buhârî, Eşribe 1-3"]
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/168-173, el-Mâide 5/3-5, 90-91",
+      "Hadis: Müslim, Eşribe 72-73; Buhârî, Eşribe 1-3"
+    ]
   },
   {
     "id": "faiz-ticaret",
     "kategori": "Helâl-Haram",
     "soru": "Faiz (ribâ) nedir, kredi/faizli işlemler caiz mi?",
-    "anahtar": ["faiz", "riba", "banka faizi", "kredi", "konut kredisi", "kredi kartı", "enflasyon", "mortgage", "faiz caiz mi"],
+    "anahtar": [
+      "faiz",
+      "riba",
+      "banka faizi",
+      "kredi",
+      "konut kredisi",
+      "kredi kartı",
+      "enflasyon",
+      "mortgage",
+      "faiz caiz mi"
+    ],
     "cevap": "**Faiz (ribâ)**, Kur'an'ın kesin olarak yasakladığı, büyük günahlardan biridir: «Allah alışverişi helâl, faizi haram kılmıştır.» (Bakara 2/275) ve «Faiz yiyenler, şeytanın çarptığı kimsenin kalktığı gibi kalkar... Kim (bundan) vazgeçerse, geçmişi affedilir.» (Bakara 2/275-276). Hz. Peygamber faizi yiyeni, yedireni, yazıcısını ve şahitlerini lanetlemiştir (Müslim).\n\n**Faizin kapsamı:** Verilen borca karşılık **koşulsuz fazla** almak (ribâ'nın temel tanımı); sözleşmede baştan şart koşulan faiz. Ayrıca mal alım-satımında eşit ölçüde olması gereken mallarda fazlalık (ribâ'l-fadl) ve vadeli eşitsizlik (ribâ'n-nesîe).\n\n**Modern pratik sorular:**\n- **Bankada mevduat faizi:** Haram. **Faizsiz/katılım bankacılığı** hesapları, alım-satım veya mudârebe gelir paylaşımı esasına dayanır ve faiz sayılmaz.\n- **Kredi:** Faizli kredi haram. **Katılım bankalarının** murabaha (kâr paylı satış) ve leâse (kira) ürünleri caizdir; ancak banka ile alım-satım ilişkisi kurulur.\n- **Kredi kartı:** Kartlı alışveriş caiz; ancak **gecikme faizi** vermemek için borcu son ödeme tarihinde kapatmak gerekir. Taksitli işlemlerde katılım bankalarının sunduğu kâr payı ürünleri tercih edilmelidir.\n- **Enflasyon ve para değer kaybı:** Tam olarak faizi affettiren 'enflasyon gerekçesi' geniş kabul görmez; ancak borcun alım gücünde meydana gelen açık zarar, bazı âlimlerce ayrı değerlendirilir. Bu konuda **müftülüğe danışmak** gerekir.\n- **Konut alımı:** Mümkünse al-sat (murabaha) veya ortaklık modelleri; özel durumlarda faizli krediye mecbur kalan Müslüman, bu yolu **zaruret** ile sınandığını bilir.\n\n**Helâl kazanç yolları:** Ticaret, emek, ortaklık, kiralama; aldatma, kumar, şans oyunları, pahalıya stokçuluk ve tefecilik helâl değildir. Rızkın bereketi, kazancın helâllığındadır.",
-    "kaynaklar": ["Kur'an: el-Bakara 2/275-281, en-Nisâ 4/161, el-Âl-i İmrân 3/130", "Hadis: Müslim, Müsâkât 102-105; Buhârî, Büyû' 24-25"]
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/275-281, en-Nisâ 4/161, el-Âl-i İmrân 3/130",
+      "Hadis: Müslim, Müsâkât 102-105; Buhârî, Büyû' 24-25"
+    ]
   },
   {
     "id": "çocuk-terbiye",
     "kategori": "Aile",
     "soru": "Çocuk terbiyesi: İslam'a göre çocuk nasıl yetiştirilir?",
-    "anahtar": ["çocuk terbiyesi", "çocuk eğitimi", "çocuğuma din", "namaz öğretmek", "çocuk ile oyun", "yeni doğan", "isim koymak", "akika"],
+    "anahtar": [
+      "çocuk terbiyesi",
+      "çocuk eğitimi",
+      "çocuğuma din",
+      "namaz öğretmek",
+      "çocuk ile oyun",
+      "yeni doğan",
+      "isim koymak",
+      "akika"
+    ],
     "cevap": "**Doğumla ilgili sünnetler:**\n- **İsim:** Güzel anlamlı isim; 7. gün isim koymak.\n- **Akîka:** Doğum sonrası şükür kurbanı (erkek için 2, kız için 1 koyun; 7. gün tavsiye edilir).\n- **Kulağına ezan/ezanı okumak**, helal süt/emzirme.\n- **Sünnet:** Belli bir yaşa gelince sağlık şartlarıyla.\n\n**Terbiyenin temel ilkeleri:**\n1. **Özellikle 0-7 yaş:** Sevgi ve güven. Çocuğun kalbine **Allah sevgisini**, örnek davranışla taşımak.\n2. **7-10 yaş:** **Namaz alışkanlığı.** Hadis: «Çocuğunuz 7 yaşına gelince namaza teşvik edin, 10 yaşında (disiplinle) alıştırın.» Ayrıca Kur'an ve ahlak eğitimi.\n3. **10-14 yaş:** Sorumluluk, istişare, mahremiyet eğitimi; cezalandırma değil **yönlendirme**.\n4. **14+:** Kimlik ve inanç tartışmalarına açıklık; çocukla **konuşmak**, sen dili yerine ben dili.\n\n**Yöntemler:**\n- **Örnek olmak** — Çocuğun en güçlü öğretmeni ebeveyndir. 'Namaz kıl' demek yerine, kılarken görülmek.\n- **Hikâye ve oyun:** Peygamber kıssalarını anlatmak; ibadeti sevgiyle tanıtmak (oruç tutan çocuğa bayram gibi ödüller).\n- **Dua ve bereket:** Çocuğa 'Allah seni korusun' demek, salih bir evlat duası etmek.\n- **Şiddet yasak:** Fiziksel ve aşağılayıcı ceza, İslamî terbiye değildir; çocuk güveni zedelenir. Zorlama, aşırı kural ve korkutma, çocuğu dinden soğutur.\n- **Adalet:** Çocuklar arasında ayırım yapmamak (hediye, ilgi, sevgi).\n- **Dijital çağ:** Ekran süresi, oyun bağımlılığı, zararlı içerik ve sosyal medya için sınır koymak; çocukla birlikte içerik seçmek.\n\n**Dua:** «Ey Rabbimiz! Bize eşlerimizden ve çocuklarımızdan gözümüzü aydınlatacak (nesiller) ver ve bizi takvâ sahiplerine önder kıl.» (Furkân 25/74)",
-    "kaynaklar": ["Kur'an: el-Furkân 25/74, et-Tahrîm 66/6, İbrâhîm 14/40-41", "Hadis: Ebû Dâvûd, Salât 26; Tirmizî, Birr 33; Buhârî, Akîka 1-2"]
+    "kaynaklar": [
+      "Kur'an: el-Furkân 25/74, et-Tahrîm 66/6, İbrâhîm 14/40-41",
+      "Hadis: Ebû Dâvûd, Salât 26; Tirmizî, Birr 33; Buhârî, Akîka 1-2"
+    ]
   }
 ]

@@ -67,7 +67,7 @@ BEKLENEN = {
     "dua nasıl edilir": "dua-nasil-edilir",
     "kuran okuma adabı": "kur-an-okuma-adab",
     "flört caiz mi": "kadin-erkek-iliski",
-    "komşuluk hakkı": "temizlik-gunluk",
+    "komşuluk hakkı": "komsuluk-hakki",
     "sağlık ve tedavi": "saglik-hastalik",
     "namazımda huşu yok": "namazda-husyu",
     "namaz kılmıyorum nasıl başlarım": "namazi-biraktim",
@@ -83,7 +83,65 @@ BEKLENEN = {
     "hangi mezhep": "mezhep-taklit",
     "gayrimüslim cennete gider mi": "gayrimuslim-cennet",
     "kısmet için dua": "kismet-evlilik-dualari",
+    # --- genişletilmiş içerik (yeni kayıtlar) ---
+    "miras nasıl paylaşılır": "miras-ferâiz",
+    "vasiyet nasıl yapılır": "vasiyet-borç",
+    "sigorta yaptırmak caiz mi": "sigorta-hayat",
+    "şirket ortaklığı caiz mi": "ortaklik-sirket",
+    "kira geliri helal mi": "kira-geliri-kar",
+    "işçi hakları nelerdir": "isci-isveren-haklari",
+    "katılım bankası caiz mi": "katilim-bankaciligi",
+    "vergi vermek gerekli mi": "vergi-devlet-mali",
+    "hisse senedi almak caiz mi": "borsa-hisse-helal",
+    "evlilik engelleri kimlerle evlenilmez": "evlilik-engelleri",
+    "gayrimüslimle evlenmek caiz mi": "gayrimuslimle-evlilik",
+    "süt kardeşliği nedir": "sut-akrabaligi",
+    "mehir nedir": "mehir",
+    "ikinci eş almak caiz mi": "cok-eslilik",
+    "kadının çalışması caiz mi": "kadin-haklari-islam",
+    "nisa 4 34 kadına vurmak": "nisa-434-aile-ici-siddet",
+    "çocuk velayeti ve nafaka": "velayet-nafaka-cocuk",
+    "tokalaşmak caiz mi": "kadin-erkek-temas",
+    "resmi nikah şart mı": "nikah-resmi-dini",
+    "evlat edinmek caiz mi": "evlat-edinme-tebenni",
+    "tilavet secdesi nedir": "tilavet-sukr-secdesi",
+    "adak nasıl yerine getirilir": "adak-nezir",
+    "yemin kefareti nedir": "yemin-kefareti",
+    "tesbih namazı nasıl kılınır": "tesbih-namazi",
+    "nafile oruçlar hangileri": "nafile-oruclar",
+    "zikir nasıl yapılır": "zikir-adabi",
+    "salavat getirmek fazileti": "salavat",
+    "kan bağışı orucu bozar mı": "hacamat-kan-bagisi",
+    "vekaleten hac caiz mi": "vekalet-hac-kurban",
+    "hatim nasıl yapılır": "kuran-hatmi",
+    "ezan okunurken ne yapılır": "ezan-kamet-cami-adabi",
+    "kıble nasıl bulunur": "kible-yonu",
+    "imam olma şartları": "cemaatte-imamlik",
+    "bidat nedir": "bidat",
+    "tasavvuf caiz mi": "tasavvuf-tarikat",
+    "keramet nedir": "keramet-mucize",
+    "rüya tabiri doğru mu": "ruya-istihare",
+    "kıyamet alametleri nelerdir": "kiyamet-alametleri",
+    "peygamberimizin hayatı": "siyer-peygamberimiz",
+    "dört halife dönemi": "asr-i-saadet-halifeler",
+    "dini ilim tahsili nasıl yapılır": "ilim-tahsili",
+    "sahih hadis nedir": "sahih-hadis-uydurma",
+    "birine kafir demek caiz mi": "tekfir",
+    "hurafe nedir": "hurafe-batil-inanclar",
+    "tebliğ nasıl yapılır": "teblig-davet",
+    "tüp bebek caiz mi": "ureme-sagligi-tup-bebek",
+    "sakal bırakmak sünnet mi": "fitrat-bakim",
+    "spor yapmak caiz mi": "spor-saglik",
+    "dolar alıp satmak caiz mi": "doviz-altin-ticareti",
+    "alkollü parfüm caiz mi": "parfum-alkol-urunler",
+    "kayınvalidemle sorun yaşıyorum": "kayinvalide-aile-iliskileri",
+    "nişanlılık hükümleri": "nisan-adab",
+    "askerlik ve şehitlik": "askerlik-vatani-gorev",
+    "kızımın okula gitmesi caiz mi": "egitim-okul-karma",
+    "küfür etmek ve beddua": "kufur-beddua-hakaret",
+    "israf ve lüks tüketim": "israf-luks-borc",
 }
+
 
 
 def test_normalizasyon():
@@ -125,6 +183,22 @@ def test_her_soru_bir_cevap_buluyor():
         if not r.get("bulundu"):
             eksik.append(e.id)
     assert not eksik, f"Bulunamayan kayıtlar: {eksik}"
+
+
+def test_pasaj_aramasi_calisiyor():
+    """Tam kayıt olmasa da, cevap metinlerinden ilgili paragraflar bulunabilmeli."""
+    r = engine.ask("kredi kartı taksitli alışveriş caiz mi")
+    assert r["tip"] == "cevap"
+    assert r.get("pasajlar"), "Pasaj önerisi üretilmedi"
+    assert all(p["metin"] and p["soru"] for p in r["pasajlar"])
+
+
+def test_ilke_yaniti_uretiyor():
+    """Bilgi bankasında karşılığı olmayan 'caiz mi' tarzı sorularda usul cevabı verilmeli."""
+    r = engine.ask("komşuma ödünç verdiğim aleti kırdı, tazmin etmeli mi, caiz mi")
+    assert r["tip"] in ("ilke", "belirsiz", "cevap")
+    if r["tip"] == "ilke":
+        assert "Aslolan" in r["cevap"] or "haram" in r["cevap"].lower()
 
 
 def test_selamlasma_ve_tanitim():

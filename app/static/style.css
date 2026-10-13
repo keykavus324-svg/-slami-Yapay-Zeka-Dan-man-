@@ -168,7 +168,14 @@ body{
 .sources{margin-top:12px;border-top:1px dashed var(--line-soft);padding-top:10px}
 .sources h5{margin:0 0 6px;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);opacity:.9}
 .sources ul{margin:0;padding-left:1.1em;font-size:12.2px;color:var(--ink-dim);line-height:1.6}
-.related{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pasajlar{margin-top:12px;border-top:1px dashed var(--line-soft);padding-top:10px}
+.pasajlar h5{margin:0 0 8px;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--teal);opacity:.95}
+.pasaj{border:1px solid var(--line-soft);border-radius:12px;padding:10px 12px;margin-bottom:8px;background:rgba(45,212,191,.045)}
+.pasaj-head{font-size:12.6px;color:var(--gold);margin-bottom:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pasaj-body{font-size:13.4px;line-height:1.66;color:#dcece4}
+.pasaj-body p{margin:.35em 0}
+.pasaj .tool{margin-top:8px}
+.related{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
 .rel{font-size:12px;border:1px solid var(--line-soft);background:rgba(45,212,191,.06);color:#cdeee4;padding:6px 11px;border-radius:999px;cursor:pointer;transition:.16s;text-align:left}
 .rel:hover{background:rgba(45,212,191,.14);border-color:rgba(45,212,191,.4);transform:translateY(-1px)}
 .notlar{margin-top:10px;font-size:11.6px;color:#f5d9a0;background:rgba(227,197,116,.08);border:1px solid var(--line-soft);border-radius:10px;padding:9px 11px;line-height:1.55}

@@ -25,6 +25,7 @@ import os
 import re
 import unicodedata
 from collections import Counter, defaultdict
+from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -278,7 +279,10 @@ class Engine:
         self.N = len(self.entries)
         self.df: Counter = Counter()
         self.avg_len: Dict[str, float] = {}
+        self.passages: List[Dict[str, Any]] = []
+        self.pass_avg: float = 1.0
         self._build_index()
+        self._build_passages()
 
     # ---- indeks -------------------------------------------------------------------
     def _build_index(self) -> None:
@@ -355,6 +359,169 @@ class Engine:
             coverage = hit / len(set(q_tokens))
             score *= 0.55 + 0.45 * coverage
         return score
+
+    # ---- paragraf (pasaj) araması ---------------------------------------------------
+    K1P, BP = 1.2, 0.6
+
+    def _build_passages(self) -> None:
+        """Her cevabı anlamlı parçalara (pasajlara) böler ve indeksler.
+
+        Böylece tam karşılığı olmayan bir soruda bile, bilgi bankasındaki en ilgili
+        bölümler kaynağıyla birlikte gösterilebilir.
+        """
+        self.passages = []
+        for e in self.entries:
+            bloklar = [b.strip() for b in re.split(r"\n\s*\n", e.cevap) if b.strip()]
+            parcalar: List[str] = []
+            for b in bloklar:
+                if "\n" in b or len(b) > 650:
+                    parcalar.extend(x.strip() for x in b.split("\n") if x.strip())
+                else:
+                    parcalar.append(b)
+            for b in parcalar:
+                temiz = re.sub(r"[*|#>•\-]+", " ", b)
+                toks = [stem(t) for t in tokens(temiz) if t not in STOPWORDS and len(t) > 2]
+                if len(toks) < 3:
+                    continue
+                self.passages.append({
+                    "entry": e,
+                    "metin": b,
+                    "toks": Counter(toks),
+                    "uzunluk": len(toks),
+                    "norm": normalize(temiz),
+                })
+        toplam = sum(p["uzunluk"] for p in self.passages) or 1
+        self.pass_avg = toplam / max(len(self.passages), 1)
+
+    def _pasaj_puan(self, pas: Dict[str, Any], q_weighted: List[Tuple[str, float]]) -> Tuple[float, int]:
+        score, hits = 0.0, 0
+        for q, qw in q_weighted:
+            tf = pas["toks"].get(q, 0)
+            if not tf:
+                continue
+            hits += 1
+            norm_len = pas["uzunluk"] / (self.pass_avg or 1)
+            denom = tf + self.K1P * (1 - self.BP + self.BP * norm_len)
+            score += qw * self.idf(q) * (tf * (self.K1P + 1)) / denom
+        if hits >= 2:
+            score *= 1.3
+        return score, hits
+
+    def ilgili_pasajlar(self, q_weighted: List[Tuple[str, float]],
+                        haric: Optional[set] = None, limit: int = 3,
+                        esik: float = 1.4) -> List[Dict[str, Any]]:
+        """Soruya en yakın paragrafları (farklı kayıtlardan) döndürür."""
+        haric = haric or set()
+        bulunan: List[Tuple[float, int, Dict[str, Any]]] = []
+        for pas in self.passages:
+            if pas["entry"].id in haric:
+                continue
+            sc, hits = self._pasaj_puan(pas, q_weighted)
+            if sc >= esik and hits >= 1:
+                bulunan.append((sc, hits, pas))
+        bulunan.sort(key=lambda x: -x[0])
+        secilen: List[Dict[str, Any]] = []
+        kullanilan: Dict[str, int] = {}
+        for sc, hits, pas in bulunan:
+            eid = pas["entry"].id
+            if kullanilan.get(eid, 0) >= 2:      # aynı kayıttan en fazla 2 pasaj
+                continue
+            kullanilan[eid] = kullanilan.get(eid, 0) + 1
+            secilen.append({"kayit": pas["entry"], "metin": pas["metin"], "puan": round(sc, 2)})
+            if len(secilen) >= limit:
+                break
+        return secilen
+
+    # ---- genel usul / ilke cevapları (tam kayıt bulunamazsa) ------------------------
+    ILKELER = [
+        {
+            "ad": "hukum",
+            "re": r"(caiz mi|caizmidir|caiz olur mu|caiz midir|haram mi|helal mi|gunah mi|gunahi var mi|"
+                  r"yasak mi|hukmu nedir|hukmu ne|fetva|dinen uygun mu|dinen dogru mu|"
+                  r"dinen sakincali|buna izin var mi|olmaz mi|seriat|dinen)",
+            "cevap": (
+                "Bu sorunun **özel hükmünü** bilgi bankamda bulamadım; ama sana hükmü doğru şekilde "
+                "öğrenmenin yolunu vereyim — böylece her yeni meseleyi kendin de değerlendirebilirsin:\n\n"
+                "**1. Aslolan mübahlıktır (helâllik):** «Yeryüzünde olan şeylerin hepsini sizin için yarattı.» "
+                "(Bakara 2/29) Bir şeyin haram olduğu **açık bir delille** sabit olmadıkça haram sayılmaz.\n"
+                "**2. Haram ancak nass ile sabit olur:** Kur'an, sahih sünnet veya kesin icmâ. Kulaktan dolma "
+                "«filanca haram demiş» sözü hüküm kurmaz.\n"
+                "**3. Şüpheli şeylerden kaçın (takva):** «Helâl apaçık, haram apaçık; ikisi arasında şüpheli "
+                "şeyler vardır.» (Buhârî, Müslim)\n"
+                "**4. Zarûret, haramı geçici olarak kaldırır:** «Kim zarûrette kalırsa, saldırmamak ve haddi "
+                "aşmamak şartıyla (haramdan) yiyebilir.» (Bakara 2/173)\n"
+                "**5. İhtilafları bil:** Âlimler bazı konularda farklı içtihat eder; «en zoru» seçmek de "
+                "«en kolayı» seçmek de doğru yöntem değildir — ehline sormak esastır: «Bilmediğinizde ehline "
+                "sorun.» (Nahl 16/43)\n\n"
+                "**Şimdi ne yapabilirsin?**\n"
+                "- Sorunu konu ve durum olarak açık yaz (örnek: *«kredi kartıyla taksitli alışveriş, gecikme "
+                "faizi işlemeden caiz mi?»*) — o zaman ilgili kaydı daha isabetli bulabilirim.\n"
+                "- Benzer başlıklardaki cevapların içinde yer alan **genel ölçüler** çoğu zaman bu soruya da "
+                "uygulanır.\n"
+                "- Kişisel ve hukukî sonuç doğuran meselelerde **İl/İlçe Müftülüğü'ne** danış. Bu araç fetva "
+                "mercii değildir."
+            ),
+        },
+        {
+            "ad": "hikmet",
+            "re": r"(neden (haram|yasak|farz|gunah|boyle|oluyor)|hikmeti nedir|hikmeti ne|neden yapilir|"
+                  r"neden var|ne anlami var|manasi ne|neden boyle|ne faydasi|ne ise yarar)",
+            "cevap": (
+                "Bu konunun hikmetini özel olarak bilgi bankamda bulamadım; ama genel çerçeveyi paylaşayım:\n\n"
+                "**1. Her hükümde hikmet aranır, ama hüküm hikmete bağlı değildir.** Bir emir/yasak, görünen "
+                "faydası bulunamadı diye düşmez: «O, kendi hevesinden konuşmaz; o ancak vahyedilen bir "
+                "vahiydir.» (Necm 53/3-4)\n"
+                "**2. Hükümlerin çoğunun hikmeti açıktır:** koruma (can, mal, nesil, akıl, din), adalet, "
+                "kolaylık, temizlik, toplumsal huzur. «Allah size kolaylık ister, zorluk istemez.» (Bakara 2/185)\n"
+                "**3. Bazı hükümlerin hikmeti tam bilinmeyebilir** — bu, teslimiyetin sınavıdır: «İşitiriz ve "
+                "itaat ederiz.» (Bakara 2/285)\n"
+                "**4. Hikmet ile illet (gerekçe) karıştırılmamalıdır:** âlim illeti bulunca hüküm değişmez; "
+                "illet, **kıyas** yapmak için kullanılır.\n\n"
+                "Sorunu biraz açarsan (örnek: *«içki neden kademeli yasaklandı?»*, *«faizin hikmeti nedir?»*) "
+                "hangisini kastettiğini anlayıp en yakın kaydı getirebilirim. Daha derin tefsir/fıkıh "
+                "çalışması için ehlinden ders almak en güzelidir."
+            ),
+        },
+        {
+            "ad": "nasil",
+            "re": r"(nasil (yapilir|olur|kilarim|kilinir|baslarim|baslanir|ederim|edilir|ogrenirim|yaparim)|"
+                  r"adim adim|ogrenmek istiyorum|bilmiyorum nasil|nasil yapmam)",
+            "cevap": (
+                "Bu konunun adımlarını bilgi bankamda bulamadım; ama genel yöntem şudur ve çoğu ibadet "
+                "için geçerlidir:\n\n"
+                "**1. Önce çerçeveyi öğren:** Bu ibadet *farz mı, vacip mi, sünnet mi?* Zamanı ve şartları "
+                "neler? Bir ilmihalin ilgili bölümü yeterlidir.\n"
+                "**2. Küçükten başla:** Tamamını bir günde öğrenmeye çalışma. Örnek: namaz → önce abdest, "
+                "sonra 2 rekâtlık bir namaz, sonra diğer vakitler.\n"
+                "**3. Taklit, öğrenmeyi hızlandırır:** Bir hocayla/cami cemaatiyle yan yana kılmak, "
+                "kitaptan okumaktan çok daha hızlı öğretir.\n"
+                "**4. Hata senden, kabul Allah'tandır:** «Amellerin en hayırlısı, az da olsa devamlı olanıdır.» "
+                "(Buhârî, Müslim) Öğrenirken yapılan hatalar seni yoldan çıkarmasın.\n"
+                "**5. Vesveseye kapılma:** Şüphelerle ameli bırakmak, şeytanın en sevdiği tuzaktır.\n\n"
+                "Hangi ibadet/konu için sorduğunu tam yaz (örnek: *«vitir namazı nasıl kılınır»*, *«adak nasıl "
+                "yerine getirilir»*) — ilgili kaydı bulup adım adım anlatayım."
+            ),
+        },
+    ]
+
+    def _ilke_yaniti(self, q_norm: str, q_base: List[str]) -> Optional[Dict[str, Any]]:
+        # Çok kısa/çok genel sorularda ilke cevabı verme (onlar konu listesine gitsin)
+        if len(q_base) < 2:
+            return None
+        for ilke in self.ILKELER:
+            if re.search(ilke["re"], q_norm):
+                return {
+                    "bulundu": False,
+                    "tip": "ilke",
+                    "guven": 0.35,
+                    "kategori": "Genel Usul",
+                    "soru": "Genel çerçeve",
+                    "cevap": ilke["cevap"],
+                    "kaynaklar": ["Kur'an: el-Bakara 2/29, 173, 185; en-Nahl 16/43",
+                                  "Hadis: Buhârî, İman 39; Müslim, Müsâkât 107"],
+                    "ilgili": [], "notlar": [],
+                }
+        return None
 
     # ---- acil & özel durumlar ------------------------------------------------------
     SAFETY = [
@@ -559,7 +726,16 @@ class Engine:
         scores.sort(key=lambda x: (-x[0], x[1].index))
 
         if not scores:
-            return self._belirsiz(question, self._fuzzy_candidates(q_norm))
+            self._bosluk_kaydet(question, [])
+            ilke = self._ilke_yaniti(q_norm, q_base)
+            if ilke:
+                ilke["pasajlar"] = [
+                    {"id": pz["kayit"].id, "kategori": pz["kayit"].kategori,
+                     "soru": pz["kayit"].soru, "metin": pz["metin"], "puan": pz["puan"]}
+                    for pz in self.ilgili_pasajlar(q_weighted, limit=3, esik=1.2)
+                ]
+                return ilke
+            return self._belirsiz(question, self._fuzzy_candidates(q_norm), q_weighted)
 
         best_score, best = scores[0]
 
@@ -570,7 +746,17 @@ class Engine:
             overview = self._category_overview(q_base, q_norm)
             if overview:
                 return overview
-            return self._belirsiz(question, [e for _, e in scores[:4]])
+            self._bosluk_kaydet(question, [(s, e) for s, e in scores[:4]])
+            ilke = self._ilke_yaniti(q_norm, q_base)
+            if ilke:
+                ilke["pasajlar"] = [
+                    {"id": pz["kayit"].id, "kategori": pz["kayit"].kategori,
+                     "soru": pz["kayit"].soru, "metin": pz["metin"], "puan": pz["puan"]}
+                    for pz in self.ilgili_pasajlar(q_weighted, limit=3, esik=1.2)
+                ]
+                ilke["ilgili"] = self._ilgili_sozluk([e for _, e in scores[:4]])
+                return ilke
+            return self._belirsiz(question, [e for _, e in scores[:4]], q_weighted)
 
         if len(q_base) <= 1:
             overview = self._category_overview(q_base, q_norm)
@@ -578,6 +764,15 @@ class Engine:
                 return overview
 
         related = [e for _, e in scores[1:top_k + 1] if _ > best_score * 0.35] or self._same_category(best)
+
+        # Kullanıcı, en iyi kaydın kapsamadığı ek ayrıntılar sorduysa: cevap metinlerinden
+        # paragraf düzeyinde ek bilgi getir (kapsamı genişletir).
+        q_set = {t for t, _ in q_weighted}
+        kapsanan = set(best.field_tokens["soru"]) | set(best.field_tokens["anahtar"]) | set(best.field_tokens["kategori"])
+        eksik = [t for t, _ in q_weighted if t not in kapsanan and t not in LOW_SIGNAL]
+        pasajlar: List[Dict[str, Any]] = []
+        if len(eksik) >= 2 or (q_set and 1 - len(eksik) / len(q_set) < 0.6):
+            pasajlar = self.ilgili_pasajlar(q_weighted, haric={best.id}, limit=3)
 
         cevap = best.cevap
         if detay == "kisa":
@@ -602,8 +797,22 @@ class Engine:
             "cevap": cevap,
             "kaynaklar": best.kaynaklar,
             "ilgili": [{"id": e.id, "soru": e.soru, "kategori": e.kategori} for e in related],
+            "pasajlar": [
+                {
+                    "id": pz["kayit"].id,
+                    "kategori": pz["kayit"].kategori,
+                    "soru": pz["kayit"].soru,
+                    "metin": pz["metin"],
+                    "puan": pz["puan"],
+                }
+                for pz in pasajlar
+            ],
             "notlar": notlar,
         }
+
+    @staticmethod
+    def _ilgili_sozluk(entries: List[Entry]) -> List[Dict[str, str]]:
+        return [{"id": e.id, "soru": e.soru, "kategori": e.kategori} for e in entries]
 
     def _needs_fatwa(self, entry: Entry, question: str) -> bool:
         sensitive = {"Helâl-Haram", "Aile", "Genel"}
@@ -636,18 +845,32 @@ class Engine:
     def _same_category(self, entry: Entry, n: int = 3) -> List[Entry]:
         return [e for e in self.entries if e.kategori == entry.kategori and e.id != entry.id][:n]
 
-    def _belirsiz(self, question: str, candidates: Optional[List[Entry]] = None) -> Dict[str, Any]:
+    def _belirsiz(self, question: str, candidates: Optional[List[Entry]] = None,
+                  q_weighted: Optional[List[Tuple[str, float]]] = None) -> Dict[str, Any]:
         if not candidates:
             candidates = self._fuzzy_candidates(normalize(question))
         ilgili: List[Any] = candidates or self._popular(5)
         if ilgili and isinstance(ilgili[0], dict):
             ilgili = [self.by_id(x["id"]) or x for x in ilgili]
+        ilgili = [e for e in ilgili if isinstance(e, Entry)]
+        pasajlar = self.ilgili_pasajlar(q_weighted or [], haric={e.id for e in ilgili[:1]},
+                                        limit=3, esik=1.3)
+        if pasajlar:
+            ek = (
+                "Yine de bilgi bankamda sorunuza **en yakın bölümleri** aşağıda kaynağıyla paylaşıyorum; "
+                "bunlar sorunuzun bir kısmına cevap verebilir."
+            )
+        else:
+            ek = (
+                "Sorunuzu şu şekilde yeniden yazarsanız çok daha isabetli cevap verebilirim:\n\n"
+                "- Konu adını söyleyin: *\"zekât\"*, *\"abdest\"*, *\"cuma namazı\"*\n"
+                "- Ne öğrenmek istediğinizi belirtin: *\"... nasıl yapılır?\"*, *\"... caiz mi?\"*, "
+                "*\"... kaç rekât?\"*\n\n"
+                "**Örnek:** *\"Namaz kılmıyorum, yeniden nasıl başlarım?\"*"
+            )
         metin = (
-            "Bilgi bankamda bu sorunun **tam karşılığını** bulamadım ama en yakın konuları aşağıda listeledim. "
-            "Sorunu şu şekilde yeniden yazarsan çok daha isabetli cevap verebilirim:\n\n"
-            "- Konu adını söyleyin: *\"zekât\"*, *\"abdest\"*, *\"cuma namazı\"*\n"
-            "- Ne öğrenmek istediğinizi belirtin: *\"... nasıl yapılır?\"*, *\"... caiz mi?\"*, *\"... kaç rekât?\"*\n\n"
-            "**Örnek:** *\"Namaz kılmıyorum, yeniden nasıl başlarım?\"*"
+            "Bilgi bankamda bu sorunun **tam karşılığını** bulamadım. " + ek + "\n\n"
+            "Ayrıca sorunuzu *geliştirme listesine* kaydettim; ileride bu konu da eklenecek. 🤲"
         )
         return {
             "bulundu": False,
@@ -657,8 +880,11 @@ class Engine:
             "soru": question.strip()[:120],
             "cevap": metin,
             "kaynaklar": [],
-            "ilgili": [{"id": e.id, "soru": e.soru, "kategori": e.kategori}
-                       if isinstance(e, Entry) else e for e in ilgili[:5]],
+            "ilgili": self._ilgili_sozluk(ilgili[:5]),
+            "pasajlar": [
+                {"id": pz["kayit"].id, "kategori": pz["kayit"].kategori, "soru": pz["kayit"].soru,
+                 "metin": pz["metin"], "puan": pz["puan"]} for pz in pasajlar
+            ],
             "notlar": ["Sonuç bulunamadıysa, konu tek kelimeyle (örneğin *faiz*) yeniden yazabilirsin. "
                        "Cevap bulunamayan konular için müftülüğe danışman isabetli olur."],
         }
@@ -675,6 +901,39 @@ class Engine:
             scored.append((max(r1, r2, jacc * 1.4), e))
         scored.sort(key=lambda x: -x[0])
         return [e for s, e in scored[:limit] if s > 0.42]
+
+    # ---- geliştirme listesi: cevaplanamayan sorular --------------------------------
+    BOSLUK_DOSYA = Path(__file__).parent / "runtime" / "bosluklar.json"
+
+    def _bosluk_kaydet(self, soru: str, adaylar: List[Tuple[float, Entry]]) -> None:
+        """Cevaplanamayan soruları (tekrar sayısıyla) kaydeder — içerik büyütme listesi."""
+        try:
+            self.BOSLUK_DOSYA.parent.mkdir(parents=True, exist_ok=True)
+            veri: Dict[str, Any] = {}
+            if self.BOSLUK_DOSYA.exists():
+                veri = json.loads(self.BOSLUK_DOSYA.read_text(encoding="utf-8"))
+            anahtar = normalize(soru)[:120]
+            kayit = veri.get(anahtar, {"soru": soru.strip()[:200], "adet": 0, "ilk": None,
+                                       "en_yakin": [e.soru for _, e in adaylar[:3]]})
+            kayit["adet"] = int(kayit.get("adet", 0)) + 1
+            kayit["son"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+            kayit.setdefault("ilk", kayit["son"])
+            veri[anahtar] = kayit
+            self.BOSLUK_DOSYA.write_text(
+                json.dumps(veri, ensure_ascii=False, indent=2), encoding="utf-8")
+        except Exception:
+            pass  # kayıt tutulamazsa cevaplama akışı bozulmasın
+
+    def bosluklar(self) -> List[Dict[str, Any]]:
+        try:
+            if not self.BOSLUK_DOSYA.exists():
+                return []
+            veri = json.loads(self.BOSLUK_DOSYA.read_text(encoding="utf-8"))
+            kayitlar = list(veri.values())
+            kayitlar.sort(key=lambda k: -int(k.get("adet", 0)))
+            return kayitlar
+        except Exception:
+            return []
 
     # ---- API yardımcı verileri ------------------------------------------------------
     def kategoriler(self) -> List[Dict[str, Any]]:
@@ -703,8 +962,10 @@ class Engine:
             "toplam_kayit": self.N,
             "kategoriler": self.kategoriler(),
             "ucret": "Ücretsiz ve sınırsız",
-            "motor": "Yerel bilgi bankası (BM25 + ifade eşleştirme)",
+            "motor": "Yerel bilgi bankası (BM25 + ifade eşleştirme + paragraf arama)",
             "internet_gerekli": False,
+            "pasaj_sayisi": len(self.passages),
+            "bosluk_sayisi": len(self.bosluklar()),
         }
 
 

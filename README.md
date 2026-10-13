@@ -46,11 +46,16 @@ Port değiştirmek için: `PORT=9000 python -m app.main`
 
 ## 🧩 Neler Yapabilir?
 
-- **90+ soru-cevap kaydı**, 13 konu başlığı: İnanç, Taharet, Namaz, Oruç, Zekât, Hac, Aile,
+- **148 soru-cevap kaydı**, 13 konu başlığı: İnanç, Taharet, Namaz, Oruç, Zekât, Hac, Aile,
   Helâl-Haram, Ahlâk, Dua, Kur'an, Günlük Hayat, Genel
+- **~1.800 pasaj indeksi:** Tam karşılığı olmayan sorularda bile, tüm cevap metinleri
+  **paragraf paragraf** taranır ve en ilgili bölümler kaynağıyla sunulur
 - **Doğal dil ile arama:** *"adetliyken namaz kılınır mı"*, *"faizli kredi caiz mi"*,
   *"namaz kılmıyorum nasıl başlarım"* gibi sorular anlaşılır
 - **Yazım hatası toleransı** ve Türkçe ek/çekim farklılıklarına dayanıklı arama
+- **"Bilmiyorum" yerine usul cevabı:** Bilinmeyen *"…caiz mi?"*, *"…hikmeti nedir?"*,
+  *"…nasıl yapılır?"* sorularında genel fıkhî ölçüler (aslolan mübahlık, nass, zaruret, ihtilaf) anlatılır
+- **Boşluk kaydı:** Cevaplanamayan sorular listelenir (`/api/bosluklar`) — içerik bu listeye göre büyür
 - **Kaynak gösterimi:** her cevapta âyet/hadis/fıkıh referansları
 - **İlgili sorular:** cevabın altında konuya yakın diğer başlıklar
 - **İhtilaf farkındalığı:** fıkhî tartışmalı konularda "ihtilaf var, müftülüğe danışın" uyarısı
@@ -71,7 +76,8 @@ Port değiştirmek için: `PORT=9000 python -m app.main`
 | `GET`  | `/api/sorular?kategori=Namaz` | Soru listesi (isteğe bağlı konu filtresi) |
 | `GET`  | `/api/soru/{id}` | Belirli bir kaydın tam cevabı |
 | `GET`  | `/api/rastgele` | Rastgele soru-cevap |
-| `GET`  | `/api/istatistik` | Kayıt sayısı, motor bilgisi, ücret/limit bilgisi |
+| `GET`  | `/api/istatistik` | Kayıt sayısı, pasaj sayısı, boşluk sayısı, motor bilgisi |
+| `GET`  | `/api/bosluklar` | Cevaplanamayan sorular (içerik geliştirme listesi) |
 | `GET`  | `/api/saglik` | Servis durumu |
 | `GET`  | `/docs` | Otomatik API dokümantasyonu (Swagger) |
 
@@ -115,7 +121,12 @@ curl -X POST http://localhost:8000/api/sor \
 │   │   ├── qa_ahlak.json          # Gıybet, yalan, öfke, sabır, iş ahlakı
 │   │   ├── qa_aile.json           # Nikâh, boşanma, eş-çocuk hakları, helâl-haram
 │   │   ├── qa_genel.json          # Dua, Kur'an, günlük hayat, ilmihal
-│   │   └── qa_modern.json         # Tesettür, müzik, sigara, dijital hayat, kripto, teknoloji
+│   │   ├── qa_modern.json         # Tesettür, müzik, sigara, dijital hayat, kripto, teknoloji
+│   │   ├── qa_miras_ticaret.json  # Miras, vasiyet, sigorta, ortaklık, kira, işçi hakları, vergi, borsa
+│   │   ├── qa_evlilik_genis.json  # Evlilik engelleri, mehir, çok eşlilik, kadın hakları, Nisâ 4/34, velayet
+│   │   ├── qa_ibadet_ek.json      # Tilâvet/şükür secdesi, adak, yemin, tesbih namazı, nafile oruç, zikir, hatim
+│   │   ├── qa_akaid_lim.json      # Bidat, tasavvuf, keramet, rüya, kıyamet alâmetleri, siyer, tekfir, hadis ilmi
+│   │   └── qa_ek2.json            # Üreme sağlığı, fıtrat bakımı, spor, döviz, parfüm, kayınvalide, nişan, askerlik…
 │   └── static/              # Arayüz (index.html, style.css, app.js, favicon.svg)
 ├── tests/test_smoke.py      # Duman testleri
 └── requirements.txt
@@ -131,9 +142,9 @@ python tests/test_smoke.py
 pytest -q
 ```
 
-Testler; veri bütünlüğünü, her kaydın kendi anahtar kelimeleriyle bulunabilmesini,
-70+ örnek sorunun **doğru kayda** yönlenmesini, güvenlik yanıtlarını ve "ücretsiz/sınırsız"
-sözleşmesini doğrular.
+Testler (10 adet); veri bütünlüğünü, her kaydın kendi anahtar kelimeleriyle bulunabilmesini,
+**120+ örnek sorunun doğru kayda** yönlenmesini, paragraf aramasını, usul (ilke) cevaplarını,
+güvenlik yanıtlarını ve "ücretsiz/sınırsız" sözleşmesini doğrular.
 
 ---
 

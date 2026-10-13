@@ -152,8 +152,27 @@
 
     bubble.appendChild(el("div", "answer", markdown(r.cevap || "")));
 
+    // Bilgi bankasından ilgili bölümler (pasaj araması)
+    if (r.pasajlar && r.pasajlar.length) {
+      const box = el("div", "pasajlar");
+      box.appendChild(el("h5", null, "📖 Bilgi bankasından ilgili bölümler"));
+      r.pasajlar.forEach((p) => {
+        const item = el("div", "pasaj");
+        const head = el("div", "pasaj-head");
+        head.innerHTML = `↳ <b>${esc(p.soru)}</b> <span class="chip cat">${esc(p.kategori || "")}</span>`;
+        item.appendChild(head);
+        item.appendChild(el("div", "pasaj-body", markdown(p.metin || "")));
+        const b = el("button", "tool", "Tamamını gör");
+        b.addEventListener("click", () => soruSor(p.soru));
+        item.appendChild(b);
+        box.appendChild(item);
+      });
+      bubble.appendChild(box);
+    }
+
     if (r.ilgili && r.ilgili.length) {
       const rel = el("div", "related");
+      rel.appendChild(el("span", "q-title", "Benzer konular:"));
       r.ilgili.forEach((x) => {
         const b = el("button", "rel", `↳ ${esc(x.soru)}`);
         b.title = x.kategori || "";
