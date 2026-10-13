@@ -33,6 +33,15 @@
       </div>
     </div>
 
+    <div class="motor-box">
+      <div class="motor-head">
+        <b>🧠 Yapay Zekâ Motoru</b>
+        <span class="motor-durum" id="motorDurum">Yerel</span>
+      </div>
+      <p class="mini" id="motorOzet">Şu an <b>yerel bilgi bankası</b> cevaplıyor. İstersen ücretsiz bir yüksek parametreli model (Gemini / Llama 70B / GPT-OSS 120B) bağla.</p>
+      <button class="ghost-btn" id="motorBtn2">Model bağla →</button>
+    </div>
+
     <div class="stats" id="stats"></div>
 
     <nav class="cats" aria-label="Konular">
@@ -62,6 +71,7 @@
         <p><span class="star">✦</span> İslami Yapay Zeka Danışmanı <span class="hijri" id="hijri"></span></p>
       </div>
       <div class="top-actions">
+        <button class="motor-chip" id="motorBtn" title="Yapay zekâ motorunu seç">📚 Yerel bilgi bankası</button>
         <div class="seg" role="group" aria-label="Cevap uzunluğu">
           <button data-detay="normal" class="active">Ayrıntılı</button>
           <button data-detay="kisa">Kısa</button>
@@ -82,11 +92,51 @@
         </button>
       </form>
       <p class="disclaimer">
-        <b>Ücretsiz &amp; sınırsız.</b> Bu araç fetva mercii değildir; cevaplar Kur'an, sahih hadis ve fıkıh kaynaklarına
-        dayanan yerel bir bilgi bankasından üretilir. Kişisel durumlar için müftülüğe danışın.
+        <b>Ücretsiz &amp; sınırsız.</b> Bu araç fetva mercii değildir. Cevaplar; 152 kayıtlık yerel bilgi bankasından
+        (Kur'an, sahih hadis ve fıkıh kaynaklarına dayalı) ve <b>bağlarsan</b> seçtiğin yüksek parametreli dil
+        modelinden üretilir. Kişisel durumlar için müftülüğe danışın.
       </p>
     </footer>
   </main>
+</div>
+
+<!-- ============ DİL MODELİ (LLM) AYAR PENCERESİ ============ -->
+<div class="modal" id="llmModal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="llmBaslik">
+    <h3 id="llmBaslik">🧠 Yüksek Parametreli Dil Modeli</h3>
+    <p class="mini">
+      Yerel bilgi bankası (152 kayıt) her zaman çalışır. Aşağıdan ücretsiz bir model bağlarsan,
+      cevaplar <b>gerçek bir dil modeli</b> tarafından, bilgi bankasındaki kaynaklarla beslenerek üretilir.
+      <b>Anahtarın yalnızca bu tarayıcıda saklanır</b> — sunucuya gönderilmez, ücret/kayıt yoktur.
+    </p>
+
+    <label class="alan">Sağlayıcı
+      <select id="llmSaglayici"></select>
+    </label>
+    <p class="mini" id="llmSagNot"></p>
+
+    <label class="alan">API anahtarı
+      <input id="llmAnahtar" type="password" autocomplete="off" spellcheck="false" placeholder="..." />
+    </label>
+
+    <label class="alan">Model
+      <input id="llmModel" list="llmModelListe" autocomplete="off" spellcheck="false" placeholder="model adı" />
+      <datalist id="llmModelListe"></datalist>
+    </label>
+
+    <label class="alan" id="llmUrlSar" hidden>Sunucu adresi
+      <input id="llmUrl" autocomplete="off" spellcheck="false" placeholder="https://ornek.com/v1/chat/completions" />
+    </label>
+
+    <div class="modal-actions">
+      <button class="primary" id="llmKaydet">Kaydet ve kullan</button>
+      <button id="llmTest">Bağlantıyı test et</button>
+      <button id="llmYerel">Yerel motora dön</button>
+      <button id="llmKapat">Kapat</button>
+    </div>
+    <div class="mini" id="llmDurum"></div>
+    <p class="mini" id="llmLink"></p>
+  </div>
 </div>
 
 <script src="/static/app.js"></script>

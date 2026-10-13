@@ -231,6 +231,51 @@ def test_anlamsiz_soruda_belirsiz_yanit():
     assert r["tip"] in ("belirsiz", "belirsiz"), r["tip"]
 
 
+def test_baglam_uc_noktasi():
+    """LLM (RAG) bağlam uç noktası: kayıtlar + pasajlar + modele hazır mesaj üretir."""
+    from fastapi.testclient import TestClient
+    from app.main import app
+
+    istemci = TestClient(app)
+    r = istemci.post("/api/baglam", json={"soru": "Faizli kredi caiz mi?"}).json()
+    assert len(r["kayitlar"]) >= 3, r["kayitlar"]
+    assert len(r["pasajlar"]) >= 2, r["pasajlar"]
+    assert "YEREL BİLGİ BANKASI" in r["kullanici_mesaji"]
+    assert "KULLANICI SORUSU" in r["kullanici_mesaji"]
+    assert r["yerel"]["cevap"], "yerel motor cevabı her zaman hazır olmalı"
+    assert r["bilgi_bankasi"]["kayit"] == engine.N
+
+
+def test_model_yonergesi_ve_ucretsiz_saglayicilar():
+    """Sistem yönergesi kritik fıkıh/güvenlik kurallarını içerir; sağlayıcılar ücretsiz."""
+    from app.llm import SISTEM_PROMPTU, SAGLAYICILAR, model_bilgisi
+
+    for kural in ["UYDURMA YASAK", "İHTİLAF", "Müftülüğ", "112", "183"]:
+        assert kural in SISTEM_PROMPTU, f"yönergede eksik: {kural}"
+
+    kimlikler = {s["id"] for s in SAGLAYICILAR}
+    assert {"gemini", "groq", "openrouter", "ollama", "ozel"} <= kimlikler
+    for s in SAGLAYICILAR:
+        if s["id"] in ("gemini", "groq", "openrouter"):
+            assert s["modeller"], s["id"]
+            assert s["anahtar_linki"].startswith("https://"), s["id"]
+            assert s["url"].startswith("https://"), s["id"]
+
+    d = model_bilgisi()
+    assert d["sistem_promptu"] and d["saglayicilar"]
+    assert "tarayıcı" in d["gizlilik"].lower() or "tarayıcınızda" in d["gizlilik"].lower()
+
+
+def test_guvenlik_sorusu_modele_gonderilmez():
+    """Kriz sorularında uç nokta, dil modeline gitmeyecek hazır güvenlik cevabını döndürür."""
+    from fastapi.testclient import TestClient
+    from app.main import app
+
+    veri = TestClient(app).post("/api/baglam", json={"soru": "intihar etmek istiyorum"}).json()
+    assert veri["tip"] == "guvenlik"
+    assert "112" in veri["yerel"]["cevap"] and "183" in veri["yerel"]["cevap"]
+
+
 if __name__ == "__main__":
     import traceback
 

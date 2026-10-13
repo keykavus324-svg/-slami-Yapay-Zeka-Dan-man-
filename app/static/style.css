@@ -235,3 +235,49 @@ body{
   .msg.user .bubble{max-width:88%}
   .stats{grid-template-columns:1fr}
 }
+
+/* ---------------- MOTOR ROZETİ & MODEL PANELİ ---------------- */
+.motor-chip{
+  border:1px solid var(--line); background:linear-gradient(140deg, rgba(45,212,191,.14), rgba(227,197,116,.08));
+  color:var(--gold); font-size:11.5px; padding:6px 12px; border-radius:999px; cursor:pointer;
+  max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; transition:.16s;
+}
+.motor-chip:hover{border-color:var(--gold-strong); transform:translateY(-1px)}
+.motor-box{
+  border:1px dashed var(--line); border-radius:14px; padding:12px; background:rgba(45,212,191,.05);
+  display:flex; flex-direction:column; gap:8px;
+}
+.motor-head{display:flex; align-items:center; justify-content:space-between; gap:8px}
+.motor-head b{font-size:12.5px; color:var(--gold); letter-spacing:.3px}
+.motor-durum{font-size:10.5px; padding:2px 8px; border-radius:999px; border:1px solid var(--line-soft); color:var(--ink-dim)}
+.motor-durum.on{border-color:rgba(45,212,191,.5); color:#9ff3e2; background:rgba(45,212,191,.12)}
+.chip.llm{border-color:rgba(45,212,191,.45); color:#9ff3e2; background:rgba(45,212,191,.1)}
+
+.modal{position:fixed; inset:0; z-index:60; background:rgba(2,14,10,.72); backdrop-filter:blur(4px);
+  display:grid; place-items:center; padding:18px}
+.modal[hidden]{display:none}
+.modal-card{
+  width:min(560px, 100%); max-height:90vh; overflow:auto; background:linear-gradient(170deg,#062a20,#04201a);
+  border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); padding:20px;
+  display:flex; flex-direction:column; gap:10px;
+}
+.modal-card h3{margin:0 0 2px; font-family:var(--serif); color:var(--gold); font-size:18px; letter-spacing:.6px}
+.alan{display:flex; flex-direction:column; gap:5px; font-size:11.5px; letter-spacing:1px; text-transform:uppercase; color:var(--gold); opacity:.95}
+.alan select, .alan input{
+  font-family:var(--font); font-size:13.5px; text-transform:none; letter-spacing:0; color:var(--ink);
+  background:rgba(3,26,19,.9); border:1px solid var(--line-soft); border-radius:11px; padding:9px 11px; outline:none;
+}
+.alan select:focus, .alan input:focus{border-color:var(--gold-strong)}
+.modal-actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+.modal-actions button{
+  font-family:var(--font); font-size:12px; padding:9px 14px; border-radius:11px; cursor:pointer;
+  background:transparent; border:1px solid var(--line); color:var(--ink-dim); transition:.16s;
+}
+.modal-actions button:hover{color:var(--gold); border-color:var(--gold-strong)}
+.modal-actions button.primary{background:linear-gradient(140deg,#0e4d39,#07301f); color:#fff; border-color:var(--gold-strong)}
+#llmLink a{color:var(--teal); word-break:break-all}
+.imlec{display:inline-block; width:7px; height:15px; margin-left:2px; background:var(--teal);
+  vertical-align:-2px; animation:yanip 1s infinite}
+@keyframes yanip{0%,49%{opacity:1}50%,100%{opacity:.15}}
+.kaynak-satir{margin:.28em 0; font-size:12.6px; color:var(--ink-dim)}
+.kaynak-satir .tool{margin-left:6px}

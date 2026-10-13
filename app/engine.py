@@ -816,6 +816,61 @@ class Engine:
             "notlar": notlar,
         }
 
+    # ------------------------------------------------------------------
+    # HARİCİ DİL MODELİ (LLM) İÇİN BAĞLAM  —  "RAG" katmanı
+    # ------------------------------------------------------------------
+    def baglam(self, soru: str, limit: int = 4, pasaj_limit: int = 6) -> Dict[str, Any]:
+        """
+        Yüksek parametreli bir dil modeline (Gemini/Groq/OpenRouter/Ollama) verilecek
+        *kaynaklı bağlam paketi* ile birlikte yerel motorun cevabını üretir.
+
+        Böylece model: (1) bilgi bankamızdan gerçek kayıt ve pasajları görür,
+        (2) kendi genel İslami bilgisiyle serbestçe cevap verebilir.
+        """
+        yerel = self.ask(soru, detay="normal")
+
+        q_norm = normalize(soru)
+        q_base = keywords(soru)
+        q_tokens = list(dict.fromkeys(expand(q_base)))
+        base_set = set(q_base)
+        q_weighted = [(t, 1.0 if t in base_set else 0.45) for t in q_tokens]
+
+        skorlar: List[Tuple[float, Entry]] = []
+        for e in self.entries:
+            s = self._score(norm_query=q_norm, q_tokens=q_tokens, entry=e, weighted=q_weighted)
+            if s > 0:
+                skorlar.append((s, e))
+        skorlar.sort(key=lambda x: (-x[0], x[1].index))
+
+        kayitlar = [
+            {
+                "id": e.id,
+                "kategori": e.kategori,
+                "soru": e.soru,
+                "cevap": e.cevap[:2400],
+                "kaynaklar": e.kaynaklar,
+                "puan": round(s, 3),
+            }
+            for s, e in skorlar[:limit]
+        ]
+        pasajlar = [
+            {
+                "kategori": pz["kayit"].kategori,
+                "soru": pz["kayit"].soru,
+                "metin": pz["metin"],
+                "puan": round(pz["puan"], 3),
+            }
+            for pz in self.ilgili_pasajlar(q_weighted, limit=pasaj_limit, esik=1.2)
+        ]
+        return {
+            "soru": soru.strip(),
+            "tip": yerel.get("tip", "cevap"),
+            "yerel": yerel,
+            "kayitlar": kayitlar,
+            "pasajlar": pasajlar,
+            "bilgi_bankasi": {"kayit": self.N, "pasaj": len(self.passages)},
+        }
+
     @staticmethod
     def _ilgili_sozluk(entries: List[Entry]) -> List[Dict[str, str]]:
         return [{"id": e.id, "soru": e.soru, "kategori": e.kategori} for e in entries]

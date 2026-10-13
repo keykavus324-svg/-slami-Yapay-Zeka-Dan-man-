@@ -16,6 +16,7 @@
 
   let DETAY = "normal";
   let gecmis = [];
+  let MODEL_BILGISI = { sistem_promptu: "", saglayicilar: [] };
 
   /* ------------------------- Markdown (hafif) ------------------------- */
   const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -215,6 +216,277 @@
     scrollDown();
   }
 
+
+  /* ============================================================
+     YÜKSEK PARAMETRELİ DİL MODELİ (LLM) KATMANI
+     • Model çağrısı doğrudan TARAYICIDAN yapılır — API anahtarı sunucuya gitmez.
+     • Sunucu yalnızca yerel bilgi bankasından KAYNAKLI BAĞLAM üretir (RAG).
+     ============================================================ */
+  const AYAR_ANAHTAR = "seyh-tugrul-llm";
+  let LLM = null;
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  function llmOku() {
+    try { LLM = JSON.parse(localStorage.getItem(AYAR_ANAHTAR) || "null"); } catch { LLM = null; }
+  }
+  function llmYaz() {
+    try {
+      if (LLM) localStorage.setItem(AYAR_ANAHTAR, JSON.stringify(LLM));
+      else localStorage.removeItem(AYAR_ANAHTAR);
+    } catch {}
+  }
+  const saglayiciBul = (id) => (MODEL_BILGISI.saglayicilar || []).find((x) => x.id === id) || null;
+  const llmAktif = () =>
+    !!(LLM && LLM.model && saglayiciBul(LLM.saglayici) && (LLM.anahtar || LLM.saglayici === "ollama"));
+
+  function motorRozeti() {
+    const sag = LLM ? saglayiciBul(LLM.saglayici) : null;
+    const yazi = llmAktif() && sag
+      ? "🧠 " + sag.ad.split("—")[0].split("(")[0].trim() + " · " + LLM.model
+      : "📚 Yerel bilgi bankası";
+    const b = $("#motorBtn");
+    if (b) b.textContent = yazi;
+    const durum = $("#motorDurum");
+    if (durum) {
+      durum.textContent = llmAktif() ? "Model bağlı" : "Yerel";
+      durum.classList.toggle("on", llmAktif());
+    }
+    const ozet = $("#motorOzet");
+    if (ozet) {
+      ozet.innerHTML = llmAktif() && sag
+        ? "<b>" + esc(sag.ad) + "</b> bağlı — cevaplar bu model tarafından, bilgi bankası kaynaklarıyla üretiliyor."
+        : "Şu an <b>yerel bilgi bankası</b> cevaplıyor. İstersen ücretsiz bir yüksek parametreli model (Gemini / Llama 70B / GPT-OSS 120B) bağla.";
+    }
+  }
+
+  async function modelBilgisiYukle() {
+    try {
+      const r = await fetch("/api/model");
+      MODEL_BILGISI = await r.json();
+    } catch { /* yerel motor yine çalışır */ }
+    llmPaneliDoldur();
+    motorRozeti();
+  }
+
+  function llmPaneliDoldur() {
+    const sec = $("#llmSaglayici");
+    if (!sec) return;
+    sec.innerHTML = '<option value="yerel">📚 Yerel bilgi bankası (dil modeli yok)</option>';
+    (MODEL_BILGISI.saglayicilar || []).forEach((sg) => {
+      const o = document.createElement("option");
+      o.value = sg.id;
+      o.textContent = sg.ad;
+      sec.appendChild(o);
+    });
+    // Kayıtlı model varsa paneli onunla aç
+    sec.value = LLM && LLM.saglayici && saglayiciBul(LLM.saglayici) ? LLM.saglayici : "yerel";
+    sec.onchange = () => formuGuncelle();
+    formuGuncelle();
+  }
+
+  function formuGuncelle() {
+    const id = $("#llmSaglayici").value;
+    const sg = saglayiciBul(id);
+    const not = $("#llmSagNot");
+    const liste = $("#llmModelListe");
+    const urlSar = $("#llmUrlSar");
+    liste.innerHTML = "";
+    if (!sg) { // yerel
+      not.textContent = "Dil modeli kapalı: cevaplar 152 kayıtlık yerel bilgi bankasından gelir (ücretsiz, kotasız, çevrimdışı).";
+      urlSar.hidden = true;
+      const lnk = $("#llmLink"); if (lnk) lnk.innerHTML = "";
+      return;
+    }
+    not.textContent = sg.not || "";
+    (sg.modeller || []).forEach((m) => {
+      const o = document.createElement("option"); o.value = m; liste.appendChild(o);
+    });
+    urlSar.hidden = sg.id !== "ozel";
+    const mevcut = LLM && LLM.saglayici === id ? LLM : null;
+    $("#llmModel").value = (mevcut && mevcut.model) || (sg.modeller || [])[0] || "";
+    $("#llmAnahtar").value = (mevcut && mevcut.anahtar) || "";
+    $("#llmUrl").value = (mevcut && mevcut.url) || sg.url || "";
+    const link = $("#llmLink");
+    link.innerHTML = sg.anahtar_linki
+      ? '🔑 Ücretsiz anahtar: <a href="' + sg.anahtar_linki + '" target="_blank" rel="noopener">' + sg.anahtar_linki + "</a>"
+      : "";
+  }
+
+  function llmAc() { $("#llmModal").hidden = false; formuGuncelle(); }
+  function llmKapat() { $("#llmModal").hidden = true; }
+
+  /* ------------------- Model çağrısı (akışlı / SSE) ------------------- */
+  function llmUrl(sg) {
+    const temel = (LLM && LLM.url) || sg.url || "";
+    if (sg.tur === "gemini") {
+      const u = temel.replace("{model}", encodeURIComponent(LLM.model));
+      return u + (u.includes("?") ? "&" : "?") + "alt=sse&key=" + encodeURIComponent(LLM.anahtar || "");
+    }
+    return temel;
+  }
+
+  function llmGovde(sg, kullanici) {
+    const sistem = MODEL_BILGISI.sistem_promptu || "";
+    if (sg.tur === "gemini") {
+      return {
+        system_instruction: { parts: [{ text: sistem }] },
+        contents: [{ role: "user", parts: [{ text: kullanici }] }],
+        generationConfig: { temperature: 0.55, maxOutputTokens: 2400 },
+      };
+    }
+    return {
+      model: LLM.model,
+      messages: [
+        { role: "system", content: sistem },
+        { role: "user", content: kullanici },
+      ],
+      temperature: 0.55,
+      stream: true,
+      max_tokens: 2400,
+    };
+  }
+
+  function llmBasliklar(sg) {
+    const h = { "Content-Type": "application/json" };
+    if (LLM.anahtar) h["Authorization"] = "Bearer " + LLM.anahtar;
+    if (sg.id === "openrouter") { h["HTTP-Referer"] = location.origin; h["X-Title"] = "Seyh Tugrul"; }
+    return h;
+  }
+
+  function parcaAyikla(j) {
+    if (j.candidates) {
+      const p = (j.candidates[0] || {}).content || {};
+      return (p.parts || []).map((x) => x.text || "").join("");
+    }
+    const c = j.choices && j.choices[0];
+    if (c && c.delta && typeof c.delta.content === "string") return c.delta.content;
+    if (c && c.message && typeof c.message.content === "string") return c.message.content;
+    return "";
+  }
+
+  async function akisOku(res, parca) {
+    const oku = res.body.getReader();
+    const coz = new TextDecoder();
+    let tampon = "";
+    for (;;) {
+      const { done, value } = await oku.read();
+      if (done) break;
+      tampon += coz.decode(value, { stream: true });
+      let i;
+      while ((i = tampon.indexOf("\n")) >= 0) {
+        const satir = tampon.slice(0, i).trim();
+        tampon = tampon.slice(i + 1);
+        if (!satir.startsWith("data:")) continue;
+        const veri = satir.slice(5).trim();
+        if (!veri || veri === "[DONE]") continue;
+        let j;
+        try { j = JSON.parse(veri); } catch { continue; }
+        const t = parcaAyikla(j);
+        if (t) parca(t);
+      }
+    }
+  }
+
+  function hataMetni(e, res) {
+    if (res) {
+      if (res.status === 401 || res.status === 403) return "API anahtarı geçersiz ya da yetkisiz (HTTP " + res.status + ").";
+      if (res.status === 429) return "Ücretsiz kota doldu veya çok hızlı istek (HTTP 429). Kısa bir süre bekleyip tekrar dene.";
+      if (res.status === 404) return "Model bulunamadı (HTTP 404). Model adını kontrol et.";
+      if (res.status >= 500) return "Model sunucusu geçici hata verdi (HTTP " + res.status + ").";
+      return "Model hatası (HTTP " + res.status + ").";
+    }
+    const m = (e && e.message) || "";
+    if (/Failed to fetch|NetworkError|load failed/i.test(m))
+      return "Modele ulaşılamadı (ağ/CORS engeli veya internet yok).";
+    return "Model çağrısı başarısız: " + (m || "bilinmeyen hata") + ".";
+  }
+
+  function kaynakBloku(veri) {
+    const kutu = el("div", "sources");
+    kutu.appendChild(el("h5", null, "📚 Cevaba temel olan bilgi bankası kayıtları"));
+    (veri.kayitlar || []).slice(0, 3).forEach((k) => {
+      const p = el("p", "kaynak-satir");
+      p.innerHTML = "<b>" + esc(k.soru) + "</b> <span class=\"chip cat\">" + esc(k.kategori) + "</span>";
+      const b = el("button", "tool", "Tamamını gör");
+      b.addEventListener("click", () => soruSor(k.soru));
+      p.appendChild(b);
+      kutu.appendChild(p);
+    });
+    const src = (veri.kayitlar && veri.kayitlar[0] && veri.kayitlar[0].kaynaklar) || [];
+    if (src.length) {
+      kutu.appendChild(el("p", "mini", "Delil kaynakları: " + src.map(esc).join(" • ")));
+    }
+    return kutu;
+  }
+
+  async function llmAkisi(soru, veri) {
+    const sg = saglayiciBul(LLM.saglayici);
+    const wrap = el("div", "msg bot");
+    wrap.appendChild(botAvatar());
+    const bubble = el("div", "bubble");
+    const meta = el("div", "meta");
+    meta.appendChild(el("span", "chip llm", "🧠 " + esc(sg.ad.split("—")[0].split("(")[0].trim()) + " · " + esc(LLM.model)));
+    meta.appendChild(el("span", "chip cat", "Bilgi bankası kaynaklı (RAG)"));
+    bubble.appendChild(meta);
+    if (veri.tip === "cevap" && veri.yerel && veri.yerel.soru)
+      bubble.appendChild(el("p", "q-title", "Soru: <b>" + esc(soru) + "</b>"));
+    const ans = el("div", "answer", '<p class="mini">🧠 Bilgi bankası taranıyor ve cevap yazılıyor…</p>');
+    bubble.appendChild(ans);
+    wrap.appendChild(bubble);
+    chat.appendChild(wrap);
+    scrollDown();
+
+    let birikim = "";
+    let sonCizim = 0;
+    const ciz = (zorla) => {
+      const n = performance.now();
+      if (!zorla && n - sonCizim < 80) return;
+      sonCizim = n;
+      ans.innerHTML = markdown(birikim) + (zorla ? "" : '<span class="imlec"></span>');
+      scrollDown();
+    };
+
+    let res = null;
+    try {
+      res = await fetch(llmUrl(sg), {
+        method: "POST",
+        headers: llmBasliklar(sg),
+        body: JSON.stringify(llmGovde(sg, veri.kullanici_mesaji)),
+      });
+      if (!res.ok) {
+        let govde = "";
+        try { govde = (await res.text()).slice(0, 200); } catch {}
+        throw new Error(hataMetni(null, res) + (govde ? " " + govde : ""));
+      }
+      await akisOku(res, (p) => { birikim += p; ciz(false); });
+      ciz(true);
+      if (!birikim.trim()) throw new Error("Model boş yanıt döndürdü.");
+
+      bubble.appendChild(kaynakBloku(veri));
+      const tools = el("div", "tools");
+      const kopya = el("button", "tool", "📋 Kopyala");
+      kopya.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(birikim); kopya.textContent = "✔ Kopyalandı"; }
+        catch { kopya.textContent = "Kopyalanamadı"; }
+        setTimeout(() => (kopya.textContent = "📋 Kopyala"), 1800);
+      });
+      tools.appendChild(kopya);
+      const yz = el("button", "tool", "🔄 Modeli değiştir");
+      yz.addEventListener("click", llmAc);
+      tools.appendChild(yz);
+      bubble.appendChild(tools);
+
+      gecmis.push({ rol: "bot", veri: { bulundu: true, tip: "llm", guven: 1, kategori: sg.ad, soru: soru, cevap: birikim, kaynaklar: [], ilgili: [], notlar: [] } });
+      kaydet();
+    } catch (e) {
+      ans.innerHTML = birikim.trim() ? markdown(birikim) : "";
+      bubble.appendChild(el("div", "notlar", "⚠️ " + esc(hataMetni(e, null)) +
+        " Aşağıda <b>yerel bilgi bankası</b> cevabı gösteriliyor."));
+      if (veri.yerel) addBot(veri.yerel);
+    }
+    scrollDown();
+  }
+
   /* ------------------------- Sunucu ile konuşma ------------------------- */
   async function soruSor(metin) {
     metin = (metin || input.value || "").trim();
@@ -227,23 +499,32 @@
     const t = addTyping();
 
     try {
-      const res = await fetch("/api/sor", {
+      const res = await fetch("/api/baglam", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ soru: metin, detay: DETAY }),
       });
       if (!res.ok) throw new Error("Sunucu hatası: " + res.status);
-      const data = await res.json();
+      const veri = await res.json();
+      const yerel = veri.yerel || {};
+
+      // Güvenlik/greeting özel yanıtları ve dil modeli kapalıysa: yerel motor
+      const ozelTip = ["guvenlik", "sohbet", "bos"].includes(veri.tip);
+      if (ozelTip || !llmAktif()) {
+        t.remove();
+        await sleep(160);
+        addBot(yerel);
+        return;
+      }
+      // Yüksek parametreli model: bağlamla beslenmiş cevap (akışlı)
       t.remove();
-      // Kısa doğal "düşünme" gecikmesi
-      await new Promise((r) => setTimeout(r, 260));
-      addBot(data);
+      await llmAkisi(metin, veri);
     } catch (e) {
       t.remove();
       addBot({
         bulundu: false, tip: "hata", guven: 0, kategori: "Bağlantı",
         cevap: "Sunucuya ulaşamadım. Bağlantını kontrol edip tekrar dener misin? " +
-               "(Uygulama tamamen yerel çalışır; internet gerekmez.)",
+               "(Yerel bilgi bankası çevrimdışı da çalışır.)",
         kaynaklar: [], ilgili: [], notlar: [],
       });
     } finally {
@@ -405,6 +686,69 @@
 
   $("#randomBtn").addEventListener("click", rastgele);
 
+  // Dil modeli paneli olayları
+  const mb = $("#motorBtn"); if (mb) mb.addEventListener("click", llmAc);
+  const mb2 = $("#motorBtn2"); if (mb2) mb2.addEventListener("click", llmAc);
+  const kapat = $("#llmKapat"); if (kapat) kapat.addEventListener("click", llmKapat);
+  const mmodal = $("#llmModal");
+  if (mmodal) mmodal.addEventListener("click", (e) => { if (e.target === mmodal) llmKapat(); });
+
+  const kaydetBtn = $("#llmKaydet");
+  if (kaydetBtn) kaydetBtn.addEventListener("click", () => {
+    const id = $("#llmSaglayici").value;
+    const durum = $("#llmDurum");
+    if (id === "yerel") {
+      LLM = null; llmYaz(); motorRozeti();
+      durum.textContent = "✔ Yerel bilgi bankası kullanılıyor (ücretsiz, kotasız).";
+      setTimeout(llmKapat, 700);
+      return;
+    }
+    const sg = saglayiciBul(id);
+    const model = $("#llmModel").value.trim() || (sg.modeller || [])[0] || "";
+    const anahtar = $("#llmAnahtar").value.trim();
+    const url = $("#llmUrl").value.trim() || sg.url;
+    if (!model) { durum.textContent = "⚠️ Model adı gerekli."; return; }
+    if (!anahtar && id !== "ollama") { durum.textContent = "⚠️ API anahtarı gerekli (yalnızca yerel Ollama istemez)."; return; }
+    if (!url) { durum.textContent = "⚠️ Sunucu adresi gerekli."; return; }
+    LLM = { saglayici: id, anahtar, model, url };
+    llmYaz(); motorRozeti();
+    durum.textContent = "✔ Kaydedildi: " + model + " — sonraki sorular bu modelle cevaplanacak.";
+    setTimeout(llmKapat, 900);
+  });
+
+  const yerelBtn = $("#llmYerel");
+  if (yerelBtn) yerelBtn.addEventListener("click", () => {
+    LLM = null; llmYaz(); motorRozeti();
+    $("#llmDurum").textContent = "✔ Yerel bilgi bankasına dönüldü.";
+    formuGuncelle();
+  });
+
+  const testBtn = $("#llmTest");
+  if (testBtn) testBtn.addEventListener("click", async () => {
+    const durum = $("#llmDurum");
+    const id = $("#llmSaglayici").value;
+    if (id === "yerel") { durum.textContent = "Yerel motor zaten çalışıyor — test gerekmez."; return; }
+    const sg = saglayiciBul(id);
+    const gecici = { saglayici: id, anahtar: $("#llmAnahtar").value.trim(), model: $("#llmModel").value.trim(), url: $("#llmUrl").value.trim() || sg.url };
+    const eski = LLM; LLM = gecici;
+    durum.textContent = "⏳ Test ediliyor…";
+    let toplam = 0;
+    try {
+      const res = await fetch(llmUrl(sg), {
+        method: "POST",
+        headers: llmBasliklar(sg),
+        body: JSON.stringify(llmGovde(sg, "Kısaca kendini bir cümleyle tanıt.")),
+      });
+      if (!res.ok) throw new Error(hataMetni(null, res));
+      await akisOku(res, (p) => { toplam += p.length; });
+      durum.textContent = "✔ Bağlantı başarılı! (" + toplam + " karakter yanıt geldi)";
+    } catch (e) {
+      durum.textContent = "✘ " + hataMetni(e, null);
+    } finally {
+      LLM = eski;
+    }
+  });
+
   function toggleSide(open) {
     $("#sidebar").classList.toggle("open", open);
     $("#overlay").classList.toggle("show", open);
@@ -421,6 +765,9 @@
   }
 
   /* ------------------------- Başlat ------------------------- */
+  llmOku();
+  modelBilgisiYukle();
+  motorRozeti();
   hicriTarih();
   chipsYukle();
   kategorileriYukle();

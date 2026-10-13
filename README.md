@@ -5,6 +5,17 @@
 > Namaz, abdest, gusül, oruç, zekât, hac, dua, iman esasları, aile, helâl-haram, ahlâk,
 > günlük hayat… Aklınıza gelen her İslami soruyu doğal bir dille yazın; cevabı kaynaklarıyla alın.
 
+**İki katmanlı yapay zekâ:**
+
+1. **Yerel bilgi bankası (RAG kaynağı)** — 152 doğrulanmış kayıt + ~1.900 pasaj. Anahtarsız, kotasız,
+   çevrimdışı çalışır. Her zaman açıktır.
+2. **Yüksek parametreli dil modeli (isteğe bağlı)** — Gemini 2.5 Flash, Llama 3.3 **70B**,
+   GPT-OSS **120B**, Qwen3 **235B** gibi modeller; ücretsiz anahtarla. Model, **1. katmandaki
+   kaynaklarla beslenir** ve cevabı özgürce, akıcı biçimde yazar. Arayüzden tek tıkla bağlanır.
+
+> Model çağrısı **doğrudan tarayıcınızdan** yapılır: API anahtarınız sunucuya gitmez, sunucu
+> üzerinden ücret/kota tüketilmez.
+
 ---
 
 ## ✨ Neden "ücretsiz ve sınırsız"?
@@ -16,12 +27,13 @@
 | 📊 Soru limiti / kota | **Yok** |
 | 🌐 İnternet bağlantısı | **Gerekmez** (bilgi bankası tamamen yerel) |
 | 🕵️ Veri toplama / kayıt | **Yok** — sohbetler yalnızca tarayıcınızda saklanır |
-| 🧠 Harici yapay zekâ servisi | **Kullanılmaz** |
+| 🧠 Yapay zekâ | Yerel motor **her zaman**; dil modeli **isteğe bağlı ve ücretsiz** |
+| 💾 Anahtarın saklandığı yer | **Yalnızca sizin tarayıcınız** (localStorage) |
 
-Uygulama; yapay zekâ API'si çağırmaz. Cevaplar, **Kur'an âyetleri, sahih hadisler ve klasik fıkıh
-kaynaklarına dayanılarak hazırlanmış yerel bir bilgi bankasından** gelir ve her cevabın altında
-kaynakları listelenir. Yani: aynı soruya her zaman aynı, denetlenebilir cevap; ağ kesintisinde bile
-çalışır, sıfır maliyetle istediğiniz kadar soru.
+Anahtarsız kullanımda cevaplar, **Kur'an âyetleri, sahih hadisler ve klasik fıkıh kaynaklarına
+dayanılarak hazırlanmış yerel bilgi bankasından** gelir; her cevabın altında kaynakları listelenir.
+Dil modeli bağladığınızda ise model, aynı bilgi bankası kaynaklarıyla beslenir (RAG) ve soruyu
+serbestçe, akıcı bir dille cevaplar. Sıfır maliyet, sıfır kayıt.
 
 ---
 
@@ -41,6 +53,47 @@ http://localhost:8000
 ```
 
 Port değiştirmek için: `PORT=9000 python -m app.main`
+
+---
+
+## 🧠 Gerçek Yapay Zekâ (Dil Modeli) Nasıl Bağlanır?
+
+Arayüzde sağ üstteki **"📚 Yerel bilgi bankası"** rozetine tıklayın → sağlayıcıyı seçin → ücretsiz
+anahtarınızı yapıştırın → **Kaydet**. Hepsi bu kadar; anahtarınız cihazınızdan çıkmaz.
+
+| Sağlayıcı | Örnek modeller | Ücretsiz katman | Anahtar adresi |
+|---|---|---|---|
+| **Google Gemini** | `gemini-2.5-flash`, `gemini-2.5-flash-lite` | Günde ~1.500 istek, kredi kartı yok | https://aistudio.google.com/apikey |
+| **Groq** | `llama-3.3-70b-versatile`, `openai/gpt-oss-120b` | Dakikada 30 / günde 1.000 istek | https://console.groq.com/keys |
+| **OpenRouter** | `qwen/qwen3-235b-a22b:free`, `llama-3.3-70b-instruct:free`, `deepseek-r1:free` | Günde ~50 istek (`:free` uzantısı şart) | https://openrouter.ai/keys |
+| **Ollama (yerel)** | `llama3.1:8b`, `qwen2.5:32b`, `gemma2:27b` | **Sınırsız ve tamamen ücretsiz** | https://ollama.com/download |
+| **Diğer** | OpenAI uyumlu her servis | — | — |
+
+### Tam sınırsızlık istiyorsanız: Ollama
+```bash
+# Modeli indirip çalıştırın (kendi bilgisayarınızda)
+ollama pull qwen2.5:14b
+OLLAMA_ORIGINS=* ollama serve        # tarayıcı erişimi için
+```
+Sonra arayüzden **Sağlayıcı: Kendi bilgisayarım — Ollama**, model: `qwen2.5:14b` seçin.
+İnternet gerekmez, kota yok, ücret yok; veriler cihazınızdan hiç çıkmaz.
+
+### Nasıl çalışır? (RAG akışı)
+```
+Soru ──► Sunucu (yerel): 152 kayıt + ~1.900 pasaj taranır
+          └─► en ilgili 4 kayıt + 6 bölüm "kaynaklı bağlam" olarak paketlenir
+                    │
+                    ▼
+      Tarayıcınız ──► Seçtiğiniz dil modeli (Gemini/Groq/OpenRouter/Ollama)
+                       │  sistem yönergesi: Ehl-i Sünnet, delil zorunlu,
+                       │  uydurma yasak, ihtilafta görüşleri belirt, müftülüğe yönlendir,
+                       │  kriz durumunda 112/183
+                       ▼
+              Akışlı (yazı yazılarak gelen) cevap + bilgi bankası kaynakları
+```
+Anahtar yoksa ya da ağ kesilirse uygulama **otomatik olarak yerel motora düşer** — hiçbir soru
+cevapsız kalmaz. Kriz/güvenlik soruları (intihar, şiddet, istismar) model çağrılmadan yerel
+güvenlik yanıtıyla karşılanır.
 
 ---
 
@@ -76,6 +129,8 @@ Port değiştirmek için: `PORT=9000 python -m app.main`
 | `GET`  | `/api/sorular?kategori=Namaz` | Soru listesi (isteğe bağlı konu filtresi) |
 | `GET`  | `/api/soru/{id}` | Belirli bir kaydın tam cevabı |
 | `GET`  | `/api/rastgele` | Rastgele soru-cevap |
+| `POST` | `/api/baglam` | LLM için **kaynaklı bağlam paketi** (4 kayıt + 6 pasaj + hazır mesaj) |
+| `GET`  | `/api/model` | Sistem yönergesi + ücretsiz sağlayıcı/model listesi |
 | `GET`  | `/api/istatistik` | Kayıt sayısı, pasaj sayısı, boşluk sayısı, motor bilgisi |
 | `GET`  | `/api/bosluklar` | Cevaplanamayan sorular (içerik geliştirme listesi) |
 | `GET`  | `/api/saglik` | Servis durumu |
@@ -143,9 +198,19 @@ python tests/test_smoke.py
 pytest -q
 ```
 
-Testler (10 adet); veri bütünlüğünü, her kaydın kendi anahtar kelimeleriyle bulunabilmesini,
-**120+ örnek sorunun doğru kayda** yönlenmesini, paragraf aramasını, usul (ilke) cevaplarını,
-güvenlik yanıtlarını ve "ücretsiz/sınırsız" sözleşmesini doğrular.
+**Python testleri (13 adet):** veri bütünlüğü, her kaydın kendi anahtar kelimeleriyle bulunabilmesi,
+**120+ örnek sorunun doğru kayda** yönlenmesi, paragraf araması, usul (ilke) cevapları, güvenlik
+yanıtları, LLM bağlam uç noktası (`/api/baglam`), sistem yönergesinin kritik kuralları ve
+"ücretsiz/sınırsız" sözleşmesi.
+
+**Arayüz testi (21 kontrol, tarayıcı taklidi):**
+```bash
+npm i jsdom          # bir kez
+python -m app.main & # sunucu açıkken gerçek veriyle çalışır
+node tests/ui_test.js
+```
+Bu test; cevabın akışlı yazımını, kaynak bloğunu, güvenlik sorusunda modelin devre dışı kalmasını,
+rozetin güncellenmesini ve ayar penceresini doğrular.
 
 ---
 
