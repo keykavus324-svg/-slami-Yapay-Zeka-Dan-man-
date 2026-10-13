@@ -1,0 +1,356 @@
+[
+  {
+    "id": "namaz-rekatlari",
+    "kategori": "Namaz",
+    "soru": "Beş vakit namazın rekât sayıları kaçtır?",
+    "anahtar": [
+      "namaz rekat",
+      "rekat sayıları",
+      "sabah namazı kaç rekat",
+      "öğle namazı kaç rekat",
+      "ikindi namazı kaç rekat",
+      "akşam namazı kaç rekat",
+      "yatsı namazı kaç rekat",
+      "vitir kaç rekat",
+      "sünnet farz",
+      "akşam namazı kaç rekât",
+      "yatsı namazı kaç rekât",
+      "öğle namazı kaç rekât",
+      "ikindi kaç rekât"
+    ],
+    "cevap": "**Beş vakit namazın rekât sayıları (Hanefî mezhebine göre):**\n\n| Vakit | İlk Sünnet | Farz | Son Sünnet | Diğer | Toplam |\n|---|---|---|---|---|---|\n| **Sabah** | 2 | 2 | — | — | 4 |\n| **Öğle** | 4 | 4 | 2 | — | 10 |\n| **İkindi** | 4 | 4 | — | — | 8 |\n| **Akşam** | — | 3 | 2 | 2 (nafile) | 5 (+2) |\n| **Yatsı** | 4 (müekked değil) | 4 | 2 | 3 Vitir + 2 nafile | 13 |\n\n**Notlar:**\n- **Sabah namazının sünneti** müekked sünnettir, çok önemlidir.\n- **Öğle namazının son sünneti** de müekkeddir, 2 rekât kılınır.\n- **İkindi namazının 4 rekât sünneti** gayr-i müekked (müstehap) sünnettir; kılınırsa sevabı vardır, terk edilirse günahı yoktur.\n- **Yatsının ilk sünneti** 4 rekâttır, müekked değildir; son sünneti 2 rekât müekkettir.\n- **Vitir namazı** yatsının ardından kılınan **vacip** bir namazdır, 3 rekâttır.\n- **Cemaatle** kılınan namaz, tek başına kılınandan 27 derece üstündür (Buhârî, Müslim).\n\n**Vakitleri:** Sabah (imsak-tan yeri ağarıncaya kadar), Öğle (zevâl-öğle vakti güneş tepe noktasını geçince), İkindi (öğle sonrası-akşam), Akşam (güneş battıktan sonra), Yatsı (şafağın kaybolması-gece yarısı/imsağa kadar).",
+    "kaynaklar": [
+      "Hadis: Buhârî, Ezan 1; Müslim, Salât 1-3",
+      "Fıkıh: el-Hidâye, Salât bölümü"
+    ]
+  },
+  {
+    "id": "namazin-farzlari",
+    "kategori": "Namaz",
+    "soru": "Namazın farzları, şartları ve rükünleri nelerdir?",
+    "anahtar": [
+      "namazın farzları",
+      "namazın şartları",
+      "namazın rükünleri",
+      "namazın 12 farzı",
+      "namazın içindeki farzlar",
+      "namazın dışındaki farzlar",
+      "namazda okunacaklar"
+    ],
+    "cevap": "Namazın farzları iki grupta incelenir:\n\n**A) Namazın dışındaki farzlar (şartlar) — 6 tanedir:**\n1. **Hadesten tahâret** — Abdestsizlikten temizlenmek (abdest/gusül/teyemmüm).\n2. **Necasetten tahâret** — Beden, elbise ve yerin necasetten temiz olması.\n3. **Setr-i avret** — Avret yerlerini örtmek (erkek: göbek ile diz kapağı arası; kadın: yüz, el ve ayak bilekleri hariç bütün vücut).\n4. **İstikbâl-i kıble** — Kâbe'ye yönelmek.\n5. **Vakit** — Namazın kendi vaktinde kılınması.\n6. **Niyet** — Hangi namazı kılacağını kalben belirlemek.\n\n**B) Namazın içindeki farzlar (rükünler) — 6 tanedir:**\n1. **İftitah tekbiri** — «Allâhü ekber» diyerek namaza girmek.\n2. **Kıyâm** — Hiçbir yere dayanmadan ayakta durmak.\n3. **Kırâat** — Kur'an okumak (Fatiha farzdır).\n4. **Rükû** — Bel hizasında eğilmek.\n5. **Secde** — Alnı, burnu, elleri, dizleri ve parmaklarını yere koymak (iki defa).\n6. **Ka'de-i ahîre** — Namazın sonunda kısa da olsa oturmak (Tahiyyât'ı okuyacak kadar).\n\n**Vacip olanlar:** Fatiha'dan sonra sûre okumak, secdede iki kez bekleme, tertip, kıraate Fatiha ile başlamak, rükûda-secdede tesbihat gibi hususlar vaciptir; birinin terk edilmesi **sehiv secdesi** gerektirir (Hanefî).\n\n**Sünnetler:** Sübhâneke, istiâze-besmele, tahiyyât, salâtü-selâm, selâm vermek vb.\n\nKısaca: Dışındaki 6 şart + içindeki 6 farz = **12 farz** olarak da anlatılır.",
+    "kaynaklar": [
+      "Kur'an: el-Mâide 5/6, el-Kasas 28/? (namaz)",
+      "Hadis: Buhârî, Salât; Müslim, Salât",
+      "Fıkıh: el-Hidâye; Mültekâ el-Ebhur"
+    ]
+  },
+  {
+    "id": "namaz-nasil-kilinir",
+    "kategori": "Namaz",
+    "soru": "Namaz nasıl kılınır? Adım adım anlatır mısın?",
+    "anahtar": [
+      "namaz nasıl kılınır",
+      "namaz adım adım",
+      "namaza başlama",
+      "namaz öğrenmek",
+      "2 rekat namaz",
+      "namaz kılış"
+    ],
+    "cevap": "**Bir rekânın temel akışı:**\n\n**1. Kıyâm (ayakta duruş):** Kıbleye yönel, niyet et, «Allâhü ekber» deyip namaza başla. Elleri bağla (erkek: göbek altı; kadın: göğüs üstü).\n**2. Sübhâneke:** «Sübhânekellâhümme ve bi hamdike…» oku.\n**3. Kırâat:** «Eûzü billâhi mine'ş-şeytâni'r-racîm» — «Bismillâhirrahmânirrahîm» — **Fâtiha** — ardından bir **sûre/âyet** (ilk iki rekâtta).\n**4. Rükû:** «Allâhü ekber» ile eğil, «Sübhâne rabbiye'l-azîm» üç kez oku, doğrulurken «Semiallâhü limen hamideh — Rabbenâ lekel-hamd» de.\n**5. Secde:** «Allâhü ekber» ile secdeye, «Sübhâne rabbiye'l-a'lâ» üç kez; «Allâhü ekber» ile otur; tekrar secde; «Allâhü ekber» ile ayağa kalk.\n**6. İkinci rekât:** Besmele + Fâtiha + sûre (sübhâneke okunmaz). Ardından rükû ve secdeler.\n**7. Ka'de (oturuş):** Son rekâtta oturup **Tahiyyât** («Ettehiyyâtü lillâhi…»), **Allâhümme salli** ve **Allâhümme bârik** (mezhebe göre sünnet), **Rabbenâ âtinâ** duası ve **selâm** («Esselâmü aleyküm ve rahmetullah» sağa ve sola).\n\n**Rekâtlara göre:** 3 rekâtlık namazlarda 2. rekâtta oturup Tahiyyât okuyup ayağa kalkılır (ilk ka'de). 4 rekâtlık namazlarda 3. rekâtta sadece Fâtiha okunur (zamm-ı sûre okunmaz).\n\n**Yeni başlayanlar için:** Önce abdest + 2 rekâtlık bir namazı (sabah sünneti gibi) öğren; sureleri (İhlâs, Kevser, Fil, Nâs, Felak) ezberle; sonra 3 ve 4 rekâtlılara geç. Hatalardan korkma; kılmaya devam etmek öğrenmenin en hızlı yoludur.",
+    "kaynaklar": [
+      "Hadis: Buhârî, Ezan 95-100 (namazın kılınışı)",
+      "Fıkıh: el-Hidâye, Sıfatu's-salât"
+    ]
+  },
+  {
+    "id": "namazi-bozanlar",
+    "kategori": "Namaz",
+    "soru": "Namazı bozan şeyler nelerdir?",
+    "anahtar": [
+      "namazı bozan",
+      "namaz bozulur mu",
+      "namazda konuşmak",
+      "namazda gülmek",
+      "namazda yemek",
+      "namaz geçerli mi",
+      "namazda telefon"
+    ],
+    "cevap": "**Namazı bozan hâller (Hanefî):**\n\n1. **Konuşmak** — Namazda bilerek bir kelime söylemek.\n2. **Kahkaha ile gülmek** — Abdesti de bozar. Gülümsemek (tebessüm) bozmaz.\n3. **Yemek-içmek** — Bilerek bir şey yemek/içmek; unutarak da olsa kasten çiğnemek bozar.\n4. **Kıbleden göğüs hizasını çevirmek.**\n5. **Namazda bir rüknü kasten terk etmek** (mesela secdeyi bırakmak).\n6. **Sünnet miktarından fazla bir rükün tekrarlamak** (mesela üç kez secdeye gitmek).\n7. **Dünya işine yönelik büyük hareket** (bir kişinin tükürük atması, elbiseyi toplama gibi; fakat bir-iki hareket bozmaz).\n8. **Namazda Kur'an yerine dua okumak** (bilerek, insan sözü).\n9. **Özürsüz olarak iki elin kaldırılması/hareketi** gibi namazın heyetini bozan hareketler.\n10. **Selâm verdikten sonra kasten konuşmak** namazı bozmaz (namaz bitmiştir).\n11. **Uyku, bayılma, ishal gibi abdesti bozan bir hâl** namaza da zarar verir; namaz bozulur.\n12. **Namazda telefon sesi/çalması** — sadece ses çıkması namazı bozmaz; fakat telefonla konuşmak/oynamak bozar. Telefonu sesize almak gerekir.\n13. **Kadın-erkek teması** (Hanefî'de temas abdesti bozmaz, ancak namazda kişinin kendisi kasten sarılması hareket çokluğundan bozar).\n\n**Bozmayanlar:** Unutarak selâm vermek (sonra sehiv secdesi), bir-iki küçük adım, gözle işaret, içinden dua, ağlamak, esnemek, hastalık sebebiyle öksürmek, mushafı kaldırmak, ufak bir düzeltme.",
+    "kaynaklar": [
+      "Hadis: Buhârî, Salât 71-73; Müslim, Mesâcid 33",
+      "Fıkıh: el-Hidâye, Müfsidâtü's-salât"
+    ]
+  },
+  {
+    "id": "sehiv-secdesi",
+    "kategori": "Namaz",
+    "soru": "Sehiv secdesi nedir, ne zaman ve nasıl yapılır?",
+    "anahtar": [
+      "sehiv secdesi",
+      "namazda hata",
+      "yanlış kıldım namazı",
+      "vacibi terk",
+      "namazda unuttum",
+      "sehv"
+    ],
+    "cevap": "**Sehiv secdesi**, namazda **yanılarak/unutularak** yapılan eksiklik hâlinde yapılan iki secdedir. Namazı yeniden kılmaya gerek bırakmaz, namazı sağlamlaştırır.\n\n**Gerektiği durumlar:**\n- Bir **vacibi** terk etmek (mesela Fâtiha'dan sonra sûreyi atlamak, rükûda tesbihi unutmak).\n- **Farzı** unutup sonra hatırlayıp yerine getirmek (mesela ilk oturuşun unutulması).\n- Bir rüknü **bir kez tekrar etmek**.\n- Namazı **bir rekât eksik/fazla** kılma şüphesi (kanaat galip olan duruma göre tamamlamak).\n- Son oturuştan önce **selâm vermek**.\n\n**Yapılışı (Hanefî):**\n1. Namazın **son ka'desinde Tahiyyât okuyup**, selâm verilmeden önce,\n2. «Allâhü ekber» ile **iki secde** yapılır (normal secde gibi),\n3. Oturulur, **Tahiyyât ve selâm** ile namaz bitirilir.\n\nBazı âlimler sehiv secdesinin son oturuştan sonra ve selâmdan önce olması gerektiğini söyler (Hanefî); selâmdan sonra yapılması da caizdir (Şâfiî). Niyet gerekmez; yapılırken «Sehiv secdesi» diye niyet etmek güzel bir ihtiyattır.\n\n**Kolaylık:** Namazda ne yapacağını şaşırdıysan, paniklemek yerine en kuvvetli zannına göre namazı tamamla ve sehiv secdesi yap. İslam kolaylık dini; şaşırmak namazı bozmaz.",
+    "kaynaklar": [
+      "Hadis: Buhârî, Sehv 1-14; Müslim, Mesâcid 89-91",
+      "Fıkıh: el-Hidâye, Sehiv"
+    ]
+  },
+  {
+    "id": "kaza-namaz",
+    "kategori": "Namaz",
+    "soru": "Kaza namazı nedir, nasıl kılınır ve hesaplanır?",
+    "anahtar": [
+      "kaza namazı",
+      "kaza borcu",
+      "namaz kazası",
+      "geçmiş namazları kılmak",
+      "kaza hesaplama",
+      "namaz borcu ödenir mi",
+      "kaza namazı nasıl kılınır"
+    ],
+    "cevap": "**Kaza**, vaktinde kılınamayan farz namazların, sonradan kılınmasıdır. Farz namazlar kazaya kaldığında kılınması **gerekir**; vakit namazı gibi kılınır, fakat niyet ederken hangi vaktin kazası olduğu belirtilir (örneğin: «Niyet ettim geçmiş öğle namazının farzının kazasına»).\n\n**Önemli hükümler:**\n- **Sünnetler kaza edilmez** (Hanefî). Yalnızca **vitir vacibi** kaza edilir; sabah namazının sünneti ihtiyaten kaza edilebilir.\n- **Cemaatle kaza** kılınabilir; ancak sesli kaza namaz kılınabileceği gibi sessiz de olabilir.\n- **Kasten terk edilen namaz** da kaza edilir; ayrıca tövbe edilmesi gerekir. Terk (kasten) büyük günahtır.\n- **Uyku ve unutma** hâlinde kaza, günah değildir: «Kim namazı unutur veya uyuyakalırsa, hatırladığında kılsın.» (Müslim)\n\n**Hesaplama:** İnsan bazen yıllar boyu kılmamış olabilir. Pratik yöntem: \n1. Namaza başladığın tarihi belirle.\n2. Her gün kıldığın vakit namazının yanına bir o kadar kaza ekle (sabah kılarken bir sabah kazası, öğlen kılarken bir öğle kazası gibi). Bu yöntem kazaları sırayla eritir. Sabah kılarken bir sabah kazası, öğle kılarken bir öğle kazası...\n3. Böylece ortalama bir yılda bir yıllık kaza kapanır. Yıllarca süren terklerde bile bu yöntemle düzenli ve ümitli bir şekilde ilerlenir.\n\n**Önemli:** Kazaları, üzerine titreyerek kıl; asla «kaza yapıyorum» diye vaktin namazını geciktirme. Ve bil ki tövbe ile birlikte kaza kapısı rahmettir, yük değil.",
+    "kaynaklar": [
+      "Hadis: Müslim, Mesâcid 314; Tirmizî, Salât 158",
+      "Fıkıh: el-Hidâye, Kazâü'l-fevaît"
+    ]
+  },
+  {
+    "id": "namaz-vakitleri",
+    "kategori": "Namaz",
+    "soru": "Namaz vakitleri ne zaman başlar ve biter?",
+    "anahtar": [
+      "namaz vakti",
+      "namaz vakitleri",
+      "sabah namazı vakti",
+      "ikindi vakti",
+      "yatsı vakti",
+      "akşam vakti",
+      "namaz ne zaman kılınır",
+      "güneş battıktan sonra",
+      "kerahat vakti"
+    ],
+    "cevap": "**Vakitler (özet):**\n\n| Vakit | Başlangıç | Bitiş |\n|---|---|---|\n| **Sabah (Fecr)** | Tan yeri ağarması (imsak) | Güneş doğumu |\n| **Öğle (Zuhr)** | Güneşin tepe noktasını geçmesi (zevâl sonrası) | İkindi vakti girene kadar |\n| **İkindi (Asr)** | Öğlenin çıkması (gölge, kendi boyu kadar) | Güneş batımı |\n| **Akşam (Mağrib)** | Güneş batması | Yatsı vakti girene kadar |\n| **Yatsı (Işâ)** | Şafağın kaybolması | İmsak (tan yeri ağarması) |\n\n**Kerahat vakitleri (namaz kılmak mekruh):**\n1. Güneş doğarken (doğuş anı ve 20-45 dk sonrasına kadar)\n2. Güneş tam tepede iken (zevâl öncesi)\n3. Güneş batarken (batış anına yakın)\n\nBu vakitlerde farz namaz **kaza** kılınmaz ve nafile kılınmaz; ancak o vakte ait farz namazın **geçmesi hâlinde kaza** kılınabilir (mesela ikindi namazını güneş batmadan kılmak üzere tehir eden için).\n\n**Pratik tavsiye:** Namazı vaktin başında kılmak sünnettir; uykuya, işe ve şeytana vakit bırakmamak namazın muhafazasıdır. Sabah ve akşam en zor olanlardır: Sabah için «namaz kıl, sonra uyu» alışkanlığı, akşam için «akşam yemeğini namazdan sonraya bırak» yöntemi işe yarar.\n\n**Yatsı vakti çıkmazsa:** Kuzey enlemlerde yaz aylarında yatsı ve sabah vakti hesaplanırken «yatsı vaktinin çıkmaması» veya «sabah vaktinin çok erken girmesi» durumlarında fıkıh kitaplarında özel hükümler vardır (yatsı namazı gecenin ortasına/üçte birine kadar kılınır). Bu konuda Diyanet İşleri Başkanlığı'nın bölgeniz için verdiği vakitleri esas almak en doğrusudur.",
+    "kaynaklar": [
+      "Kur'an: el-İsrâ 17/78, el-Bakara 2/238",
+      "Hadis: Müslim, Mesâcid 173-176 (vakitler)",
+      "Hadis: Buhârî, Mevâkît 1-40"
+    ]
+  },
+  {
+    "id": "namazi-biraktim",
+    "kategori": "Namaz",
+    "soru": "Namaz kılmıyorum / bıraktım, nasıl başlarım? Namaz kılmayanın hükmü nedir?",
+    "anahtar": [
+      "namaz kılmıyorum",
+      "namazı bıraktım",
+      "namaza nasıl başlarım",
+      "namaz alışkanlığı",
+      "namaz kılmamanın hükmü",
+      "namaz farz mı",
+      "tembelsem"
+    ],
+    "cevap": "Namaz, İslam'ın **beş şartının en belirginidir** ve akıllı-bâliğ her Müslümana farzdır: «Şüphesiz namaz, mü'minlere belirli vakitlerde farz kılınmıştır.» (Nisâ 4/103)\n\nNamazı **büyük günah** olarak gören Ehl-i Sünnet âlimlerinin ortak görüşü şudur: Terk eden bir Müslüman dinden çıkmaz, ancak büyük bir sorumluluk altındadır; namazı inkâr ederek terk edenin ise imanı tehlikeye girer.\n\n**Yeniden başlamanın yolu — mükemmeliyetçiliği bırak:**\n1. **Bir vakit seç.** Yatağa girmeden akşam veya yatsı. Başarı için tek bir vakit yeterlidir.\n2. **Aynı saate bağla.** Namazı mevcut bir alışkanlığa (uyanma, eve giriş) ekle.\n3. **Telefon alarmı ve sesi.** Bir vakti 3 farklı alarm ile hatırlat.\n4. **Abdesti 'hazırlık ritüeli' yap.** Abdest, sadece temizlik değil, zihni namaza taşımaktır.\n5. **Kısa kıl.** Kılama korkusu; namaz uzunluğundan değil, ertelemekten doğar. İlk günler 1-2 dakikalık sade bir kılma yeterlidir.\n6. **Kaçırdığın gün panikleme.** Bıraktığın bir gün, kaldığın yerden devam; tövbe ve istiğfar.\n7. **Şeytanın 'artık sen kirli birisin' tuzağını kır.** Sen, kalktığın anda temizsin.\n8. **Yardım al.** Cami cemaati, bir dost, bir hoca. Yalnız yürüyen yol uzundur.\n\n«Amellerin Allah'a en sevimli olanı, az da olsa devamlı olanıdır.» (Buhârî, Müslim)",
+    "kaynaklar": [
+      "Kur'an: en-Nisâ 4/103, el-Müddessir 74/42-43",
+      "Hadis: Buhârî, İman 34; Müslim, Salât 88"
+    ]
+  },
+  {
+    "id": "cemaat-namaz",
+    "kategori": "Namaz",
+    "soru": "Cemaatle namazın hükmü ve sevabı nedir?",
+    "anahtar": [
+      "cemaatle namaz",
+      "cemaat namazı",
+      "camide namaz",
+      "imam ne yapar",
+      "muktedi",
+      "cemaat sevabı",
+      "27 derece"
+    ],
+    "cevap": "Cemaatle namaz kılmak **sünnet-i müekkede** (kuvvetle istenen sünnet) olup çok büyük sevap taşır: «Cemaatle kılınan namaz, tek başına kılınan namazdan yirmi yedi derece daha faziletlidir.» (Buhârî, Müslim)\n\n**Cemaatin şartları:**\n- Bir **imam** ve en az **bir muktedi** (uyan).\n- İmamın, muktediden namazı iyi bilmesi.\n- Aynı namazı kılıyor olmaları.\n- Muktedinin imamı takip etmesi.\n- Kadınların cemaatinde kadın imam olabilir (imam, kadınların en bilgilisi olur ve ortada durur).\n\n**Muktedinin yapması gerekenler:**\n- Tekbiri imamla birlikte almak (rüknü kaçırmamak).\n- **İmama uymak**: İmam rükûya/secdeye gidince gitmek, kıyâmda Fâtiha okumak (Hanefî'ye göre imam sesli okurken susmak, sessiz okurken bile Hanefî mezhebinde Fâtiha okunmaz; aynı sabahları okumayıp okunanı dinlemek).\n- İmam selâm verdikten sonra kendi kalanını tamamlamak.\n- Cemaate yetişemediği rekâtlarda (mesbûk), imam selâm verdikten sonra kalkıp kılmak.\n\n**Camide namaz kılmanın sevabı:** Hadiste «Bir kimsenin cemaatle kıldığı namaz, evinde veya çarşısında kıldığından 25-27 kat üstündür» buyrulur. **İmam hatası:** İmamın yanlış yapması muktedi için namazı bozmaz.\n\n**Kadınlar:** Kadınların cemaate katılması caizdir; camide ayrı bir saffa durur veya kadınlar cemaatinde kadın imam olur (Hanefî kaynaklarında caiz). Evde kadınların kendi aralarında cemaat olması mekruh değildir.",
+    "kaynaklar": [
+      "Hadis: Buhârî, Ezan 30-31; Müslim, Mesâcid 245-250",
+      "Fıkıh: el-Hidâye, İmâmet"
+    ]
+  },
+  {
+    "id": "cuma-namazi",
+    "kategori": "Namaz",
+    "soru": "Cuma namazı kimlere farzdır, şartları nelerdir?",
+    "anahtar": [
+      "cuma namazı",
+      "cuma farz mı",
+      "cuma kimlere farz",
+      "cuma namazı kaç rekat",
+      "cuma hutbesi",
+      "cuma kılmamak",
+      "cumaya gitmek"
+    ],
+    "cevap": "Cuma namazı, **bâliğ, akıllı, hür, ikamet eden, mazeretsiz erkek Müslümanlara farz-ı ayındır**. Kur'an: «Ey iman edenler! Cuma günü namaz için çağrıldığında Allah'ı anmaya koşun ve alışverişi bırakın.» (Cum'a 62/9)\n\n**Kılınışı:** Cemaatle 2 rekât farz kılınır. Öncesinde 4 rekât sünnet (Cuma öncesi sünnet), farz sonrası 4 ve 2 sünnet (toplam 10 rekât). Hutbe okunur; hutbe, cumanın şartıdır ve imam minberde iki hutbe verir. Hutbeyi **dinlemek** vaciptir; konuşmak, telefonla ilgilenmek hutbenin sevabını götürür.\n\n**Farz olmadığı durumlar (özel mazeretler):** Hastalık, yolculuk (seferî olmak), kadınlar, çocuklar, engellilik, düşman korkusu, şiddetli yağmur-çamur ve benzeri bir meşakkat. Kadınlar cuma namazı kılabilir; kılmazsa öğle namazını kılarlar.\n\n**Cuma'nın özelliği:**\n- Cuma günü **gusül almak, temizlenmek, güzel koku sürünmek, erken gitmek** sünnettir.\n- Bir hadiste: «Cuma günü melekler mescide gelip sırayla isimleri yazar...» (Buhârî) ve «Cuma'nın önceki cumaya kadar işlenen küçük günahlara keffâret olması» müjdelenmiştir (Müslim).\n- **Üç cumayı mazeretsiz terk etmek**, hadislerde kalbin mühürlenmesi olarak uyarılmıştır (Ebû Dâvûd, Tirmizî).\n- **Cuma hutbesinde dua:** Saat-i icâbet denilen vakitte dua etmek müstehaptır.\n- Cuma gününde **Kehf sûresi okumak** tavsiye edilmiştir (Beyhakî).",
+    "kaynaklar": [
+      "Kur'an: el-Cum'a 62/9-10",
+      "Hadis: Müslim, Cuma 1-2; Buhârî, Cum'a 2-19"
+    ]
+  },
+  {
+    "id": "seferi-namaz",
+    "kategori": "Namaz",
+    "soru": "Seferi (yolcu) namazı nasıl kılınır?",
+    "anahtar": [
+      "seferi namaz",
+      "yolculukta namaz",
+      "yolcu namazı",
+      "seferilik",
+      "kaç km seferi",
+      "yolda namaz kılmak",
+      "uçakta namaz"
+    ],
+    "cevap": "**Seferîlik**, yaklaşık **90 km (bir menzil)** ve üzeri bir yolculuğa çıkan kişinin, ikamet ettiği yerden ayrıldıktan sonra yol boyunca ve gittiği yerde **15 günden az kalmak niyetiyle** olduğu durumdur.\n\n**Seferînin namazı:**\n- **4 rekâtlı farzları 2 rekât olarak kılar** (öğle, ikindi, yatsı). Sabah (2) ve akşam (3) aynen kılınır.\n- **Sünnetleri terk edebilir**, ancak kılması daha faziletli olanlar da vardır (sabah sünneti, vitir).\n- **Cemaate uyduğunda**: İmam seferî ise 2 rekât kılar; mukim cemaat kalanı tamamlar. İmam mukimse, seferî kişi imamın arkasında 4 rekâtı tamamlar (Hanefî).\n- Yolculukta **cemaatle kılınan** namaz kuvvetli sünnettir.\n- **Teyemmüm** ve **mest** de yolculukta genişlik sağlar (mest süresi 3 gün 3 gece).\n\n**Pratik hususlar:**\n- **Uçakta/otobüste namaz:** Vakit çıkmak üzereyse, kıbleye yönelip kılmak mümkünse kılınır; değilse bulunduğun yöne niyet edilir. Oturarak ima ile kılabilir. Uçakta vakit genişliği varsa, inince kılmak daha iyidir.\n- **Vakit ve mesafe:** Yolculukta namazı vaktin başında kılmak zor; ama en azından günahlık olmaması için geciktirmemek gerekir.\n- **Cuma namazı**: Seferî için cuma farz olmaz; kılınsa da geçerlidir.\n- **Yolculuk niyetiyle çıkmış kişi**, şehir içinde yol alırken — şehir hududunu geçmedikçe — tam kılar. Şehirden çıktıktan sonra seferîlik başlar.",
+    "kaynaklar": [
+      "Kur'an: en-Nisâ 4/101",
+      "Hadis: Müslim, Salâtü'l-müsâfirîn 1-15; Buhârî, Taksîru's-salât 1-4"
+    ]
+  },
+  {
+    "id": "hastalikta-namaz",
+    "kategori": "Namaz",
+    "soru": "Hasta veya engelli biri namazı nasıl kılar?",
+    "anahtar": [
+      "hasta namaz",
+      "oturarak namaz",
+      "yatarak namaz",
+      "engelli namaz",
+      "hastayken namaz",
+      "ima ile namaz",
+      "ameliyatlı namaz"
+    ],
+    "cevap": "İslam'da namaz, kişinin **gücü ölçüsünde** kılınır: «Allah hiç kimseye gücünün üstünde bir şey yüklemez.» (Bakara 2/286)\n\n**Sıralama (kolaydan zora):**\n1. **Ayakta** — Gücü yeten ayakta kılar.\n2. **Oturarak** — Ayakta durmak zor veya zararlıysa (baş dönmesi, tansiyon, kırık, ameliyat) sandalyede veya yerde oturarak; rükû ve secde **ima** (işaret) ile yapılır. Secde, rükûdan daha çok eğilmekle olur.\n3. **Yatarak** — Yataktan kalkamayan hasta sırt üstü, yüzü kıbleye gelerek yatar; başıyla ima eder.\n4. **Göz işaretiyle** — Başını bile hareket ettiremeyen hasta, gözüyle veya kalbiyle işaret eder.\n\n**Kolaylıklar:**\n- **Abdest:** Su kullanmak zararlıysa **teyemmüm** edilir.\n- **Kıyafet:** Ameliyat elbisesi, sargı, idrar torbası gibi zorunlu durumlar namaza engel değildir; avret yerlerini örtecek şekilde kılmak gerekir.\n- **Vakit genişliği:** Ağrı/sersemlik hâlinde namazı en müsait vakitte kılmak; nafile değil farzı kılmak esastır.\n- **Cemaat:** Namazlarını cemaatle kılmaya gayret eden hasta, cemaate gidemezse evde kılar; cemaat sevabı imkâna bağlıdır.\n- **Ameliyat ve ilaç:** Uyku yapan ilaçlar ile namaz kaçırılırsa **kaza** edilir; uyanık olduğu vakitlerde kılmaya çalışılır.\n- **Ruhsal hastalık:** Depresyon, OKB gibi hâllerde kişi hasta kabul edilir ve hasta hükmünde kolaylıklardan yararlanır. Vesveselerin abdest ve namazı bozmadığı bilinmelidir.\n\n**Önemli:** Namazı sağlık bahanesiyle bırakmak caiz değildir; hasta için imkânlar daha fazladır, sadece uygulama kolaylaşır. Bu din, rahmet dinidir; kolaylık dinidir.",
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/286, et-Tegâbün 64/16",
+      "Hadis: Buhârî, Takstra 8-20; Tirmizî, Salât 158"
+    ]
+  },
+  {
+    "id": "vitir-teravih",
+    "kategori": "Namaz",
+    "soru": "Vitir namazı ve teravih namazı nedir, nasıl kılınır?",
+    "anahtar": [
+      "vitir",
+      "vitir namazı",
+      "teravih",
+      "teravih namazı",
+      "teravih kaç rekat",
+      "vitir vacip",
+      "yatsıdan sonra"
+    ],
+    "cevap": "**Vitir namazı:** Yatsı namazından sonra kılınan **3 rekâtlık vacip** namazdır. Yatsı farzı ve sünnetinden sonra, imsak vaktine kadar kılınabilir.\n- 3 rekât olarak **tek selâmla** kılınır (Hanefî'de tercih edilen usul).\n- 3. rekâtta **Kunut duaları** (Sübhâneke'den sonra «Künût» duası: «Allâhümme innâ neste'înüke…») okunur.\n- Vitir, bir gün geç kalındıysa **kaza edilir**; unutulması günah değildir ama sorumluluk doğurur.\n- Hadis: «Şüphesiz Allah tektir, teki (vitri) sever. Ey Kur'an ehli, vitir kılın!» (Ebû Dâvûd, Tirmizî)\n\n**Teravih namazı:** Ramazan ayı boyunca yatsıdan sonra kılınan **sünnet** namazdır. Kuvvetli sünnetlerdendir; cemaatle kılınması sünnettir.\n- Genellikle **20 rekât** olarak kılınır (Hanefî-meşhur); *8 rekât* kılan İslam âlimleri de vardır (ihtilafın temeli, Hz. Peygamber'in nafile kılışını sayı bakımından farklı değerlendirmektir).\n- Teravih, 2'şer rekât kılınır; her 4 rekâtta bir oturulup dinlenilir ve zikir yapılır.\n- **Yatsı namazını kılmadan teravih kılınmaz** (kılınacak olsa da geçerli olmaz).\n- Teravih cemaatle kılınamadıysa evde tek başına kılınabilir; kadınların da camide kılması caizdir.\n- Teravih, **Kur'an'la** kılınıyorsa imamın okuduğunu dinlemek, teravih namazının kıraatini oluşturur.\n\nİkisi de günlük hayatın temposuna uyumlu — 'gece 15 dakika' — bir ibadet ritmi kurar. Ramazan'da teravih ile başlayan alışkanlık, bütün yıla namaz alışkanlığı kazandırır.",
+    "kaynaklar": [
+      "Hadis: Ebû Dâvûd, Vitr 1-4; Tirmizî, Vitr 4",
+      "Hadis: Buhârî, Terâvîh 1; Müslim, Salâtü'l-müsâfirîn 173-177"
+    ]
+  },
+  {
+    "id": "cenaze-namazi",
+    "kategori": "Namaz",
+    "soru": "Cenaze namazı nasıl kılınır, cenaze ile ilgili hükümler nelerdir?",
+    "anahtar": [
+      "cenaze namazı",
+      "cenaze",
+      "ölüye yapılacaklar",
+      "cenaze yıkamak",
+      "kefen",
+      "defin",
+      "mezar ziyareti",
+      "cenaze duası"
+    ],
+    "cevap": "**Cenaze Namazı:**\n- **Farz-ı kifâyedir**; bazı Müslümanların kılmasıyla diğerlerinden sorumluluk düşer.\n- **Kılınışı:** İmam ve cemaat ayakta durur, **rukû ve secde yoktur**, 4 tekbir ile kılınır:\n  1. **1. Tekbir**: Niyet + Sübhâneke.\n  2. **2. Tekbir**: «Allâhümme salli… Allâhümme bârik…» (salâtü selâm).\n  3. **3. Tekbir**: Cenaze duası («Allâhümmağfir lehû…»).\n  4. **4. Tekbir** sonrası sağa ve sola selâm.\n- Cenaze namazı **abdestli** kılınır; cemaat tek safa durmasa da olur.\n\n**Cenaze ile ilgili sıralı görevler:**\n1. **Yıkama (gasil)** — Aynı cinsiyetten uygun biri tarafından, avret yerleri örtülü biçimde yıkanır.\n2. **Kefenleme (tekfîn)** — Beyaz bez ile üç parça (erkek) veya beş parça (kadın) sarılır.\n3. **Cenaze namazı** — Kılınması; ölü için **dua** edilir.\n4. **Defin** — Kıbleye yönelik olarak gömülür.\n\n**Kültür ve adet:** Ölünün arkasından **yüksek sesle ağıt** yakmak, yüzüne vurmak, isyan etmek uygun değildir; sabır ve «İnnâ lillâhi ve innâ ileyhi râciûn» (Bakara 2/156) esastır. **Ölü için dua ve sadaka** en hayırlı hediyedir.\n\n**Mezar ziyareti:** Ziyaret eden için sünnettir, hatırlatıcıdır; mezar başında **Kur'an okumak** bazı âlimlere göre caizdir, dua etmek daha açıktır. Ölüden **bir şey istemek** (medet ummak) ise kesinlikle caiz değildir — isteme yalnız Allah'tandır.",
+    "kaynaklar": [
+      "Hadis: Buhârî, Cenâiz 1-30; Müslim, Cenâiz",
+      "Fıkıh: el-Hidâye, Cenâiz"
+    ]
+  },
+  {
+    "id": "bayram-namazi",
+    "kategori": "Namaz",
+    "soru": "Bayram namazı nasıl kılınır, hükmü nedir?",
+    "anahtar": [
+      "bayram namazı",
+      "bayram namazı kaç rekat",
+      "bayram namazı vacip mi",
+      "ramazan bayramı namazı",
+      "kurban bayramı namazı",
+      "tekbirler"
+    ],
+    "cevap": "**Bayram namazı**, iki bayramda (Ramazan ve Kurban) cemaatle kılınan **vacip** bir namazdır. Bayram namazının **hükmü vaciptir**; ancak farz namazın yerini almaz, ayrı bir ibadettir.\n\n**Kılınışı:** 2 rekâttır, cemaatle kılınır.\n- **1. rekât**: Niyet, iftitah tekbiri, Sübhâneke, sonra **üç defa «Allâhü ekber»** (her tekbirde eller kaldırılır ve aralarında bir miktar beklenir), ardından Fâtiha + sûre, rükû ve secdeler.\n- **2. rekât**: Kıraatten sonra **üç tekbir** daha, sonra Fâtiha + sûre, rükû ve secdeler.\n- Cemaat tekbirleri imamla birlikte alır.\n\n**Sünnetleri:**\n- Bayram sabahı **gusül almak, temiz giyinmek, güzel koku sürünmek**.\n- **Ramazan Bayramı'nda namazdan önce tatlı/hurma yemek**, Kurban Bayramı'nda ise yiyip kesim sonrası yemek.\n- Bir yoldan gidip **başka yoldan dönmek**.\n- Bayram tekbirlerini yüksek sesle söylemek.\n\n**Bayram gününün sıhhati:** Hediyeleşmek, **ziyaretleşmek**, akraba ve komşu ile muhabbet kurmak, **çocukları sevindirmek** sünnet ve edep olarak bize ulaşmıştır. Bayram namazını kılamayan kişi, tek başına kılamaz; ancak bir kaza yükümlülüğü de doğurmaz.\n\n**Bayramda yoksul:** Bayramı bayram yapan, etrafındakilerin de sevincidir. Kurban eti ve fitre, bayramın paylaşma yüzüdür.",
+    "kaynaklar": [
+      "Hadis: Buhârî, Îdeyn 1-10; Müslim, Îdeyn",
+      "Fıkıh: el-Hidâye, Salâtü'l-îdeyn"
+    ]
+  },
+  {
+    "id": "nafile-namazlar",
+    "kategori": "Namaz",
+    "soru": "Nafile namazlar (kuşluk, teheccüd, tahiyyetü'l-mescid) hangileridir?",
+    "anahtar": [
+      "nafile namaz",
+      "teheccüd",
+      "gece namazı",
+      "kuşluk namazı",
+      "duha namazı",
+      "tahiyyetül mescid",
+      "şükür namazı",
+      "hacet namazı",
+      "istihare namazı"
+    ],
+    "cevap": "**Nafile namazlar**, farz ve vacibin dışında, sevap kazanmak için kılınan namazlardır. Başlıcaları:\n\n- **Teheccüd:** Gece uykudan sonra kalkıp kılınan namaz. «Gecenin bir kısmında O'na hamd et ve secde et.» (İsrâ 17/79) Nafilelerin en faziletlisidir (Müslim).\n- **Duha (Kuşluk):** Güneş doğduktan sonra kerâhat vakti çıkınca, öğleye kadar kılınan 2-12 rekâtlık namaz (2-4 rekât).\n- **Tahiyyetü'l-mescid:** Camiye girince oturmadan önce kılınan 2 rekât.\n- **İstihâre:** Bir işin hayırlısını istemek için kılınan 2 rekât + dua (uykudan önce).\n- **Hâcet:** Bir ihtiyaç için kılınan 2 rekât namaz (ihtiyaç namazı).\n- **Şükür Secdesi/Namazı:** Bir nimet veya kurtuluş üzerine şükür için.\n- **Evvâbîn:** Akşam namazından sonra kılınan 6 rekât.\n- **Tesbîh namazı:** Çok büyük sevabı olan, 4 rekâtta 300 tesbih okunan namaz.\n- **Abdest sonrası 2 rekât:** Sünnettir; güzel bir başlangıçtır.\n- **Yolculuk namazı (seferde 2 rekât nafile).**\n\n**Şartlar:** Nafile namaz, **farz namazlara engel olmamalıdır**; vaktin çıkmasına yol açacak kadar uzun sürerse nafile değil farz tercih edilir. **Kerahat vakitlerinde** nafile kılınmaz (kaza ve sebebi olan nafileler hariç; öğle öncesi ve kerahat çıkışı istisna).\n\n**Uygulama önerisi:** Güne 2 rekât ile başla (duha), birkaç kez teheccüd ekle. Manevi hayatta en etkili değişim, farzların ardına eklenen istikrarlı küçük nafilelerdir.",
+    "kaynaklar": [
+      "Kur'an: el-İsrâ 17/79; el-Müzzemmil 73/2-4",
+      "Hadis: Müslim, Salâtü'l-müsâfirîn 90-93; Ebû Dâvûd, Tatavvu 12-22"
+    ]
+  },
+  {
+    "id": "namazda-husyu",
+    "kategori": "Namaz",
+    "soru": "Namazda huşû (kalp huzuru) nasıl elde edilir? Zihnim dağılıyor",
+    "anahtar": [
+      "huşû",
+      "namazda odaklanma",
+      "zihnim dağılıyor",
+      "namazda düşünmek",
+      "namazdan zevk almak",
+      "kalp huzuru"
+    ],
+    "cevap": "Huşû, bedeni değil **kalbi** namaza taşımaktır. Zihnin dağılması çok yaygındır ve tek başına namazı bozmaz; ancak namazın meyvesini azaltır. Yüce Allah bu sebeple: «Şüphesiz huşû duyan mü'minler kurtuluşa ermiştir» (Mü'minûn 23/1-2) buyurur.\n\n**Uygulanabilir yöntemler:**\n1. **Namaza hazırlık** — Abdest alırken 'şimdi Allah'ın huzurundayım' diye zihni toplamak. Yani abdest, huşûnun ilk adımı.\n2. **Yavaş ve net telaffuz** — Zihnin hızını yavaşlatmak için okunanı içinden takip et.\n3. **Mânâyı bilmek** — Ezberlediğin sürenin anlamını öğrenmek; anlamı bilinen kelime kalbi tutar.\n4. **Bakışı ayarlamak** — Secde yerinden başka yere bakmamak, gözü sabitlemek.\n5. **Kısa ve düzenli** — Acele etmeden, sade ama devamlı kılmak.\n6. **Şeytanın tuzağını bil** — Namazda sıklıkla akla gelen dünyevi konular, şeytanın 'seni şaşırtıp namazdan soğutmak' için işidir. Onunla tartışma; dikkati sonraki cümle veya ayete kaydır.\n7. **Secdede dua et** — Ve özellikle secdede 'kalbini dilinle bağla'.\n8. **Namazın ardından 30 saniyelik zikir** — Namazdan kopuşu yumuşat.\n\nHadis: «Sizden biriniz namazda Yüce Allah'a münâcât etmektedir; ne söylediğine dikkat etsin.» (Buhârî, Müslim). And remember — şeytanın en büyük hilesi, kişiyi 'huşûn yok, o halde namazın kabul değil' diye namazdan soğutmaktır. Kabul, ihlastadır; kusur senin mahiyetindendir.",
+    "kaynaklar": [
+      "Kur'an: el-Mü'minûn 23/1-2, el-Bakara 2/238",
+      "Hadis: Müslim, Mesâcid 36; Buhârî, Salât 60"
+    ]
+  },
+  {
+    "id": "namazda-fatiha-sureler",
+    "kategori": "Namaz",
+    "soru": "Namazda hangi dualar ve sûreler okunur? (Tahiyyât, Kunut, Âyetü-Kürsî)",
+    "anahtar": [
+      "tahiyyat",
+      "kunut duaları",
+      "namazda ne okunur",
+      "salavat",
+      "ayetel kürsi",
+      "namaz duaları",
+      "salli barik",
+      "rabbena atina",
+      "namazda okunan dualar",
+      "hangi sureler okunur"
+    ],
+    "cevap": "**Namazda okunan başlıca dua ve sûreler (Hanefî sırasıyla):**\n\n1. **Sübhâneke** (ilk rekât): «Sübhânekellâhümme ve bi hamdike ve tebârakesmüke ve teâlâ ceddüke ve lâ ilâhe gayruk.»\n2. **Eûzü-Besmele** — «Eûzü billâhi mine'ş-şeytâni'r-racîm. Bismillâhirrahmânirrahîm.»\n3. **Fâtiha** — Her rekâtta okunur.\n4. **Zamm-ı sûre** — İlk iki rekâtta bir sûre (İhlâs, Kevser, Fil, Nâs, Felak, Asr vb.).\n5. **Rükû tesbihi:** «Sübhâne rabbiye'l-azîm» (3 kez)\n6. **Secde tesbihi:** «Sübhâne rabbiye'l-a'lâ» (3 kez)\n7. **Ka'de (oturuş):**\n   - **Tahiyyât:** «Ettehiyyâtü lillâhi ve's-salevâtü ve't-tayyibâtü…»\n   - **Salli-Bârik:** «Allâhümme salli alâ Muhammedin ve alâ âli Muhammed…»\n   - **Rabbenâ âtinâ** veya **Rabbenâğfir lî** duası.\n8. **Vitirde Kunut:** «Allâhümme innâ neste'înüke ve nestağfiruke…»\n9. **Selâm:** «Esselâmü aleyküm ve rahmetullah» (sağa ve sola).\n10. **Namazdan sonra:** Âyetü'l-Kürsî, 33 kez Sübhânallah, 33 kez Elhamdülillah, 33 kez Allâhü ekber, salavat.\n\n**Kısa sûreler (ezber için):** İhlâs («Kul hüvallâhü ehad…»), Kevser («İnnâ a'taynâke'l-kevser…»), Asr («Vel-asr…»), Fil, Kureyş, Nâs, Felak.\n\n**Kolaylık:** Ezberin yoksa bir sûreyi ezberleyene kadar «Sübhânallâhi ve'l-hamdü lillâhi ve lâ ilâhe illallâhü vallâhü ekber» diyebilirsin (namazda Kur'an yerine zikir; Hanefî'ye göre cevaz verilmiştir). İlk hedef: Fatiha + bir kısa sûre. Sonra yavaş yavaş artır.",
+    "kaynaklar": [
+      "Hadis: Buhârî, Ezan 148-150; Müslim, Mesâcid 60-62",
+      "Hadis: Buhârî, Ezan 155 (rükû-secde tesbihi)"
+    ]
+  }
+]

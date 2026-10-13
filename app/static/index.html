@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ŞEYH TUĞRUL — İslami Yapay Zeka Danışmanı</title>
+<meta name="description" content="Ücretsiz ve sınırsız İslami soru-cevap danışmanı. Namaz, abdest, oruç, zekât, hac, aile, helâl-haram ve daha fazlası. Kayıt yok, ücret yok." />
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<div class="bg-pattern" aria-hidden="true"></div>
+
+<div class="app">
+
+  <!-- ============ YAN PANEL ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">﷽</div>
+      <div class="brand-text">
+        <strong>ŞEYH TUĞRUL</strong>
+        <span>İslami Yapay Zeka Danışmanı</span>
+      </div>
+      <button class="icon-btn close-side" id="closeSide" title="Kapat" aria-label="Kapat">✕</button>
+    </div>
+
+    <div class="free-banner">
+      <span class="dot"></span>
+      <div>
+        <b>Ücretsiz &amp; Sınırsız</b>
+        <small>Kayıt yok • Ücret yok • Soru limiti yok • İnternetsiz de çalışır</small>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <nav class="cats" aria-label="Konular">
+      <h4>Konular</h4>
+      <div id="catList" class="cat-list"></div>
+    </nav>
+
+    <div class="qlist-wrap">
+      <h4 id="qlistTitle">Sorular</h4>
+      <div id="qList" class="q-list"></div>
+    </div>
+
+    <div class="sidebar-foot">
+      <button class="ghost-btn" id="randomBtn">🎲 Rastgele soru</button>
+      <p class="mini">Bilgiler genel bilgilendirme içindir. Kişisel ve hassas konularda <b>İl/İlçe Müftülüğü'ne</b> danışınız.</p>
+    </div>
+  </aside>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ============ ANA ALAN ============ -->
+  <main class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="openSide" aria-label="Konuları aç">☰</button>
+      <div class="title-block">
+        <h1>ŞEYH TUĞRUL</h1>
+        <p><span class="star">✦</span> İslami Yapay Zeka Danışmanı <span class="hijri" id="hijri"></span></p>
+      </div>
+      <div class="top-actions">
+        <div class="seg" role="group" aria-label="Cevap uzunluğu">
+          <button data-detay="normal" class="active">Ayrıntılı</button>
+          <button data-detay="kisa">Kısa</button>
+        </div>
+        <button class="icon-btn" id="clearBtn" title="Sohbeti temizle" aria-label="Sohbeti temizle">🧹</button>
+      </div>
+    </header>
+
+    <section class="chat" id="chat" aria-live="polite"></section>
+
+    <div class="chips" id="chips"></div>
+
+    <footer class="composer">
+      <form id="form" autocomplete="off">
+        <textarea id="input" rows="1" placeholder="İslami sorunuzu yazın… (örn: Faizli kredi caiz mi?)" maxlength="1000" aria-label="Sorunuz"></textarea>
+        <button type="submit" id="sendBtn" class="send" aria-label="Gönder">
+          <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><path fill="currentColor" d="M3.4 20.4 21 12 3.4 3.6l.01 6.53L15 12 3.41 13.87z"/></svg>
+        </button>
+      </form>
+      <p class="disclaimer">
+        <b>Ücretsiz &amp; sınırsız.</b> Bu araç fetva mercii değildir; cevaplar Kur'an, sahih hadis ve fıkıh kaynaklarına
+        dayanan yerel bir bilgi bankasından üretilir. Kişisel durumlar için müftülüğe danışın.
+      </p>
+    </footer>
+  </main>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+[
+  {
+    "id": "oruc-farz-kimlere",
+    "kategori": "Oruç",
+    "soru": "Oruç kimlere farzdır, Ramazan orucunun hükmü nedir?",
+    "anahtar": [
+      "oruç farz mı",
+      "ramazan orucu",
+      "kimlere oruç farz",
+      "oruç tutmak",
+      "oruç kimler tutmaz",
+      "ramazan geldi",
+      "oruç tutamıyorum hastayım",
+      "hasta oruç tutabilir mi",
+      "kimler oruç tutmaz"
+    ],
+    "cevap": "Ramazan orucu, **bâliğ, akıllı, sağlıklı ve mukim** her Müslümana **farz-ı ayındır**: «Ramazan ayı, insanlara yol gösterici olan Kur'an'ın indirildiği aydır. Öyleyse kim bu aya erişirse oruç tutsun.» (Bakara 2/185)\n\n**Oruç tutmayabilecekler (mazeretliler):**\n- **Hastalık:** İyileşme umudu olan hastalar, oruç tutunca hastalığı artanlar (doktor tavsiyesiyle) — sonra kaza ederler.\n- **Yolculuk:** Seferî mesafede yolculuk yapanlar — kaza ederler.\n- **Hamilelik ve emzirme:** Kendisi veya bebeği zarar görürse tutmazlar; kaza (bazı âlimlere göre fidye) gerekir.\n- **Hayız ve nifas:** Bu hâllerde oruç tutulmaz; sonra **kaza edilir**.\n- **Yaşlılık ve iyileşmez hastalık:** Tutamayacak durumda olanlar **fidye** verirler.\n- **Delilik ve bâliğ olmama:** Sorumluluk yoktur.\n\n**Fidye:** Bir günün orucu için bir fakire bir günlük yiyecek (yaklaşık bir kişiyi doyurmak) veya bedeli. Fidye, Ramazan bittikten sonra ve mümkünse belli aralıklarla verilir.\n\n**Ramazan'ın ruhu:** Oruç, yemekten kesilmek değildir; **dilin, gözün, kulağın, elin ve kalbin orucudur**. Hz. Peygamber: «Kim yalanı ve yalanla iş yapmayı bırakmazsa, Allah'ın onun yemesini-içmesini bırakmasına ihtiyacı yoktur.» (Buhârî) buyurmuştur. Yani orucun bedeni kadar, ahlakı da önemli.",
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/183-185",
+      "Hadis: Buhârî, Savm 1-8; Müslim, Sıyâm 1-10"
+    ]
+  },
+  {
+    "id": "orucu-bozanlar",
+    "kategori": "Oruç",
+    "soru": "Orucu bozan şeyler nelerdir?",
+    "anahtar": [
+      "orucu bozan",
+      "orucu bozan şeyler",
+      "yiyince oruç bozulur mu",
+      "sigara oruç",
+      "su içmek oruç",
+      "oruç bozar mı"
+    ],
+    "cevap": "**Orucu bozanlar (Hanefî):**\n\n1. **Yemek-içmek** (kasten, unutmayarak).\n2. **Cinsî münasebet** — hem orucu bozar hem kefâret gerektirir (60 gün oruç veya 60 fakiri doyurmak).\n3. **Sigara, nargile, elektronik sigara** içmek.\n4. **İlaç/şurup içmek**, fitil, lavman; ağızdan alınan her şey.\n5. **Serumla beslenme** (damardan gıda — Muhammed el-Emîn gibi âlimler ihtilaf etmiştir, ihtiyaten bozar).\n6. **Kan aldırmak (hacamat)** — Hanefî'ye göre kasten yapılırsa orucu bozar (Şâfiî bozmaz); ihtiyaten kaçınmak iyi.\n7. **Kasten kusmak** — bir ağız dolusu kusmak orucu bozar.\n8. **Ağızdan kan gelmesi** ve yutulması.\n9. **Beslenme ve enerji içecekleri**, vitamin şurubu.\n10. **Niyetsiz sabahlamak** — oruç için niyet etmemek.\n11. **Hayız/nifas kanı gelmesi** orucu bozar (o günün kazası gerekir).\n12. **Unutarak yiyip içtikten sonra 'bozuldu' diyerek yemeye devam etmek** — unutmak bozmaz ama kasten devam etmek bozar.\n\n**Orucu bozmayanlar:**\n- **Unutarak yemek-içmek** (Hz. Peygamber: «Kim oruçlu iken unutup da yer içerse, orucunu tamamlasın; onu Allah yedirmiştir.» — Buhârî)\n- **Abdest almak**, **diş fırçalamak** (diş macununun yutulmaması şartıyla), **misvak**,\n- **Kan aldırmak** (iğne/aşı/damuleti) — bunlar gıda yerine geçmediği için çoğu âlime göre bozmaz; serum fizyolojik dâhi besin içermiyorsa bozmaz,\n- **Banyo yapmak, göze damla, kulağa su kaçmaması, küpe deliği, koku sürünmek (yeme-içme olmayan),\n- **Kusma** (kendiliğinden gelen),\n- **Meninin gelmesi** (rüya/şehvet gibi, ilişki olmadan) — Hanefî'ye göre bozmaz,\n- **Sakız çiğnemenin caiz olmadığı**, ancak çiğnemekle bozulmadığı görüşünde olanlar; en ihtiyatlısı çiğnememektir.\n- **Kusmuk/diş fırçası macununun tadını hissetmek ama yutmamak.**",
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/187",
+      "Hadis: Buhârî, Savm 22-25; Müslim, Sıyâm 81",
+      "Fıkıh: el-Hidâye, Müfsidâtü's-savm"
+    ]
+  },
+  {
+    "id": "oruc-kaza-fidye",
+    "kategori": "Oruç",
+    "soru": "Oruç kazası ve fidye nasıl hesaplanır, nasıl ödenir?",
+    "anahtar": [
+      "oruç kazası",
+      "fidye",
+      "kaza oruç",
+      "kaç gün oruç borcum",
+      "oruç borcu",
+      "fidye ne kadar",
+      "kefaret"
+    ],
+    "cevap": "**Kaza:** Mazeret sebebiyle tutulamayan oruç günleri, mazeret ortadan kalktıktan sonra **gün sayısı kadar** kaza edilir. Kaza oruçları, bir sonraki Ramazan'a kadar kılınması esastır; ancak bir sonraki Ramazan gelinceye kadar tutulmazsa, sonraki Ramazanlarda da tutulabilir ve fidye gerekmez.\n\n**Fidye:** Yaşlılık, iyileşme umudu olmayan hastalık gibi **sürekli mazeret** hâlinde tutulamayan her gün için bir fakire bir günlük yiyecek (yaklaşık bir kişinin bir günlük karnını doyurma) verilir. Para ile de verilebilir. Fitre miktarı fidye için de ölçü alınır.\n\n**Kefâret:** Ramazan'da kasten orucu bozmanın kefâreti: 60 gün oruç veya **60 fakiri doyurmak**. İlişki ile bozmanın cezası daha ağır olarak ifade edilir.\n\n**Hesaplama örneği:**\n- 3 yıl Ramazan'da toplam 15 gün tutamadıysan: 15 gün kaza orucu tutarsın. Tutmaya ara vermek gerekmez, ardı ardına tutabilirsin.\n- Sürekli rahatsızlığın varsa: Tutamadığın her gün için bir fidye.\n\n**Önemli:** Kaza borcu, kişinin ölümü hâlinde velisinin onun adına tutması veya fidye vermesiyle ilgili geniş bir ihtilaf vardır; fakihlerin çoğu fidye veya vasiyet yoluyla ödenmesini caiz görür. Bu konuda bir müftülüğe danışmak isabetli olur.\n\n**Kolaylık:** Kaza borcu, kişiye **yük değil, umut kapısıdır**. Kazası olan kişi nafile oruçtan önce kazasını tutar; yine de nafile tutması caizdir.",
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/184-185",
+      "Hadis: Buhârî, Savm 30; Müslim, Sıyâm 80-81"
+    ]
+  },
+  {
+    "id": "imsak-sahur",
+    "kategori": "Oruç",
+    "soru": "Sahur ve imsak nedir? Sahurun önemi ve vakti",
+    "anahtar": [
+      "sahur",
+      "imsak",
+      "sahur vakti",
+      "imsak nedir",
+      "sahurun fazileti",
+      "imsak saatinde yemek",
+      "sahur yapmak"
+    ],
+    "cevap": "**Sahur**, imsaktan önce yiyip içmektir; **imsak** ise tan yerinin ağarması ile orucun başladığı vakittir.\n\n**Sahurun fazileti:** Hz. Peygamber: «Sahur yapın, çünkü sahurda bereket vardır.» (Buhârî, Müslim) ve «Bizim orucumuz ile ehl-i kitabın orucu arasındaki fark sahurdur.» (Müslim) buyurmuştur. Sahuru **kısa tutup** sonuna kadar beklemek, sünnete daha uygundur.\n\n**İmsak ve güncel vakitler:** Diyanet'in ilan ettiği imsak vakti, tan yerinin ağarması esasına dayanır ve sahurun tamamlanması için **temkin (ihtiyat) süresi** eklenir. Takvimlerde gördüğünüz imsak vakti, genellikle birkaç dakika ihtiyat içerir; bu yüzden ezandan önce yemeyi bırakmak daha güvenlidir.\n\n**Pratik:**\n- «İmsak vaktinde ezan okunurken elimdeki suyu içebilir miyim?» — Eğer ezan imsak vaktinden **sonra** okunuyorsa içilmez; ezan vakitten önce okunuyorsa içilebilir. Vakit konusunda ihtiyatlı olmak en doğrusudur.\n- **Sahur için yemek yemek farz değildir**; niyet yeterlidir. Ancak sahur kuvvetli bir sünnettir.\n- **Oruç için niyet:** Ramazan orucunda niyet, imsaktan önce olduğu gibi, imsaktan sonra gün içinde de yapılabilir mi? Hanefî mezhebine göre Ramazan orucu için **imsaktan sonra da niyet caizdir** (ta ki gerçek zevâle/öğleye kadar); ancak en faziletlisi geceden niyet etmektir. Nafile oruçta ise niyet gün içinde yapılabilir.",
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/187",
+      "Hadis: Buhârî, Savm 20; Müslim, Sıyâm 44-46"
+    ]
+  },
+  {
+    "id": "itikaf",
+    "kategori": "Oruç",
+    "soru": "İtikâf nedir, nasıl yapılır?",
+    "anahtar": [
+      "itikaf",
+      "itikaf nedir",
+      "ramazan son on gün",
+      "kadir gecesi ibadeti",
+      "mescitte itikaf"
+    ],
+    "cevap": "**İtikâf**, Ramazan'ın özellikle **son on gününde** bir mescitte, dünya işlerinden uzaklaşarak ibadet, zikir ve Kur'an ile meşgul olmaktır. Hz. Peygamber her Ramazan'ın son on gününde itikâfa girerdi (Buhârî, Müslim).\n\n**Hükmü:** Sünnet-i müekkededir. Bir beldede bir kişi yaparsa diğerlerinden düşer (farz-ı kifâye hükmünde). Kişi kendi üzerine adarsa vacip olur.\n\n**Şartları:**\n- Oruçlu olmak (itikâf, oruçla kaimdir).\n- Mescitte bulunmak.\n- Cemaatle kılınan namazın olduğu camide olmak (kadınlar evde bir köşede yapabilir).\n- İtikâf edenin dünya işlerinden ve gereksiz konuşmalardan uzak durması; cinsî münasebet yasaktır (Bakara 2/187).\n\n**Neler bozar:** Cinsî münasebet, mescidden özürsüz çıkmak, hastalık gibi zorunlu çıkışta itikâf kesilir.\n\n**Evde itikâf:** Kadınlar için evde belirli bir odayı mescit gibi tahsis edip itikâf yapmak caiz görülmüştür; yani gün içinde bir köşeyi ayırıp cep telefonunu bırakıp zikir, dua, Kur'an ile meşgul olmak itikâfın özünü verir.\n\n**Modern bir itikâf önerisi:** Ramazan'ın son on gününde her akşam 20-30 dakika 'dijital oruç' uygula; bir köşede Kur'an, dua ve tevbe ile vakit geçir. **Kadir Gecesi** bu on gün içindedir ve bir hadiste «Kim kadir gecesini inanarak ve sevabını umarak ibadetle geçirirse, geçmiş günahları bağışlanır» (Buhârî, Müslim) müjdesi vardır. Kadir Gecesi'nde okunacak dua: «Allâhümme inneke afüvvün kerîmün tuhibbü'l-afve fa'fü annî.» (Allah'ım, sen affedicisin, affetmeyi seversin, beni affet.) — Tirmizî",
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/187, el-Kadr 97/1-5",
+      "Hadis: Buhârî, İtikâf 1-5; Müslim, İtikâf 1-6"
+    ]
+  },
+  {
+    "id": "oruc-hastalik-yolculuk",
+    "kategori": "Oruç",
+    "soru": "Hastalık ve yolculukta oruç tutmak, kronik hastalıklar ve ilaç kullanımı",
+    "anahtar": [
+      "hasta oruç",
+      "yolculukta oruç",
+      "diyabet oruç",
+      "kronik hastalık oruç",
+      "ilaç kullanmak oruç",
+      "doktor oruç",
+      "şeker hastası oruç"
+    ],
+    "cevap": "**Hastalık:** Kur'an'ın verdiği ruhsat açıktır: «...Sizden kim hasta veya yolcu olursa, tutamadığı günler sayısınca başka günlerde tutsun.» (Bakara 2/184). Ölçü: Oruç tutmak **hastalığı artırıyor, iyileşmeyi geciktiriyor veya ciddi zarar veriyorsa** tutulmaz. Bu takdir, güvenilir bir doktorun görüşüyle belirlenir.\n\n**Diyabet/kronik hastalık:** Ramazan öncesinde hekimle planlama yapmak, ilaç saatlerini ayarlamak gerekir. Oruç, kan şekeri dengesini bozacaksa tutulmaz ve yerine fidye/kaza gündeme gelir. **Din, sağlığı korumayı emreder**; bedeni riske atmak dinî değildir.\n\n**Yolculuk:** Seferî mesafede (yaklaşık 90 km) yolculukta oruç tutmama ruhsatı vardır. Ancak:\n- **Yolculuk zorluk doğuruyorsa** tutmamak daha iyidir.\n- Ruhsatı kullanmamak da caizdir (tutan kişi orucu geçerlidir).\n- Yolculuk sırasında oruç tutmaya devam eden kişi zayı düşerse, mazeret gerçekleşince bozup kaza etmesi caizdir.\n\n**İlaç kullanımı:**\n- **Tablet, şurup, ağızdan alınan her ilaç** orucu bozar; ancak **zorunlu ve tedavisi başka olmayan** durumlarda oruç bozulur ve gün kaza edilir (bu bir günah değil, ruhsattır).\n- **Astım spreyi**, göz-kulak damlası, merhem, iğne (besin içermeyen), oksijen gibi uygulamalarda **fıkhi ihtilaf** vardır; Diyanet'in resmî görüşü, bu sayılanların orucu bozmadığı yönündedir.\n- **Serum**, besin içeren damar yolu uygulamaları ve kan ürünleri ile beslenme orucu bozar.\n\n**Önemli:** Bu tür tıbbî ve fıkhî karmaşık hâllerde, alanında uzman bir hekimin ve müftülüğün görüşü birlikte alınmalıdır. Kendi başına \"tutmalı mıyım\" kararını bedeni riske sokarak verme.",
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/184-185",
+      "Hadis: Buhârî, Savm 25-28; Müslim, Sıyâm 89",
+      "Diyanet İşleri Başkanlığı fetvaları (oruç ve sağlık)"
+    ]
+  },
+  {
+    "id": "ramazan-bayrami-zikir",
+    "kategori": "Oruç",
+    "soru": "Ramazan'a nasıl hazırlanırım, Ramazan programı nasıl olur?",
+    "anahtar": [
+      "ramazana hazırlık",
+      "ramazan programı",
+      "ramazan planı",
+      "ramadan nasıl geçirilir",
+      "ramazan hedefleri",
+      "bol kazanç ramazan"
+    ],
+    "cevap": "**Ramazan öncesi (Şaban ayı) hazırlık:**\n1. **Kaza oruçları varsa** Şaban'da tut. Boşluk = rahatlık.\n2. **Kur'an planı:** Hedef koy (örneğin günde 1 sayfa bile olsa, meal dahil).\n3. **Oruç borcu yoksa** Pazartesi-Perşembe oruçlarıyla bedeni alıştır.\n4. **Ekran ve uyku düzeni:** Ramazan'da gecenin nurunu yakalamak isteyen, gündüz ekranı ve uykuyu düzenler.\n\n**Ramazan programı (örnek):**\n- **İmsak:** Sahur + niyet + birkaç dua.\n- **Sabah:** Sabah namazı + Kur'an.\n- **Gündüz:** İş-güç, fakat dil orucu (gıybet, tartışma, kötü sözden uzak).\n- **İkindi:** Dua ve istiğfar.\n- **Akşam:** Namaz, iftar, şükür, teravih.\n- **Yatsı sonrası:** Teravih + tilâvet + teheccüd.\n- **Son 10 gün:** İtikâf/dijital oruç, Kadir Gecesi'ni arama.\n\n**Ramazan'ın hesap defteri:**\n- **Fitre** (herkes) ve **zekât** (nisap sahipleri) Ramazan'da ödenir; bunlar Ramazan'ın sosyal yüzüdür.\n- **İftar sofrasını paylaş:** Bir yetimi, bir komşuyu, bir işçiyi sofranıza katmak, iftarın en büyük sevabıdır.\n- **Teravih cemaati:** Camide bulunmayan ev için de en büyük berekettir; çocukları da götür.\n\n**Unutma:** Ramazan, bir ay boyunca Kur'an, şükür, sabır ve paylaşmanın eğitimidir; hedef ay sonunda **iyi huy kazanmış** çıkmaktır.",
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/183-187",
+      "Hadis: Buhârî, Savm 1-8; Tirmizî, Zühd 9"
+    ]
+  },
+  {
+    "id": "zekat-farz-nisap",
+    "kategori": "Zekât",
+    "soru": "Zekât kimlere farzdır, nisap miktarı nedir?",
+    "anahtar": [
+      "zekat",
+      "zekat kimlere farz",
+      "nisap",
+      "nisap miktarı",
+      "zekat farz mı",
+      "zekat vermek",
+      "zenginlik ölçüsü"
+    ],
+    "cevap": "**Zekât**, Kur'an'da namazla birlikte en çok zikredilen ibadettir ve İslam'ın beş şartından biridir: «Namazı kılın, zekâtı verin.» (Bakara 2/43)\n\n**Zekâtın farz olması için şartlar:**\n1. **Müslüman olmak.**\n2. **Bâliğ ve akıllı olmak.**\n3. **Hür olmak** (kölelik hâli dışında).\n4. **Nisap miktarına ulaşmak.**\n5. **Mala tam sahip olmak.**\n6. **Üzerinden bir kamerî yıl (havl) geçmek.**\n7. **Malın artıcı (nâmî) olması** veya artırıcı nitelikte olması.\n8. **Aslî ihtiyaç dışı olması** (ev, ticari aracın temel ihtiyacı gibi aslî ihtiyaçlar zekâta tâbi değildir).\n\n**Nisap miktarları (yaklaşık güncel karşılıkları, Diyanet esaslı):**\n- **Altın:** 20 miskal ≈ 80,18 gram altın.\n- **Gümüş:** 200 dirhem ≈ 561 gram gümüş.\n- **Nakit/para:** Altın nisabı esas alınır (80,18 g altının piyasa değeri). Bu miktar ve üzeri paraya sahip olan, üzerinden bir yıl geçince **1/40 (%2,5)** zekât verir.\n- **Ticaret malı:** Değeri nisaba ulaşan ticaret malı için %2,5.\n- **Büyükbaş hayvan:** 30 sığır ve üzeri (1 yaşında buzağı), 40 koyun ve üzeri (1 koyun)...\n- **Tarım ürünleri:** Öşür; nisabı yaklaşık 653 kg üründür ve ürünün cinsine/emek durumuna göre 1/10 veya 1/20 oranında verilir.\n- **Toprak ürünü ve madenden elde edilen** kazançlar için farklı oranlar vardır.\n\n**Borç çıkarma:** Üzerinde bir yıl geçen borçlarını düşüp kalan mala zekât vermek yaygın ve ihtiyatlı görüştür; alacaklı olduğu tahsil edilemeyen borçlar için ise özel hükümler vardır.",
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/43, et-Tevbe 9/103",
+      "Hadis: Buhârî, Zekât 1-10; Müslim, Zekât 1-20"
+    ]
+  },
+  {
+    "id": "zekat-kimlere-verilir",
+    "kategori": "Zekât",
+    "soru": "Zekât kimlere verilir, kimlere verilmez?",
+    "anahtar": [
+      "zekat kimlere verilir",
+      "zekat kimlere verilmez",
+      "zekat alacaklar",
+      "8 sınıf",
+      "fakire zekat",
+      "anne babaya zekat",
+      "eşime zekat"
+    ],
+    "cevap": "Kur'an-ı Kerim zekâtın verileceği **sekiz sınıfı** açıkça sayar:\n\n«Sadakalar (zekâtlar) ancak şunlara mahsustur: **Fakirler, miskinler, zekât toplama memurları, kalpleri İslam'a ısındırılacak olanlar, kölelikten kurtulmak isteyenler, borçlular, Allah yolunda olanlar ve yolda kalmışlar.**» (Tevbe 9/60)\n\n1. **Fakir** — Nisap miktarından az mala sahip olan.\n2. **Miskin** — Hiçbir şeyi olmayan, muhtaç.\n3. **Âmil** — Zekâtı toplayıp dağıtan görevli.\n4. **Müellefe-i kulûb** — Kalpleri İslam'a ısındırılacaklar.\n5. **Rikâb** — Esaretten veya ağır borçtan kurtulmak isteyenler.\n6. **Gārim** — Borcundan dolayı zor durumda olanlar.\n7. **Fî sebilillah** — Allah yolunda olanlar (ilim tahsili, hayır yolları; cihat anlayışı tarihsel ve ihtilaflıdır).\n8. **İbnü's-sebîl** — Yolda kalmış yolcu.\n\n**Zekât verilmeyecekler:**\n- **Anne, baba, dede, nine, çocuk, torun** — Bunlara bakmak zaten farzdır; onların rızkı senin sorumluluğundadır (Hanefî).\n- **Karı-koca** — Birbirlerine zekât veremezler (Hanefî).\n- **Zengin** — Nisap sahibi olan kişiye zekât verilmez.\n- **Gayrimüslim** — Hanefî'ye göre zimmîye zekât verilmez (sadaka olarak verilebilir).\n- **Bâliğ olmayan yetim** — Bazı âlimler verilebileceğini söyler, ancak zengin olmaması gerekir. Ailesi zengin ise verilmez.\n- **Hz. Peygamber'in soyundan gelenlere (Ehl-i Beyt)** — Bir görüşe göre zekât almaları caiz değildir; ilim ve ihtiyaç sahibi olabilirler, ihtilaf vardır.\n\n**Önemli:** Zekâtı en yakın ihtiyaç sahibinden başlayarak vermek, kan bağı olan yoksul akrabaya vermek (anne-baba-çocuk hariç) en faziletli yoldur. Ayrıca **zekâtın gizli verilmesi** esastır; ancak başkalarını teşvik için açık vermek de caizdir.",
+    "kaynaklar": [
+      "Kur'an: et-Tevbe 9/60",
+      "Hadis: Buhârî, Zekât 1-3; Müslim, Zekât 79-99"
+    ]
+  },
+  {
+    "id": "fitre",
+    "kategori": "Zekât",
+    "soru": "Fitre (sadaka-i fıtır) nedir, ne zaman ve ne kadar verilir?",
+    "anahtar": [
+      "fitre",
+      "fitre nedir",
+      "fitre ne zaman verilir",
+      "fitre ne kadar",
+      "sadaka-i fıtır",
+      "fitre kimlere",
+      "fitre 2025"
+    ],
+    "cevap": "**Fitre (Sadaka-i Fıtır)**, Ramazan'ın sonunda verilen **vacip** bir sadakadır. Ramazan Bayramı'nın ilk günü tan yerinin ağarmasıyla vacip olur; ancak bayram namazından önce verilmesi daha faziletlidir.\n\n**Kimlere vaciptir?** Nisap miktarına (80,18 g altın veya karşılığı) sahip, aslî ihtiyaçlarından sonra bu kadar malı bulunan hür Müslümanlara vaciptir. Fitre, **kişinin kendisi, çocukları, bâliğ olmayan çocukları ve bakmakla yükümlü olduğu kişiler** için verilir. Bu miktar nisap kadar olmasa da (Rahmet ölçüsü daha düşüktür) Hanefî kaynaklarda nisap şartı arandığı için; fitre vermek için zengin sayılan kişi, günlük yemeğinden fazlasını sağlayabilen kişidir denir.\n\n**Miktar:** Hanefî'ye göre fitre **buğday, arpa, hurma, kuru üzüm** gibi maddelerin bir ölçüsü (yarım sâ' = yaklaşık 2 kg buğday, 1 sâ' = 4 kg arpa-hurma) veya **bunların bedeli** olarak verilir. Diyanet, her yıl güncel bedeli ilan eder (2025 için ilan edilen tutar, genellikle yaklaşık 130-200 TL bandındadır; kesin tutarı yılın ilanından teyit et).\n\n**Pratik:**\n- **Bayram namazından sonra vermek** vacibi yerine getirir; ancak bayram namazı sonrasına bırakmak fazileti azaltır.\n- Fitre **parça parça** verilebilir; bir fakire birden fazla fitre verilebilir (Hanefî'de caiz).\n- Fitre, zekât verilemeyen kişilere (anne-baba, çocuk, eş gibi) verilemez.\n- Fitre, zekât gibi **fakir, miskin, borçlu** gibi gruplar için geçerlidir.\n\n**Hikmeti:** Bayram sabahı kimsenin aç kalmaması. Bir kişinin fitresi, bir günlük yemeği karşılar; böylece bayram herkes için bayram olur.",
+    "kaynaklar": [
+      "Hadis: Buhârî, Zekât 70-78; Müslim, Zekât 12-16",
+      "Fıkıh: el-Hidâye, Sadaka-i fıtır"
+    ]
+  },
+  {
+    "id": "zekat-hesaplama",
+    "kategori": "Zekât",
+    "soru": "Zekât nasıl hesaplanır? Örnek hesaplama",
+    "anahtar": [
+      "zekat hesaplama",
+      "zekat oranı",
+      "zekat nasıl hesaplanır",
+      "yüzde kaç",
+      "altın zekatı",
+      "birikim zekatı",
+      "borsa zekat"
+    ],
+    "cevap": "**Temel kural:** Nisap miktarını (yaklaşık 80,18 g altın veya karşılığı para) geçen mala, üzerinden bir kamerî yıl (354 gün) geçince **%2,5 (1/40)** zekât verilir.\n\n**Hesaplanan mal varlıkları:**\n- Nakit para (nakit, banka mevduatı, dijital para cüzdanları — ciddi ihtilaf var, ihtiyaten hesaba katılır)\n- Altın, gümüş ve mücevher (Hanefî'ye göre takılar zekâta dahildir)\n- **Ticaret malları** (satılık ürün, hammadde, işletme stoğu)\n- **Hisse senetleri/fonlar** (ticari amaçlı ise piyasa değeri; temettü getiren kâğıtlar için âlimler farklı oranlar verir: %2,5 veya %10 — ihtiyatlı olan %2,5)\n- **Kira geliri getiren gayrimenkulün** sermaye değeri değil, geliri (genel kabule göre gayrimenkulün kendisi zekâta tâbi olmaz, geliri tâbi olur)\n- Alacaklar (tahsil edilmesi beklenen)\n- Emeklilik/yardım fonları (ihtilaf; ihtiyaten hesaba katılır)\n\n**Zekâttan düşülebilenler:** Aslî ihtiyaçlar (oturduğun ev, araç), temel eşya, ticari borçlar, ödenecek borçlar, bir yıl içinde ödenmesi gereken giderler. İhtilaf: Bazı âlimler tüm borçları düşerken, bazıları yalnız vadesi gelmiş borçları düşer.\n\n**Örnek hesap:**\n- Nakit: 250.000 TL\n- Altın: 40 gram (≈ değeri 300.000 TL)\n- Ticaret stoğu: 100.000 TL\n- Toplam: 650.000 TL\n- Borç (vadesi gelmiş): 150.000 TL\n- **Zekâta tâbi net: 500.000 TL**\n- **Zekât: 500.000 × 0,025 = 12.500 TL**\n\n**Ödeme zamanı:** Hicrî yılın sonunda; ancak yıl içinde **peşin/kademeli** ödeme de caizdir. Yılın sonunda toptan ödemek en yaygın usuldür.\n\n**Niyet:** Zekât verirken «Niyet ettim zekât vermeye» demek şarttır. Zekât, fakire **verilirken** veya teslim edilirken niyet edilir.",
+    "kaynaklar": [
+      "Kur'an: et-Tevbe 9/60, el-Bakara 2/110",
+      "Hadis: Buhârî, Zekât 32-40",
+      "Fıkıh: el-Hidâye, Zekât bölümü"
+    ]
+  },
+  {
+    "id": "sadaka",
+    "kategori": "Zekât",
+    "soru": "Sadaka nedir, kimlere ve nasıl verilir? Sadaka çeşitleri",
+    "anahtar": [
+      "sadaka",
+      "sadaka vermek",
+      "yardım etmek",
+      "hayır yapmak",
+      "sadaka-i cariye",
+      "gizli sadaka"
+    ],
+    "cevap": "**Sadaka**, gönüllü olarak yapılan her türlü iyilik ve yardımdır. Zekâtın dışında, sınırı olmayan bir iyilik kapısıdır.\n\n**Hadislerle sadakanın kapsamı:**\n- «Her iyilik sadakadır.» (Buhârî, Müslim)\n- «Kardeşine gülümsemen sadakadır.» (Tirmizî)\n- «Yoldan bir taşı, bir dikeni kaldırman sadakadır.»\n- «İnsanın vücudundaki 360 eklem için sadaka vermesi gerekir.» (Müslim)\n\n**Sadaka çeşitleri:**\n1. **Maddî sadaka** — Para, yiyecek, giyecek, barınma.\n2. **Manevî sadaka** — Öğretmek, yol göstermek, güler yüz, teselli, dua, hasta ziyareti, çocuklarla oynamak.\n3. **Sadaka-i câriye (sürekli sadaka):** Kişi öldükten sonra sevabı devam eden sadaka. Hadis: «İnsan ölünce ameli kesilir; ancak üç şey dışında: Sadaka-i câriye, kendisinden faydalanılan ilim ve kendisine dua eden salih bir evlat.» (Müslim)\n\n**Manevi sadaka-i câriye örnekleri:** Cami, çeşme, okul, ağaç dikmek, kitap/kurum bağışı, ilim öğretmek, bir çocuğun eğitimine destek olmak. Bunlar yazdıkları amel defteri sürekli açık kalan kimselerdir.\n\n**Gizli mi açık mı?** Kur'an: «Sadakaları açık verirseniz ne güzel; gizler ve fakirlere öyle verirseniz, işte bu sizin için daha hayırlıdır.» (Bakara 2/271). Yani **gizli sadaka** daha üstündür; ancak açık vermek başkalarını teşvik edecekse açık vermek de faziletlidir.\n\n**Sadaka ve ahlak:** Sadaka vermek bir kişiyi yalnızca sevaba götürmez; kalbi cimrilikten, mal sevgisinden temizler. Hz. Peygamber: «Sadaka malı eksiltmez.» (Müslim)",
+    "kaynaklar": [
+      "Kur'an: el-Bakara 2/261-274",
+      "Hadis: Buhârî, Zekât 34; Müslim, Zekât 92-99; Müslim, Vasiyyet 14"
+    ]
+  }
+]
