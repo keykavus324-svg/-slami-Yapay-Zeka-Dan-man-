@@ -17,6 +17,17 @@
   let DETAY = "normal";
   let gecmis = [];
   let MODEL_BILGISI = { sistem_promptu: "", saglayicilar: [] };
+  /* Sistem içi (yerel) model durumu — anahtar yok, dış servis yok */
+  let YEREL = { hazir: false, model: "", arka_uc: "", kucuk_model: false };
+  /* Üç durumlu tercih: null = otomatik (küçük model ise kapalı), "1" = açık, "0" = kapalı */
+  function yerelEtkin() {
+    if (!YEREL.hazir) return false;
+    let tercih = null;
+    try { tercih = localStorage.getItem("seyh-tugrul-yerel-kullan"); } catch {}
+    if (tercih === "0") return false;
+    if (tercih === "1") return true;
+    return !YEREL.kucuk_model;
+  }
 
   /* ------------------------- Markdown (hafif) ------------------------- */
   const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -217,6 +228,144 @@
   }
 
 
+
+  /* ============================================================
+     SİSTEM İÇİ (YEREL) DİL MODELİ
+     Model, uygulamanın çalıştığı makinede koşar: Ollama / llama.cpp /
+     llama-cpp-python. API anahtarı yok, dış servis yok, kota yok.
+     ============================================================ */
+  const YEREL_KUCUK_DESEN = /(tiny|0\.5b|135m|360m|1b|demo|test|stories)/i;
+
+  function yerelRozet() {
+    const kullanilabilir = yerelEtkin();
+    const durum = $("#yerelDurum");
+    const ozet = $("#yerelOzet");
+    const kutu = $("#yerelKullan");
+    if (kutu) kutu.checked = kullanilabilir;
+    if (kutu) kutu.disabled = !YEREL.hazir;
+
+    if (durum) {
+      durum.textContent = YEREL.hazir ? (kullanilabilir ? "Bağlı" : "Hazır (kapalı)") : "Bulunamadı";
+      durum.classList.toggle("on", kullanilabilir);
+    }
+    if (ozet) {
+      ozet.innerHTML = YEREL.hazir
+        ? "Sunucuda <b>" + esc(YEREL.model || "yerel model") + "</b> çalışıyor (" + esc(YEREL.arka_uc || "yerel") + "). " +
+          (YEREL.kucuk_model
+            ? "⚠️ <b>Küçük bir demo modeli</b> algılandı (test için). Otomatik olarak <b>kapalı</b> tutulur; denemek isterseniz aşağıdaki anahtarı açın. Kaliteli cevap için <b>qwen2.5:7b</b> gibi büyük bir model kurun."
+            : "Cevaplar bu model tarafından üretilir; bilgi bankası kaynakları modelle paylaşılır.")
+        : "Sunucuda yerel model bulunamadı. <b>Kurulum komutları</b> ile 3 dakikada kurabilirsiniz — anahtar, ücret, kota yoktur.";
+    }
+    motorRozeti();
+  }
+
+  async function yerelDurumYukle(zorla = false) {
+    try {
+      const r = await fetch("/api/yerel-model" + (zorla ? "?zorla=true" : ""));
+      YEREL = await r.json();
+      YEREL.kucuk_model = YEREL_KUCUK_DESEN.test((YEREL.model || "") + " " + (YEREL.arka_uc || ""));
+    } catch { YEREL = { hazir: false, model: "", arka_uc: "", kucuk_model: false }; }
+    yerelRozet();
+  }
+
+  async function yerelAkisi(soru, t) {
+    const wrap = el("div", "msg bot");
+    wrap.appendChild(botAvatar());
+    const bubble = el("div", "bubble");
+    const meta = el("div", "meta");
+    meta.appendChild(el("span", "chip llm", "🧠 " + esc(YEREL.model || "yerel model")));
+    meta.appendChild(el("span", "chip cat", "Sistem içi · anahtarsız"));
+    bubble.appendChild(meta);
+    bubble.appendChild(el("p", "q-title", "Soru: <b>" + esc(soru) + "</b>"));
+    if (YEREL.kucuk_model)
+      bubble.appendChild(el("div", "notlar", "⚠️ Küçük demo modeli devrede: cevap yavaş gelebilir ve bilgisi sınırlıdır. Kaliteli cevaplar için <b>qwen2.5:7b</b> gibi büyük bir model kurun."));
+    const ans = el("div", "answer", '<p class="mini">🧠 Yerel model cevap yazıyor…</p>');
+    bubble.appendChild(ans);
+    wrap.appendChild(bubble);
+    chat.appendChild(wrap);
+    scrollDown();
+
+    let birikim = "";
+    let kaynakVeri = null;
+    let sonCizim = 0;
+    const ciz = (zorla) => {
+      const n = performance.now();
+      if (!zorla && n - sonCizim < 90) return;
+      sonCizim = n;
+      ans.innerHTML = markdown(birikim) + (zorla ? "" : '<span class="imlec"></span>');
+      scrollDown();
+    };
+
+    const res = await fetch("/api/sor-yerel", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ soru }),
+    });
+    if (!res.ok || !res.body) throw new Error("Yerel model akışı başlatılamadı (HTTP " + res.status + ")");
+
+    const oku = res.body.getReader();
+    const coz = new TextDecoder();
+    let tampon = "";
+    let yedek = null;
+    let hataMesaji = "";
+
+    const isle = (olay) => {
+      if (olay.tip === "meta") {
+        kaynakVeri = olay;
+        meta.insertBefore(el("span", "chip conf", esc(olay.motor || "yerel")), meta.firstChild.nextSibling);
+      } else if (olay.tip === "parca") {
+        birikim += olay.metin || "";
+        ciz(false);
+      } else if (olay.tip === "son") {
+        ciz(true);
+      } else if (olay.tip === "hata") {
+        hataMesaji = olay.mesaj || "bilinmeyen hata";
+      } else if (olay.tip === "yedek") {
+        yedek = olay.cevap;
+      }
+    };
+
+    for (;;) {
+      const { done, value } = await oku.read();
+      if (done) break;
+      tampon += coz.decode(value, { stream: true });
+      let i;
+      while ((i = tampon.indexOf("\n")) >= 0) {
+        const satir = tampon.slice(0, i).trim();
+        tampon = tampon.slice(i + 1);
+        if (!satir.startsWith("data:")) continue;
+        const veri = satir.slice(5).trim();
+        if (!veri || veri === "[DONE]") continue;
+        try { isle(JSON.parse(veri)); } catch { /* atla */ }
+      }
+    }
+
+    if (birikim.trim()) {
+      ciz(true);
+      if (kaynakVeri) bubble.appendChild(kaynakBloku(kaynakVeri));
+      const tools = el("div", "tools");
+      const kopya = el("button", "tool", "📋 Kopyala");
+      kopya.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(birikim); kopya.textContent = "✔ Kopyalandı"; }
+        catch { kopya.textContent = "Kopyalanamadı"; }
+        setTimeout(() => (kopya.textContent = "📋 Kopyala"), 1800);
+      });
+      tools.appendChild(kopya);
+      const ayar = el("button", "tool", "⚙️ Model ayarları");
+      ayar.addEventListener("click", llmAc);
+      tools.appendChild(ayar);
+      bubble.appendChild(tools);
+      gecmis.push({ rol: "bot", veri: { bulundu: true, tip: "yerel", guven: 1, kategori: "Sistem içi model", soru: soru, cevap: birikim, kaynaklar: [], ilgili: [], notlar: [] } });
+      kaydet();
+    } else {
+      ans.innerHTML = "";
+      bubble.appendChild(el("div", "notlar",
+        "⚠️ " + esc(hataMesaji || "Yerel modelden cevap alınamadı") + (yedek ? " — bilgi bankası cevabı gösteriliyor." : "")));
+      if (yedek) addBot(yedek);
+    }
+    scrollDown();
+  }
+
   /* ============================================================
      YÜKSEK PARAMETRELİ DİL MODELİ (LLM) KATMANI
      • Model çağrısı doğrudan TARAYICIDAN yapılır — API anahtarı sunucuya gitmez.
@@ -241,9 +390,13 @@
 
   function motorRozeti() {
     const sag = LLM ? saglayiciBul(LLM.saglayici) : null;
-    const yazi = llmAktif() && sag
-      ? "🧠 " + sag.ad.split("—")[0].split("(")[0].trim() + " · " + LLM.model
-      : "📚 Yerel bilgi bankası";
+    const yazi = yerelEtkin()
+      ? "🧠 " + (YEREL.model || "yerel model")
+      : (YEREL.hazir && !yerelEtkin())
+        ? "🧠 " + (YEREL.model || "model") + " (kapalı)"
+        : llmAktif() && sag
+          ? "🧠 " + sag.ad.split("—")[0].split("(")[0].trim() + " · " + LLM.model
+          : "📚 Yerel bilgi bankası";
     const b = $("#motorBtn");
     if (b) b.textContent = yazi;
     const durum = $("#motorDurum");
@@ -508,15 +661,22 @@
       const veri = await res.json();
       const yerel = veri.yerel || {};
 
-      // Güvenlik/greeting özel yanıtları ve dil modeli kapalıysa: yerel motor
       const ozelTip = ["guvenlik", "sohbet", "bos"].includes(veri.tip);
+
+      // 1) Sistem içi model (varsa ve açıksa) — anahtarsız, dış servis yok
+      if (!ozelTip && yerelEtkin()) {
+        t.remove();
+        await yerelAkisi(metin, t);
+        return;
+      }
+      // 2) Tarayıcıdan bağlanan bulut modeli (isteğe bağlı)
       if (ozelTip || !llmAktif()) {
         t.remove();
         await sleep(160);
         addBot(yerel);
         return;
       }
-      // Yüksek parametreli model: bağlamla beslenmiş cevap (akışlı)
+      // 3) Bulut modeli: bağlamla beslenmiş cevap (akışlı)
       t.remove();
       await llmAkisi(metin, veri);
     } catch (e) {
@@ -693,6 +853,23 @@
   const mmodal = $("#llmModal");
   if (mmodal) mmodal.addEventListener("click", (e) => { if (e.target === mmodal) llmKapat(); });
 
+  const yerelKullan = $("#yerelKullan");
+  if (yerelKullan) yerelKullan.addEventListener("change", () => {
+    try { localStorage.setItem("seyh-tugrul-yerel-kullan", yerelKullan.checked ? "1" : "0"); } catch {}
+    yerelRozet();
+  });
+  const yerelYenile = $("#yerelYenile");
+  if (yerelYenile) yerelYenile.addEventListener("click", async () => {
+    const d = $("#yerelDurum");
+    if (d) d.textContent = "aranıyor…";
+    await yerelDurumYukle(true);
+  });
+  const yerelKurulum = $("#yerelKurulum");
+  if (yerelKurulum) yerelKurulum.addEventListener("click", () => {
+    const k = $("#yerelKomut");
+    if (k) k.hidden = !k.hidden;
+  });
+
   const kaydetBtn = $("#llmKaydet");
   if (kaydetBtn) kaydetBtn.addEventListener("click", () => {
     const id = $("#llmSaglayici").value;
@@ -767,6 +944,7 @@
   /* ------------------------- Başlat ------------------------- */
   llmOku();
   modelBilgisiYukle();
+  yerelDurumYukle();
   motorRozeti();
   hicriTarih();
   chipsYukle();

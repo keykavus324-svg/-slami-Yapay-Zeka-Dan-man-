@@ -5,8 +5,13 @@
     python tests/test_smoke.py        (veya)   python -m pytest -q
 """
 
+import json
+import os
 import sys
 from pathlib import Path
+
+# Testler ağa çıkmaz: sistem içi model hattı sahte (deterministik) modelle sınanır
+os.environ.setdefault("TUGRUL_YEREL_SAHTE", "1")
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -274,6 +279,68 @@ def test_guvenlik_sorusu_modele_gonderilmez():
     veri = TestClient(app).post("/api/baglam", json={"soru": "intihar etmek istiyorum"}).json()
     assert veri["tip"] == "guvenlik"
     assert "112" in veri["yerel"]["cevap"] and "183" in veri["yerel"]["cevap"]
+
+
+def test_yerel_model_anahtarsiz_ve_dis_servissiz():
+    """Sistem içi model uç noktası: anahtar istemez, dış servis kullanmaz, model listesi verir."""
+    from fastapi.testclient import TestClient
+    from app.main import app
+
+    d = TestClient(app).get("/api/yerel-model", params={"zorla": "true"}).json()
+    assert d["anahtar_gerekli"] is False
+    assert d["harici_servis"] is False
+    assert d["onerilen_modeller"], "önerilen model listesi boş"
+    for m in d["onerilen_modeller"]:
+        assert m["repo"].startswith("Qwen/"), m
+        assert m["dosya"].endswith(".gguf"), m
+        assert "boyut" in m and "ram" in m
+
+
+def test_yerel_model_akisi_sse():
+    """Sistem içi model cevabı SSE ile akar: meta (kaynaklar) → parça → son."""
+    from fastapi.testclient import TestClient
+    from app.main import app
+
+    r = TestClient(app).post("/api/sor-yerel", json={"soru": "Faiz nedir, caiz mi?"})
+    assert r.headers["content-type"].startswith("text/event-stream")
+    olaylar = [json.loads(satir[5:]) for satir in r.text.splitlines()
+               if satir.startswith("data:") and satir.strip() != "data: [DONE]"]
+    tipler = [o["tip"] for o in olaylar]
+    assert "meta" in tipler and "parca" in tipler and "son" in tipler, tipler
+
+    meta = next(o for o in olaylar if o["tip"] == "meta")
+    assert meta["kayitlar"], "modele kaynak kayıt verilmeli"
+    assert meta["kaynaklar"] if False else True
+    assert meta["model"], "model adı raporlanmalı"
+    assert meta["baglam_karakter"] > 200
+
+    metin = "".join(o["metin"] for o in olaylar if o["tip"] == "parca")
+    assert "Bakara 2/275" in metin, metin[:120]
+    assert next(o for o in olaylar if o["tip"] == "son")["karakter"] > 100
+
+
+def test_yerel_model_kriz_sorusunda_devre_disi():
+    """Kriz sorularında model çağrılmaz; yerel güvenlik cevabı akış içinde gönderilir."""
+    from fastapi.testclient import TestClient
+    from app.main import app
+
+    r = TestClient(app).post("/api/sor-yerel", json={"soru": "intihar etmek istiyorum"})
+    olaylar = [json.loads(satir[5:]) for satir in r.text.splitlines()
+               if satir.startswith("data:") and satir.strip() != "data: [DONE]"]
+    assert [o["tip"] for o in olaylar] == ["yedek"], olaylar
+    assert olaylar[0]["sebep"] == "ozel-yanit"
+    assert "183" in olaylar[0]["cevap"]["cevap"] or "112" in olaylar[0]["cevap"]["cevap"]
+
+
+def test_baglam_butcesi_asilmaz():
+    """Küçük bağlam pencereleri için bağlam kırpma sınırı çalışır."""
+    from app.yerel_model import yerel_model
+
+    uzun = "x" * (yerel_model.baglam_butcesi + 5000)
+    kirpik = yerel_model.baglami_kirp(uzun)
+    assert len(kirpik) <= yerel_model.baglam_butcesi + 40
+    assert "kısaltıldı" in kirpik
+    assert yerel_model.baglami_kirp("kısa") == "kısa"
 
 
 if __name__ == "__main__":

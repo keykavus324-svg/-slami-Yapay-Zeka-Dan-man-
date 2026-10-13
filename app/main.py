@@ -12,6 +12,7 @@ FastAPI uygulaması.
 
 from __future__ import annotations
 
+import json
 import os
 import random
 import time
@@ -20,12 +21,13 @@ from typing import Any, Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from .engine import engine
-from .llm import KULLANICI_SABLONU, baglam_metni, model_bilgisi
+from .llm import KULLANICI_SABLONU, SISTEM_PROMPTU, baglam_metni, model_bilgisi
+from .yerel_model import ONERILEN_MODELLER, yerel_model
 
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
@@ -38,7 +40,7 @@ app = FastAPI(
         "(2) isteğe bağlı yüksek parametreli dil modeli (Gemini/Groq/OpenRouter/Ollama) — "
         "çağrı kullanıcının tarayıcısından yapılır, anahtar sunucuya gitmez."
     ),
-    version="2.0.0",
+    version="3.0.0",
 )
 
 # Önizleme/tarayıcı erişimi için geniş CORS (herkese açık, kimlik doğrulamasız araç)
@@ -72,6 +74,7 @@ def saglik() -> Dict[str, Any]:
         "api_anahtari_gerekli": False,
         "harici_yapayzeka": False,
         "llm_destegi": True,
+        "yerel_model": yerel_model.durum(),
         "mod": "yerel bilgi bankası (varsayılan) + isteğe bağlı dil modeli (tarayıcıdan)",
         "bilgi_bankasi_kayit": engine.N,
         "zaman": time.time(),
@@ -111,6 +114,99 @@ def baglam(istek: SoruIstegi) -> Dict[str, Any]:
 def model() -> Dict[str, Any]:
     """Dil modeli ayarları: sistem yönergesi, sağlayıcılar ve ücretsiz model listeleri."""
     return model_bilgisi()
+
+
+@app.get("/api/yerel-model")
+def yerel_model_durumu(zorla: bool = False) -> Dict[str, Any]:
+    """Sistem içi (yerel) dil modelinin durumu. Anahtar gerekmez, dış servis kullanılmaz."""
+    return yerel_model.kesfet(zorla=zorla)
+
+
+def _kisa_baglam(veri: Dict[str, Any], kayit_sinir: int = 2, pasaj_sinir: int = 3) -> str:
+    """Küçük bağlam pencereli modeller için sıkıştırılmış bağlam metni."""
+    parcalar: List[str] = []
+    for i, k in enumerate((veri.get("kayitlar") or [])[:kayit_sinir], 1):
+        cevap = (k.get("cevap") or "")[:1100]
+        kaynak = "; ".join(k.get("kaynaklar") or [])
+        parcalar.append("[KAYIT %d] (%s) %s\n%s\nKaynaklar: %s" % (i, k.get("kategori", ""), k.get("soru", ""), cevap, kaynak))
+    for i, pz in enumerate((veri.get("pasajlar") or [])[:pasaj_sinir], 1):
+        parcalar.append("[BÖLÜM %d] (%s) %s\n%s" % (i, pz.get("kategori", ""), pz.get("soru", ""), (pz.get("metin") or "")[:700]))
+    return "\n\n".join(parcalar)
+
+
+@app.post("/api/sor-yerel")
+def sor_yerel(istek: SoruIstegi):
+    """
+    Cevabı **sistem içindeki** dil modeli üretir ve kelime kelime akıtır (SSE).
+
+    Anahtar yok, dış servis yok: model aynı makinede koşar (Ollama / llama.cpp /
+    llama-cpp-python). Model yoksa ya da hata verirse aynı akış içinde yerel bilgi
+    bankası cevabı gönderilir — soru asla cevapsız kalmaz.
+    """
+    def olay(tip: str, **ek: Any) -> str:
+        return "data: " + json.dumps({"tip": tip, **ek}, ensure_ascii=False) + "\n\n"
+
+    def akis():
+        try:
+            veri = engine.baglam(istek.soru)
+        except Exception as hata:  # pragma: no cover
+            yield olay("hata", mesaj="Bağlam üretilemedi: %s" % hata)
+            yield "data: [DONE]\n\n"
+            return
+
+        yerel_yanit = veri["yerel"]
+        if veri["tip"] in ("guvenlik", "sohbet", "bos"):
+            yield olay("yedek", cevap=yerel_yanit, sebep="ozel-yanit")
+            yield "data: [DONE]\n\n"
+            return
+
+        durum = yerel_model.kesfet()
+        if not durum["hazir"]:
+            yield olay("yedek", cevap=yerel_yanit, sebep="model-yok", model_durum=durum)
+            yield "data: [DONE]\n\n"
+            return
+
+        baglam = yerel_model.baglami_kirp(_kisa_baglam(veri))
+        kullanici_mesaji = KULLANICI_SABLONU.format(
+            kayit_sayisi=veri["bilgi_bankasi"]["kayit"],
+            pasaj_sayisi=veri["bilgi_bankasi"]["pasaj"],
+            baglam=baglam,
+            soru=istek.soru.strip(),
+        )
+        mesajlar = [
+            {"role": "system", "content": SISTEM_PROMPTU},
+            {"role": "user", "content": kullanici_mesaji},
+        ]
+
+        yield olay(
+            "meta",
+            motor=durum["arka_uc"],
+            model=durum["model"],
+            kayitlar=veri["kayitlar"][:3],
+            pasajlar=veri["pasajlar"][:3],
+            bilgi_bankasi=veri["bilgi_bankasi"],
+            baglam_karakter=len(baglam),
+        )
+
+        basla = time.time()
+        toplam = 0
+        try:
+            for parca in yerel_model.uret(mesajlar):
+                toplam += len(parca)
+                yield olay("parca", metin=parca)
+            if toplam == 0:
+                raise RuntimeError("model boş yanıt döndürdü")
+            yield olay("son", sure=round(time.time() - basla, 2), karakter=toplam)
+        except Exception as hata:
+            yield olay("hata", mesaj="Yerel model hatası: %s" % hata)
+            yield olay("yedek", cevap=yerel_yanit, sebep="model-hatasi")
+        yield "data: [DONE]\n\n"
+
+    return StreamingResponse(
+        akis(),
+        media_type="text/event-stream; charset=utf-8",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no", "Connection": "keep-alive"},
+    )
 
 
 @app.get("/api/kategoriler")
@@ -166,7 +262,8 @@ def bosluklar() -> Dict[str, Any]:
 def istatistik() -> Dict[str, Any]:
     return {
         **engine.istatistik(),
-        "surum": "2.0.0",
+        "surum": "3.0.0",
+        "yerel_model": yerel_model.durum(),
         "aciklama": "Yerel bilgi bankası her zaman çalışır (ücretsiz, kotasız). İsteğe bağlı olarak "
                     "yüksek parametreli bir dil modeli tarayıcıdan bağlanabilir.",
     }

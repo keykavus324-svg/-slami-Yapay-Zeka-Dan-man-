@@ -103,11 +103,37 @@
 <!-- ============ DİL MODELİ (LLM) AYAR PENCERESİ ============ -->
 <div class="modal" id="llmModal" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="llmBaslik">
-    <h3 id="llmBaslik">🧠 Yüksek Parametreli Dil Modeli</h3>
+    <h3 id="llmBaslik">🧠 Dil Modeli Ayarları</h3>
+    <div class="yerel-kart">
+      <div class="yerel-head">
+        <b>🖥️ Sistem içi model <span class="etiket">önerilen</span></b>
+        <span class="motor-durum" id="yerelDurum">aranıyor…</span>
+      </div>
+      <p class="mini" id="yerelOzet">Sunucunun kendi makinesinde koşan bir dil modeli aranıyor…</p>
+      <label class="anahtar-satir">
+        <input type="checkbox" id="yerelKullan" />
+        <span>Cevapları sistem içi model üretsin (anahtar gerekmez, dış servis yok)</span>
+      </label>
+      <div class="modal-actions">
+        <button id="yerelYenile">Durumu yenile</button>
+        <button id="yerelKurulum">Kurulum komutları</button>
+      </div>
+      <pre class="yerel-komut" id="yerelKomut" hidden># 1) En kolay yol — Ollama (Windows/macOS/Linux)
+ollama pull qwen2.5:7b
+ollama serve
+
+# 2) veya GGUF indirme betiği (sunucuda):
+python -m app.model_indir qwen2.5:7b
+
+# 3) veya elinizde GGUF varsa models/ klasörüne koyun:
+#    models/qwen2.5-7b-instruct-q4_k_m.gguf
+# Uygulamayı yeniden başlatın — model otomatik bulunur.</pre>
+    </div>
+
     <p class="mini">
-      Yerel bilgi bankası (152 kayıt) her zaman çalışır. Aşağıdan ücretsiz bir model bağlarsan,
-      cevaplar <b>gerçek bir dil modeli</b> tarafından, bilgi bankasındaki kaynaklarla beslenerek üretilir.
-      <b>Anahtarın yalnızca bu tarayıcıda saklanır</b> — sunucuya gönderilmez, ücret/kayıt yoktur.
+      Alternatif: tarayıcıdan bulut modeli bağlamak isterseniz (ücretsiz anahtarla, örn. Gemini),
+      aşağıdan seçebilirsiniz. <b>Anahtar yalnızca bu tarayıcıda saklanır</b> — sunucuya gönderilmez.
+      Sistem içi model varsa o tercih edilir.
     </p>
 
     <label class="alan">Sağlayıcı

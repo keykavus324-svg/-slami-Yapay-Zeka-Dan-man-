@@ -5,16 +5,21 @@
 > Namaz, abdest, gusül, oruç, zekât, hac, dua, iman esasları, aile, helâl-haram, ahlâk,
 > günlük hayat… Aklınıza gelen her İslami soruyu doğal bir dille yazın; cevabı kaynaklarıyla alın.
 
-**İki katmanlı yapay zekâ:**
+**Üç katmanlı yapay zekâ:**
 
-1. **Yerel bilgi bankası (RAG kaynağı)** — 152 doğrulanmış kayıt + ~1.900 pasaj. Anahtarsız, kotasız,
-   çevrimdışı çalışır. Her zaman açıktır.
-2. **Yüksek parametreli dil modeli (isteğe bağlı)** — Gemini 2.5 Flash, Llama 3.3 **70B**,
-   GPT-OSS **120B**, Qwen3 **235B** gibi modeller; ücretsiz anahtarla. Model, **1. katmandaki
-   kaynaklarla beslenir** ve cevabı özgürce, akıcı biçimde yazar. Arayüzden tek tıkla bağlanır.
+1. **Yerel bilgi bankası (RAG kaynağı)** — 152 doğrulanmış kayıt + ~1.900 pasaj. Anahtarsız,
+   kotasız, çevrimdışı. Her zaman açıktır.
+2. **Sistem içi dil modeli (önerilen)** — Model, uygulamanın **kendi makinesinde** koşar
+   (Ollama / llama.cpp / llama-cpp-python). **API anahtarı yok, dış servis yok, kota yok.**
+   `qwen2.5:7b` gibi bir model bir kez indirilir; cevapları bu model üretir ve bilgi
+   bankasındaki kaynaklarla beslenir. Kurulum: `scripts/kur.sh` ya da
+   `python -m app.model_indir qwen2.5:7b`.
+3. **Bulut modeli (isteğe bağlı)** — Sistem içi model yoksa, ücretsiz anahtarla
+   Gemini 2.5 Flash / Llama 70B / Qwen3 235B bağlanabilir; çağrı **tarayıcıdan** yapılır,
+   anahtar sunucuya gitmez.
 
-> Model çağrısı **doğrudan tarayıcınızdan** yapılır: API anahtarınız sunucuya gitmez, sunucu
-> üzerinden ücret/kota tüketilmez.
+> Kesintisizlik: Sistem içi model yoksa bile cevaplar yerel bilgi bankasından gelir ve
+> kriz/güvenlik soruları hiçbir zaman modele gönderilmez.
 
 ---
 
@@ -56,7 +61,61 @@ Port değiştirmek için: `PORT=9000 python -m app.main`
 
 ---
 
-## 🧠 Gerçek Yapay Zekâ (Dil Modeli) Nasıl Bağlanır?
+## 🖥️ Modeli Sistemin İçine Kur (anahtar yok, dış servis yok)
+
+Modeli **uygulamanın çalıştığı makineye** kurun; uygulama açılışta otomatik bulur ve kullanır.
+
+### Yol 1 — Ollama (en kolay, Windows/macOS/Linux)
+```bash
+ollama pull qwen2.5:7b     # ~4.7 GB, tek seferlik
+ollama serve               # 127.0.0.1:11434
+python -m app.main         # uygulama modeli otomatik bulur
+```
+
+### Yol 2 — Tek komutluk kurulum betiği
+```bash
+./scripts/kur.sh           # Linux/macOS  (Windows: scripts\kur.bat)
+```
+Betik: bağımlılıkları kurar → modeli indirir → uygulamayı başlatır.
+
+### Yol 3 — GGUF indirme betiği (sunucular için)
+```bash
+python -m app.model_indir --liste      # boyut/RAM bilgisiyle model listesi
+python -m app.model_indir qwen2.5:7b   # models/ klasörüne indirir (kaldığı yerden devam eder)
+python -m app.main
+```
+Elinizde GGUF varsa `models/` klasörüne koymanız yeterli (örn.
+`models/qwen2.5-7b-instruct-q4_k_m.gguf`).
+
+### Yol 4 — Docker
+```bash
+docker compose run --rm tugrul python -m app.model_indir qwen2.5:7b
+docker compose up        # → http://localhost:8000
+```
+
+### Hangi modeli seçmeliyim?
+| Model | Boyut | RAM | Tipik hız (CPU) | Not |
+|---|---|---|---|---|
+| `qwen2.5:0.5b` | ~400 MB | 1 GB | ~40 tok/sn | Test için; bilgisi sınırlı |
+| `qwen2.5:3b` | ~2.0 GB | 4 GB | ~15 tok/sn | Zayıf donanım |
+| **`qwen2.5:7b`** ⭐ | ~4.7 GB | 8 GB | ~7 tok/sn | **Önerilen** kalite/hız dengesi |
+| `qwen2.5:14b` | ~9.0 GB | 16 GB | ~3 tok/sn | En yüksek kalite |
+| `qwen3:8b` | ~5.0 GB | 9 GB | ~6 tok/sn | Güçlü akıl yürütme |
+
+> GPU (NVIDIA/CUDA veya Apple Metal) varsa hız 5–20 kat artar; Ollama/llama.cpp bunu otomatik kullanır.
+
+### Nasıl bulunur? (otomatik algılama sırası)
+1. `TUGRUL_YEREL_URL` (varsa, zorlanan adres)
+2. **Ollama** `127.0.0.1:11434` → 3. `llama.cpp sunucusu` `:8080` / `:8081` →
+   4. **LM Studio** `:1234` → 5. `models/*.gguf` varsa **süreç içi** (llama-cpp-python)
+6. Hiçbiri yoksa: yerel bilgi bankası (RAG) cevapları
+
+Durum: `GET /api/yerel-model` · Arayüz: *Dil Modeli Ayarları → Sistem içi model*.
+Küçük/demo modeller otomatik olarak **kapalı** başlar (kalite uyarısıyla birlikte açılabilir).
+
+---
+
+## 🧠 Alternatif: Bulut Modeli Bağlamak (isteğe bağlı, anahtarla)
 
 Arayüzde sağ üstteki **"📚 Yerel bilgi bankası"** rozetine tıklayın → sağlayıcıyı seçin → ücretsiz
 anahtarınızı yapıştırın → **Kaydet**. Hepsi bu kadar; anahtarınız cihazınızdan çıkmaz.
@@ -129,6 +188,8 @@ güvenlik yanıtıyla karşılanır.
 | `GET`  | `/api/sorular?kategori=Namaz` | Soru listesi (isteğe bağlı konu filtresi) |
 | `GET`  | `/api/soru/{id}` | Belirli bir kaydın tam cevabı |
 | `GET`  | `/api/rastgele` | Rastgele soru-cevap |
+| `POST` | `/api/sor-yerel` | **Sistem içi model** cevabı — SSE ile kelime kelime akar (anahtarsız) |
+| `GET`  | `/api/yerel-model` | Yerel model durumu + önerilen model listesi (boyut/RAM) |
 | `POST` | `/api/baglam` | LLM için **kaynaklı bağlam paketi** (4 kayıt + 6 pasaj + hazır mesaj) |
 | `GET`  | `/api/model` | Sistem yönergesi + ücretsiz sağlayıcı/model listesi |
 | `GET`  | `/api/istatistik` | Kayıt sayısı, pasaj sayısı, boşluk sayısı, motor bilgisi |
@@ -198,19 +259,20 @@ python tests/test_smoke.py
 pytest -q
 ```
 
-**Python testleri (13 adet):** veri bütünlüğü, her kaydın kendi anahtar kelimeleriyle bulunabilmesi,
+**Python testleri (17 adet):** veri bütünlüğü, her kaydın kendi anahtar kelimeleriyle bulunabilmesi,
 **120+ örnek sorunun doğru kayda** yönlenmesi, paragraf araması, usul (ilke) cevapları, güvenlik
-yanıtları, LLM bağlam uç noktası (`/api/baglam`), sistem yönergesinin kritik kuralları ve
+yanıtları, LLM bağlam uç noktası (`/api/baglam`), **sistem içi model akışı** (`/api/sor-yerel`),
+sistem yönergesinin kritik kuralları ve
 "ücretsiz/sınırsız" sözleşmesi.
 
-**Arayüz testi (21 kontrol, tarayıcı taklidi):**
+**Arayüz testi (28 kontrol, tarayıcı taklidi):**
 ```bash
 npm i jsdom          # bir kez
 python -m app.main & # sunucu açıkken gerçek veriyle çalışır
 node tests/ui_test.js
 ```
-Bu test; cevabın akışlı yazımını, kaynak bloğunu, güvenlik sorusunda modelin devre dışı kalmasını,
-rozetin güncellenmesini ve ayar penceresini doğrular.
+Bu test; sistem içi model akışını (SSE), bilgi bankası yolunu, güvenlik sorusunda modelin devre dışı
+kalmasını, kaynak bloğunu, rozetin güncellenmesini ve ayar penceresini doğrular.
 
 ---
 

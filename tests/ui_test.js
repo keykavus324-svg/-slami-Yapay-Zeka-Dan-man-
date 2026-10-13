@@ -50,7 +50,34 @@ const sablon = fs.readFileSync(path.join(REPO, "app/static/index.html"), "utf8")
   .replace('<script src="/static/app.js"></script>', "");
 const appJs = fs.readFileSync(path.join(REPO, "app/static/app.js"), "utf8");
 
-const durum = { llmCagri: 0, sonGovde: null };
+const durum = { llmCagri: 0, sonGovde: null, yerelCagri: 0, yerelDurum: null };
+
+const YEREL_MODEL = {
+  hazir: true, arka_uc: "Ollama", adres: "http://127.0.0.1:11434/v1", model: "qwen2.5-7b-instruct",
+  anahtar_gerekli: false, harici_servis: false, indirilen_modeller: [], model_dizini: "/app/models",
+  onerilen_modeller: [], baglam_butcesi_karakter: 5000, maks_token: 700,
+};
+
+function yerelAkisi() {
+  const olaylar = [
+    { tip: "meta", motor: "Ollama", model: "qwen2.5-7b-instruct",
+      kayitlar: [{ id: "k", kategori: "Helâl-Haram", soru: "Faiz (ribâ) nedir?", kaynaklar: ["Bakara 2/275"] }],
+      pasajlar: [], bilgi_bankasi: { kayit: 152, pasaj: 1886 }, baglam_karakter: 1234 },
+    { tip: "parca", metin: "**Faiz** İslam'da " },
+    { tip: "parca", metin: "haramdır. «Allah alışverişi helâl, " },
+    { tip: "parca", metin: "faizi haram kılmıştır.» (Bakara 2/275)" },
+    { tip: "son", sure: 12.4, karakter: 96 },
+  ];
+  const kod = new TextEncoder();
+  let i = 0;
+  return {
+    ok: true, status: 200,
+    body: { getReader: () => ({ read: async () => (i < olaylar.length
+      ? { done: false, value: kod.encode("data: " + JSON.stringify(olaylar[i++]) + "\n\n") }
+      : { done: true }) }) },
+    text: async () => "",
+  };
+}
 
 function sseAkisi() {
   const parcalar = [
@@ -68,10 +95,11 @@ function sseAkisi() {
   };
 }
 
-function sayfaKur(llmAyar) {
+function sayfaKur(llmAyar, depolama) {
   const dom = new JSDOM(sablon, { url: "http://localhost:8000/", runScripts: "outside-only", pretendToBeVisual: true });
   const { window } = dom;
   if (llmAyar) window.localStorage.setItem("seyh-tugrul-llm", JSON.stringify(llmAyar));
+  Object.entries(depolama || {}).forEach(([k, v]) => window.localStorage.setItem(k, v));
 
   window.fetch = async (url, opts = {}) => {
     const u = String(url);
@@ -80,6 +108,8 @@ function sayfaKur(llmAyar) {
     if (u.endsWith("/api/istatistik")) return gonder({ toplam_kayit: 152, kategoriler: Array(13).fill({}) });
     if (u.endsWith("/api/kategoriler")) return gonder({ kategoriler: [] });
     if (u.endsWith("/api/sorular")) return gonder({ sorular: [] });
+    if (u.includes("/api/yerel-model")) return gonder(durum.yerelDurum || { hazir: false, model: "", arka_uc: "" });
+    if (u.endsWith("/api/sor-yerel")) { durum.yerelCagri++; return yerelAkisi(); }
     if (u.endsWith("/api/baglam")) {
       const soru = JSON.parse(opts.body).soru;
       return gonder(/zarar|intihar|şiddet/i.test(soru) ? paketler.guvenlik : paketler.faiz);
@@ -158,6 +188,29 @@ const kontrol = (ad, kosul, ek = "") => sonuc.push({ ad, gecti: !!kosul, ek });
   kontrol("panel: sağlayıcı seçenekleri", w.document.querySelectorAll("#llmSaglayici option").length >= 6,
     "adet: " + w.document.querySelectorAll("#llmSaglayici option").length);
   kontrol("panel: ücretsiz anahtar bağlantısı", /aistudio|console\.groq|openrouter/.test(w.document.querySelector("#llmLink").innerHTML));
+
+  /* ---------- 5) Sistem içi model (anahtarsız) akışı ---------- */
+  durum.yerelDurum = YEREL_MODEL;
+  const oncekiYerel = durum.yerelCagri;
+  w = sayfaKur(null);                     // tarayıcı bulut modeli YOK, sadece sistem içi model
+  await bekle(300);
+  kontrol("yerel: rozet model adını gösteriyor", /qwen2\.5-7b-instruct/.test(w.document.querySelector("#motorBtn").textContent),
+    w.document.querySelector("#motorBtn").textContent);
+  await soruGonder(w, "Kredi kartı gecikme faizi caiz mi?");
+  b = sonBaloncuk(w);
+  kontrol("yerel: /api/sor-yerel kullanıldı", durum.yerelCagri > oncekiYerel);
+  kontrol("yerel: akış içeriği çizildi", /Allah alışverişi helâl/.test(b.textContent), b.textContent.slice(0, 70));
+  kontrol("yerel: 'Sistem içi · anahtarsız' etiketi", /Sistem içi/.test(b.textContent));
+  kontrol("yerel: kaynak bloğu", /bilgi bankası kayıtları/.test(b.textContent));
+
+  /* ---------- 6) Sistem içi model kapatılınca bilgi bankasına döner ---------- */
+  durum.yerelCagri = 0;
+  w = sayfaKur(null, { "seyh-tugrul-yerel-kullan": "0" });   // sayfa, anahtar kapalı hâliyle kurulur
+  await bekle(300);
+  await soruGonder(w, "Kredi kartı gecikme faizi caiz mi?");
+  b = sonBaloncuk(w);
+  kontrol("kapalı: yerel modele gidilmedi", durum.yerelCagri === 0, "çağrı: " + durum.yerelCagri);
+  kontrol("kapalı: bilgi bankası cevabı geldi", b.textContent.length > 150);
 
   const basarisiz = sonuc.filter((x) => !x.gecti);
   sonuc.forEach((x) => console.log((x.gecti ? "  ✔ " : "  ✘ ") + x.ad + (!x.gecti && x.ek ? "  → " + x.ek : "")));
